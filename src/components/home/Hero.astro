@@ -7,6 +7,7 @@ import Sparkles from '../graphics/Sparkles.astro';
 import { SITE } from '@/lib/site';
 ---
 
+<div class="hero-track" data-3d="hero-pin" data-3d-track="sticky">
 <section class="hero pattern-care" aria-labelledby="hero-title" data-3d="hero" data-3d-track="exit">
   <div class="container hero__grid">
     <div class="hero__text depth-text">
@@ -32,6 +33,13 @@ import { SITE } from '@/lib/site';
     <div class="hero__media depth-stage">
       <div class="depth-rig">
       <div class="depth-layer depth-far" aria-hidden="true"><div class="hero__blob"></div></div>
+      <ul class="orbit" role="list" aria-hidden="true">
+        <li style="--ox:-1.15;--oy:-0.62;--r:-10deg"><DuoIcon name="speech" size={24} tone="red" chip /></li>
+        <li style="--ox:1.05;--oy:-0.78;--r:12deg"><DuoIcon name="hand" size={24} tone="teal" chip /></li>
+        <li style="--ox:1.2;--oy:0.1;--r:-8deg"><DuoIcon name="steps" size={24} tone="gold" chip /></li>
+        <li style="--ox:-1.2;--oy:0.28;--r:9deg"><DuoIcon name="nursing" size={24} tone="red" chip /></li>
+        <li style="--ox:-0.2;--oy:-1.02;--r:-4deg"><DuoIcon name="blocks" size={24} tone="gold" chip /></li>
+      </ul>
       <Sparkles variant="hero" />
       <Photo
         image="story-time-close"
@@ -41,6 +49,7 @@ import { SITE } from '@/lib/site';
         tone="sand"
         priority
         brief="A therapist and a preschooler at eye level in a sunlit classroom, mid-laugh — real STARS moment, natural light."
+        tilt
       />
       <div class="depth-layer depth-near">
       <div class="hero__card" role="group" aria-label="On-site care team">
@@ -60,6 +69,11 @@ import { SITE } from '@/lib/site';
     </div>
   </div>
 
+  <p class="hero__cue" aria-hidden="true"><span class="hero__cue-line"></span>Scroll to explore</p>
+</section>
+</div>
+
+<div class="hero-facts-wrap">
   <div class="container">
     <dl class="hero__facts">
       <div>
@@ -80,7 +94,7 @@ import { SITE } from '@/lib/site';
       </div>
     </dl>
   </div>
-</section>
+</div>
 
 <style>
   .hero {
@@ -88,7 +102,7 @@ import { SITE } from '@/lib/site';
     padding-block: var(--space-l) var(--space-xl);
     overflow: hidden;
   }
-  .hero::before {
+  .hero::after {
     /* Soft warm light behind the composition — no loud gradients. */
     content: '';
     position: absolute;
@@ -279,6 +293,154 @@ import { SITE } from '@/lib/site';
     .hero__facts > div + div {
       padding-left: var(--space-s);
       border-left: 1px solid var(--color-line);
+    }
+  }
+
+  .hero-facts-wrap {
+    position: relative;
+    padding-bottom: var(--space-xl);
+    background: var(--paper);
+  }
+  .hero-facts-wrap .hero__facts {
+    margin-top: 0;
+  }
+
+  /* Orbiting service icons and the scroll cue exist only in the pinned story. */
+  .orbit,
+  .hero__cue {
+    display: none;
+  }
+
+  /* ---------- Pinned hero scroll story (desktop, tall enough screens) ----------
+     The track is ~190vh; the hero sticks under the header while --ps goes 0→1:
+       0.00–0.55  photo swings in 3D, service icons spread into orbit,
+                  care card lifts toward you, inset drifts away
+       0.35–1.00  headline eases back; the whole stage settles into a card */
+  @media (min-width: 60em) and (min-height: 46em) {
+    :global(.has-3d) .hero-track {
+      --hp: var(--ps, 0);
+      --e: clamp(0, calc(var(--hp) * 1.9), 1);
+      --late: clamp(0, calc((var(--hp) - 0.55) / 0.45), 1);
+      height: 195vh;
+      background: var(--sand-100);
+    }
+    :global(.has-3d) .hero {
+      position: sticky;
+      top: var(--stick-top, var(--header-h));
+      min-height: calc(100vh - var(--stick-top, var(--header-h)));
+      display: grid;
+      align-content: center;
+      padding-block: var(--space-m);
+      transform: scale(calc(1 - var(--late) * 0.05));
+      border-radius: calc(var(--late) * 28px);
+      box-shadow: 0 30px 70px -40px rgb(23 21 58 / calc(var(--late) * 0.5));
+      background: var(--paper);
+      transform-origin: 50% 0;
+    }
+    :global(.has-3d) .hero__media {
+      max-width: 30rem;
+    }
+    /* The photo rig swings and leans back in 3D. */
+    :global(.has-3d) .hero .depth-rig {
+      transform: rotateY(calc(var(--e) * -14deg)) rotateX(calc(var(--e) * 6deg))
+        scale(calc(1 + var(--e) * 0.03));
+      transition: none;
+    }
+    :global(.has-3d) .hero .depth-far {
+      transform: translateZ(-90px) scale(calc(1 + var(--e) * 0.22)) rotate(calc(var(--e) * 14deg));
+    }
+    :global(.has-3d) .hero .depth-near {
+      transform: translateZ(calc(40px + var(--e) * 110px)) translateY(calc(var(--e) * -26px));
+    }
+    :global(.has-3d) .hero .hero__inset {
+      translate: calc(var(--e) * -46px) calc(var(--e) * -28px);
+      rotate: calc(var(--e) * -7deg);
+    }
+    :global(.has-3d) .hero .depth-text {
+      transform: translateY(calc(var(--hp) * -34px));
+      opacity: calc(1 - var(--late) * 0.3);
+    }
+
+    /* Five service icons spread out from behind the photo into orbit. */
+    :global(.has-3d) .orbit {
+      display: block;
+      position: absolute;
+      left: 56%;
+      top: 50%;
+      z-index: 4;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      transform: translateZ(70px);
+      pointer-events: none;
+    }
+    :global(.has-3d) .orbit li {
+      position: absolute;
+      left: -1.6rem;
+      top: -1.6rem;
+      --dist: min(15rem, 30vw);
+      transform: translate(calc(var(--ox) * var(--dist) * var(--e)), calc(var(--oy) * var(--dist) * var(--e)))
+        rotate(calc(var(--r) * var(--e))) scale(calc(0.4 + var(--e) * 0.6));
+      opacity: var(--e);
+    }
+    :global(.has-3d) .orbit :global(.duo--chip) {
+      box-shadow: 0 12px 26px -14px rgb(23 21 58 / 0.45);
+      background: var(--white);
+    }
+
+    /* Scroll cue fades away as soon as the story starts. */
+    :global(.has-3d) .hero__cue {
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+      position: absolute;
+      left: 50%;
+      bottom: 1.2rem;
+      translate: -50% 0;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--ink-600);
+      opacity: calc(1 - var(--hp) * 5);
+    }
+    :global(.has-3d) .hero__cue-line {
+      position: relative;
+      width: 1.6rem;
+      height: 2.6rem;
+      border: 1.5px solid var(--sand-300);
+      border-radius: 1rem;
+    }
+    :global(.has-3d) .hero__cue-line::after {
+      content: '';
+      position: absolute;
+      left: 50%;
+      top: 0.5rem;
+      width: 4px;
+      height: 8px;
+      margin-left: -2px;
+      border-radius: 2px;
+      background: var(--red-600);
+      animation: cue-drop 1.8s var(--ease-out) infinite;
+    }
+  }
+  @media (min-width: 72em) {
+    :global(.has-3d) .hero-track {
+      --stick-top: calc(var(--header-h) + 2.5rem);
+    }
+  }
+  @keyframes cue-drop {
+    0% {
+      transform: translateY(0);
+      opacity: 1;
+    }
+    70% {
+      transform: translateY(12px);
+      opacity: 0;
+    }
+    100% {
+      transform: translateY(0);
+      opacity: 0;
     }
   }
 </style>

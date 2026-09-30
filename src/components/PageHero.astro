@@ -45,7 +45,7 @@ const hasAside = Boolean(photo) || Astro.slots.has('aside');
           <div class="page-hero__aside depth-stage">
             <div class="depth-rig">
             {photo && <div class="page-hero__blob" aria-hidden="true" />}
-            {photo ? <Photo {...photo} ratio="5 / 4" sizes="(min-width: 56em) 45vw, 100vw" priority /> : <slot name="aside" />}
+            {photo ? <Photo {...photo} ratio="5 / 4" sizes="(min-width: 56em) 45vw, 100vw" priority tilt /> : <slot name="aside" />}
             </div>
           </div>
         )

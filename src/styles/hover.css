@@ -1,0 +1,238 @@
+/* =====================================================================
+   Hover & interaction layer. Every effect is small, quick and reversible,
+   and none is required to understand or use the page. Hover-only styles
+   are scoped to devices that can actually hover.
+   ===================================================================== */
+
+/* ---------- 3D tilt cards (see src/scripts/tilt.ts) ---------- */
+[data-tilt] {
+  --tilt-x: 0deg;
+  --tilt-y: 0deg;
+  --lift: 0px;
+  position: relative;
+  transform: perspective(900px) rotateX(var(--tilt-x)) rotateY(var(--tilt-y)) translateY(var(--lift));
+  transition:
+    transform 500ms var(--ease-out),
+    box-shadow 400ms var(--ease-out),
+    border-color 200ms ease;
+}
+
+[data-tilt].is-tilting {
+  transition:
+    transform 120ms linear,
+    box-shadow 400ms var(--ease-out);
+}
+
+/* Soft light that follows the pointer across the card. */
+[data-tilt]::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  border-radius: inherit;
+  background: radial-gradient(circle at var(--gx, 50%) var(--gy, 0%), rgb(255 255 255 / 0.45), transparent 55%);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 300ms ease;
+}
+
+/* Combine with the scroll-driven flip so neither effect cancels the other. */
+.has-3d [data-3d='flip'][data-tilt] {
+  transform: perspective(1100px) rotateX(calc(var(--t) * 32deg + var(--tilt-x))) rotateY(var(--tilt-y))
+    translateY(calc(var(--t) * 46px + var(--lift))) scale(calc(1 - var(--t) * 0.06));
+}
+
+/* Photos that also reveal on scroll, and cards that swing in, keep their tilt. */
+.photo[data-tilt],
+.js .photo--reveal[data-tilt],
+.js [data-reveal][data-tilt] {
+  transform: perspective(900px) rotateX(var(--tilt-x)) rotateY(var(--tilt-y)) translateY(var(--lift));
+}
+
+.has-3d [data-3d='swing-left'][data-tilt],
+.has-3d [data-3d='swing-right'][data-tilt] {
+  transform: perspective(1200px) rotateY(calc(var(--t) * var(--dir) * 28deg + var(--tilt-y))) rotateX(var(--tilt-x))
+    translateX(calc(var(--t) * var(--dir) * -30px)) translateY(var(--lift));
+}
+
+@media (hover: hover) {
+  /* ---------- Footer, router, FAQ, timeline micro-interactions ---------- */
+  .site-footer nav a {
+    transition:
+      transform 300ms var(--ease-out),
+      color 200ms ease;
+  }
+
+  .site-footer nav a:hover {
+    transform: translateX(4px);
+  }
+
+  .footer__social a {
+    transition:
+      background-color 250ms ease,
+      border-color 250ms ease,
+      transform 400ms var(--ease-out);
+  }
+
+  .footer__social a:hover {
+    background: var(--gold-400);
+    color: var(--navy-950);
+    transform: translateY(-3px) rotate(-8deg);
+  }
+
+  .faq__item summary {
+    border-radius: var(--radius-s);
+    transition:
+      background-color 250ms ease,
+      padding-inline 300ms var(--ease-out);
+  }
+
+  .faq__item summary:hover {
+    background: rgb(242 194 48 / 0.1);
+    padding-inline: 0.75rem;
+  }
+
+  .router__link {
+    transition: background-color 300ms ease;
+  }
+
+  .router__link:hover {
+    background: linear-gradient(180deg, rgb(255 255 255 / 0.06), transparent);
+  }
+
+  .crumbs a {
+    transition: color 200ms ease;
+  }
+
+  [data-tilt]:hover {
+    --lift: -5px;
+    box-shadow: 0 26px 50px -28px rgb(23 21 58 / 0.42);
+  }
+
+  [data-tilt]:hover::after {
+    opacity: 1;
+  }
+
+  /* ---------- Buttons ---------- */
+  .btn {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+  }
+
+  /* Primary: a light sheen sweeps across. */
+  .btn:not(.btn--secondary)::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: linear-gradient(110deg, transparent 30%, rgb(255 255 255 / 0.22) 50%, transparent 70%);
+    transform: translateX(-120%);
+    transition: transform 700ms var(--ease-out);
+  }
+
+  .btn:not(.btn--secondary):hover::before {
+    transform: translateX(120%);
+  }
+
+  /* Secondary: fills from the bottom up. */
+  .btn--secondary {
+    background-image: linear-gradient(var(--btn-fill, var(--navy-800)), var(--btn-fill, var(--navy-800)));
+    background-repeat: no-repeat;
+    background-position: 50% 100%;
+    background-size: 100% 0%;
+    transition:
+      background-size 350ms var(--ease-out),
+      color 250ms ease,
+      border-color 250ms ease;
+  }
+
+  .btn--secondary:hover {
+    background-size: 100% 100%;
+  }
+
+  .section--navy .btn--secondary {
+    --btn-fill: #ffffff;
+  }
+
+  /* ---------- Photos: gentle zoom inside their frame ---------- */
+  .photo img {
+    transition: transform 900ms var(--ease-out);
+  }
+
+  .photo:hover img,
+  a:hover .photo img {
+    transform: scale(1.045);
+  }
+
+  /* ---------- Links with a sliding underline ---------- */
+  .prose a,
+  .muted a,
+  .small a,
+  .footer__notice a,
+  .lede a {
+    text-decoration: none;
+    background: linear-gradient(currentColor, currentColor) no-repeat 0 100% / 100% 1px;
+    transition:
+      background-size 300ms var(--ease-out),
+      color 200ms ease;
+  }
+
+  .prose a:hover,
+  .muted a:hover,
+  .small a:hover,
+  .footer__notice a:hover,
+  .lede a:hover {
+    background-size: 0% 1px;
+    background-position: 100% 100%;
+    animation: underline-in 450ms var(--ease-out) 150ms forwards;
+  }
+
+  /* Arrow links nudge forward and grow their rule. */
+  .link-arrow {
+    background: linear-gradient(var(--red-600), var(--red-600)) no-repeat 0 100% / 0% 1.5px;
+    transition:
+      background-size 400ms var(--ease-out),
+      color 200ms ease;
+  }
+
+  .link-arrow:hover {
+    background-size: 100% 1.5px;
+  }
+
+  /* ---------- Icon chips come alive ---------- */
+  .duo--chip svg {
+    transition: transform 400ms var(--ease-out);
+  }
+
+  a:hover .duo--chip svg,
+  li:hover > .duo--chip svg,
+  [data-tilt]:hover .duo--chip svg {
+    transform: scale(1.12) rotate(-6deg);
+  }
+}
+
+@keyframes underline-in {
+  from {
+    background-position: 0 100%;
+    background-size: 0% 1px;
+  }
+  to {
+    background-position: 0 100%;
+    background-size: 100% 1px;
+  }
+}
+
+/* Keyboard users get the same lift as hover, without pointer tilt. */
+[data-tilt]:focus-within {
+  --lift: -5px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-tilt],
+  [data-tilt]:hover,
+  [data-tilt]:focus-within {
+    --lift: 0px;
+    transform: none;
+  }
+}

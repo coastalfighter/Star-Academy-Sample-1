@@ -42,7 +42,7 @@ const shortcuts = [
         {
           shortcuts.map((s) => (
             <li>
-              <a href={s.href} class="lift">
+              <a href={s.href} data-tilt>
                 <span class="shortcuts__q">{s.label}</span>
                 <span class="shortcuts__a">
                   {s.action} <Icon name="arrow-right" size={18} />

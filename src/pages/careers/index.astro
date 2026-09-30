@@ -97,7 +97,7 @@ const hiring = [
 
   <section class="section section--sand" aria-labelledby="life-title">
     <div class="container life">
-      <Photo image="colleagues-planning" ratio="4 / 3" tone="teal" brief="Staff team photo outdoors or in the gym — real people, relaxed, not posed in rows." />
+      <Photo tilt image="colleagues-planning" ratio="4 / 3" tone="teal" brief="Staff team photo outdoors or in the gym — real people, relaxed, not posed in rows." />
       <div class="stack">
         <p class="eyebrow">Life at STARS</p>
         <h2 id="life-title">What working here is like.</h2>
@@ -125,7 +125,7 @@ const hiring = [
       <div class="jobs">
         {
           jobs.map((job) => (
-            <article class="job lift" data-3d="flip" aria-labelledby={`job-${job.id}`}>
+            <article class="job" data-tilt data-3d="flip" aria-labelledby={`job-${job.id}`}>
               <div class="job__head">
                 <p class="job__team">{job.data.team}</p>
                 <h3 id={`job-${job.id}`}>

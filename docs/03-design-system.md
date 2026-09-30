@@ -103,6 +103,29 @@ Subtle, calm and always optional. All motion lives in `src/styles/global.css` (t
 - Accessibility audits run against the at-rest state.
 - `tests/e2e/motion3d.spec.ts` covers the wheel, card settling and the reduced-motion fallback.
 
+### Hero scroll story
+
+On desktop (≥ 60em wide and ≥ 46em tall), the homepage hero is wrapped in a `.hero-track` about 195vh tall, and the hero sticks in place while the visitor scrolls through it (`data-3d-track="sticky"` → `--ps`). As they scroll:
+
+1. The photo rig swings into 3D (rotateY/rotateX).
+2. Five care-discipline chips orbit out from behind the photo: speech, OT, PT, nursing and classroom.
+3. The headline drifts up and eases to about 70% opacity (never lower, so the CTAs never look disabled).
+4. The hero scales down slightly with rounded corners, then hands off to the page.
+
+On smaller or shorter screens there is no pin; the hero gets only a light exit tilt. With reduced motion, the layout stays static and everything is visible.
+
+## Hover & interaction layer
+
+`src/scripts/tilt.ts` + `src/styles/hover.css`. Hover effects apply only on `(hover: hover) and (pointer: fine)` devices and are switched off for reduced motion. Keyboard focus gets an equivalent lift via `:focus-within`.
+
+- **3D pointer tilt with glare** (`data-tilt`): up to 7° toward the cursor, with a soft light sheen. Used on stat cards, eligibility cards, job cards, contact shortcuts, the "What it can look like" panels, service "Who it's for" panels, the family pathway and partner panels. Photos opt in with `<Photo tilt />`.
+- **Buttons**: primary buttons get a light sheen sweep; secondary buttons fill with navy (white on navy sections).
+- **Photos**: a gentle 4.5% zoom inside the frame.
+- **Links**: sliding underlines; `.link-arrow` grows its red rule.
+- **Details**: FAQ rows tint and indent; footer links nudge right; social icons turn gold; audience-router cards get a gradient wash; duo-icon chips bob and rotate.
+
+Don't combine `.lift` with `data-tilt`, because `.lift:hover` overrides the tilt transform.
+
 ## Graphics
 
 - **Duotone icon set** (`graphics/DuoIcon.astro`, 22 icons): a crisp brand-colored line over a soft tinted fill, optionally on an organic "chip". Every service has one consistent icon (`src/lib/service-icons.ts`): blocks for classrooms, speech bubbles for speech, a hand and block for OT, footsteps for PT, and a heart with a cross for nursing. Neurodiversity uses an infinity loop rather than a puzzle piece, which many autistic people find offensive.

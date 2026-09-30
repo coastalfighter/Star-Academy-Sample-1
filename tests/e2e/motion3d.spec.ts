@@ -35,6 +35,38 @@ test.describe('scroll-driven 3D', () => {
       .toBeGreaterThan(0.95);
   });
 
+  test('hero pins and plays its scroll story on desktop', async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: 'no-preference' });
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await page.goto('/');
+    const track = page.locator('.hero-track');
+    const height = await track.evaluate((el) => (el as HTMLElement).offsetHeight);
+    expect(height).toBeGreaterThan(900 * 1.5);
+
+    const chip = page.locator('.hero .orbit li').first();
+    await page.evaluate((h) => window.scrollTo(0, (h - window.innerHeight) * 0.9), height);
+    await expect
+      .poll(async () => Number(await chip.evaluate((el) => getComputedStyle(el).opacity)))
+      .toBeGreaterThan(0.9);
+    // Headline stays readable (not faded to look disabled) at the end of the story.
+    const text = page.locator('.hero .depth-text');
+    expect(Number(await text.evaluate((el) => getComputedStyle(el).opacity))).toBeGreaterThan(0.65);
+  });
+
+  test('cards tilt toward the pointer on hover', async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: 'no-preference' });
+    await page.goto('/getting-started');
+    const card = page.locator('.criteria [data-tilt]').first();
+    await card.scrollIntoViewIfNeeded();
+    const box = (await card.boundingBox())!;
+    await page.mouse.move(box.x + box.width * 0.9, box.y + box.height * 0.2);
+    await page.mouse.move(box.x + box.width * 0.95, box.y + box.height * 0.1);
+    await expect(card).toHaveClass(/is-tilting/);
+    await expect
+      .poll(async () => card.evaluate((el) => (el as HTMLElement).style.getPropertyValue('--tilt-y')))
+      .not.toBe('');
+  });
+
   test('reduced motion gets a calm static layout with nothing hidden', async ({ page }) => {
     await page.emulateMedia({ reducedMotion: 'reduce' });
     await page.goto('/');

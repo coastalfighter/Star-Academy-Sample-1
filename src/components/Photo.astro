@@ -26,6 +26,8 @@ interface Props {
   caption?: string;
   /** Reveal animation (wipe on scroll; on load for priority images). */
   animate?: boolean;
+  /** Pointer-following 3D tilt on hover. */
+  tilt?: boolean;
 }
 
 const {
@@ -42,6 +44,7 @@ const {
   class: className,
   caption,
   animate = true,
+  tilt = false,
 } = Astro.props;
 
 if (image && !isPhotoKey(image)) throw new Error(`Unknown photo key "${image}" (see src/lib/photos.json)`);
@@ -52,6 +55,7 @@ const registered = isPhotoKey(image) ? { key: image, ...PHOTOS[image] } : null;
   class:list={['photo', `photo--${tone}`, { 'photo--intro': animate && priority, 'photo--reveal': animate && !priority }, className]}
   style={`--ratio: ${ratio}`}
   data-reveal={animate && !priority ? 'photo' : undefined}
+  data-tilt={tilt ? '' : undefined}
 >
   {
     registered ? (

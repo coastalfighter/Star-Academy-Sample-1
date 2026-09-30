@@ -65,7 +65,7 @@ const others = all.filter((x) => x.data.path !== s.path);
         <h2 id="overview-title" class="overview__h">What is {lower}?</h2>
         <Rich as="p" class="lede" text={s.whatItIs} />
       </div>
-      <div class="overview__who lift">
+      <div class="overview__who" data-tilt>
         <h3 class="eyebrow overview__who-h">Who it’s for</h3>
         <Rich as="p" text={s.forWho} />
       </div>
