@@ -1,0 +1,264 @@
+---
+import Logo from './Logo.astro';
+import Icon from './Icon.astro';
+import Confirm from './Confirm.astro';
+import { FOOTER_NAV, LEGAL_NAV } from '@/lib/navigation';
+import { SITE, LOCATIONS, fullAddress, mapsUrl } from '@/lib/site';
+
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer__top">
+      <div class="footer__brand">
+        <Logo variant="inverse" />
+        <p class="footer__mission">
+          Therapy, learning and care for young children — woven into one full day, in Batesville since {SITE.founded}.
+        </p>
+        <p class="footer__acronym"><span>S</span>triving <span>T</span>o <span>A</span>chieve <span>R</span>eal <span>S</span>uccess</p>
+      </div>
+
+      <div class="footer__visit">
+        <h2 class="footer__heading">Visit or call</h2>
+        <ul role="list" class="footer__contact">
+          {
+            LOCATIONS.map((loc) => {
+              const addr = fullAddress(loc);
+              const map = mapsUrl(loc);
+              return (
+                <li>
+                  <Icon name="pin" size={18} />
+                  <span>
+                    <strong>{loc.name}</strong>
+                    <br />
+                    {addr && map ? (
+                      <a href={map} rel="noopener" target="_blank">
+                        {addr}
+                        <span class="visually-hidden"> (opens Google Maps in a new tab)</span>
+                      </a>
+                    ) : (
+                      <Confirm note="STARS Academy South street address" />
+                    )}
+                  </span>
+                </li>
+              );
+            })
+          }
+          <li>
+            <Icon name="phone" size={18} />
+            <a href={SITE.phoneHref}>{SITE.phone}</a>
+          </li>
+          <li>
+            <Icon name="clock" size={18} />
+            <span>{SITE.hours.days}, {SITE.hours.open} – {SITE.hours.close}</span>
+          </li>
+        </ul>
+      </div>
+
+      {
+        FOOTER_NAV.map((group) => (
+          <nav class="footer__col" aria-labelledby={`footer-${group.heading.replace(/\s+/g, '-').toLowerCase()}`}>
+            <h2 class="footer__heading" id={`footer-${group.heading.replace(/\s+/g, '-').toLowerCase()}`}>
+              {group.heading}
+            </h2>
+            <ul role="list">
+              {group.links.map((link) => (
+                <li>
+                  <a href={link.href}>{link.label}</a>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        ))
+      }
+    </div>
+
+    <div class="footer__notice">
+      <p>
+        In accordance with Federal civil rights law and U.S. Department of Agriculture (USDA) civil rights regulations and
+        policies, this institution is prohibited from discriminating based on race, color, national origin, sex (including
+        gender identity and sexual orientation), disability, age, or reprisal or retaliation for prior civil rights activity in any program or activity conducted or funded by USDA.
+        <a href="/nondiscrimination">Read the full nondiscrimination statement</a>.
+      </p>
+    </div>
+
+    <div class="footer__bottom">
+      <p>© {year} {SITE.legalName}. STARS Academy® is a registered mark.</p>
+      <ul role="list" class="footer__legal">
+        {
+          LEGAL_NAV.map((l) => (
+            <li>
+              <a href={l.href}>{l.label}</a>
+            </li>
+          ))
+        }
+      </ul>
+      <ul role="list" class="footer__social">
+        <li>
+          <a href={SITE.social.facebook} rel="noopener" target="_blank">
+            <Icon name="facebook" size={20} label="STARS Academy on Facebook (opens in a new tab)" />
+          </a>
+        </li>
+        <li>
+          <a href={SITE.social.instagram} rel="noopener" target="_blank">
+            <Icon name="instagram" size={20} label="STARS Academy on Instagram (opens in a new tab)" />
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    background: var(--navy-950);
+    color: #cfcde2;
+    padding-block: var(--space-2xl) var(--space-m);
+    font-size: 0.975rem;
+    --color-focus: var(--gold-400);
+  }
+  .site-footer a {
+    color: #ffffff;
+    text-decoration: none;
+  }
+  .site-footer a:hover {
+    color: var(--gold-400);
+    text-decoration: underline;
+  }
+  .footer__top {
+    display: grid;
+    gap: var(--space-l) var(--space-m);
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 13rem), 1fr));
+    padding-bottom: var(--space-xl);
+    border-bottom: 1px solid rgb(255 255 255 / 0.12);
+  }
+  .footer__brand {
+    grid-column: 1 / -1;
+    max-width: 30rem;
+  }
+  .footer__mission {
+    margin-top: var(--space-s);
+    font-family: var(--font-display);
+    font-size: var(--step-1);
+    line-height: 1.45;
+    color: #ffffff;
+  }
+  .footer__acronym {
+    margin-top: var(--space-s);
+    font-size: 0.8rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #a9a7c4;
+  }
+  .footer__acronym span {
+    color: var(--gold-400);
+    font-weight: 700;
+  }
+  .footer__heading {
+    margin-bottom: var(--space-xs);
+    font-family: var(--font-body);
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--gold-400);
+  }
+  .footer__col ul,
+  .footer__contact,
+  .footer__legal,
+  .footer__social {
+    list-style: none;
+    padding: 0;
+  }
+  .footer__col li + li {
+    margin-top: 0;
+  }
+  .footer__col a,
+  .footer__contact a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.75rem;
+  }
+  .footer__contact a {
+    min-height: 2.75rem;
+    padding-block: 0.25rem;
+  }
+  .footer__contact {
+    display: grid;
+    gap: var(--space-xs);
+  }
+  .footer__contact li {
+    display: grid;
+    grid-template-columns: 1.25rem 1fr;
+    gap: 0.6rem;
+    align-items: start;
+  }
+  .footer__contact :global(svg) {
+    margin-top: 0.25rem;
+    color: var(--gold-400);
+  }
+  .footer__contact strong {
+    color: #ffffff;
+    font-weight: 600;
+  }
+  .footer__visit {
+    grid-column: span 1;
+  }
+  .footer__notice {
+    padding-block: var(--space-m);
+    border-bottom: 1px solid rgb(255 255 255 / 0.12);
+    font-size: 0.8rem;
+    line-height: 1.6;
+    color: #a9a7c4;
+  }
+  .footer__notice p {
+    max-width: 62rem;
+  }
+  .footer__notice a {
+    text-decoration: underline;
+  }
+  .footer__bottom {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-s);
+    padding-top: var(--space-m);
+    font-size: 0.85rem;
+    color: #a9a7c4;
+  }
+  .footer__legal {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 1.25rem;
+  }
+  .footer__legal a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.75rem;
+  }
+  .footer__social {
+    display: flex;
+    gap: 0.5rem;
+  }
+  .footer__social a {
+    display: grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    border: 1px solid rgb(255 255 255 / 0.22);
+    border-radius: 50%;
+  }
+  .footer__social a:hover {
+    border-color: var(--gold-400);
+  }
+  @media (min-width: 64em) {
+    .footer__top {
+      grid-template-columns: 1.3fr 1.1fr 1fr 1fr 1fr;
+    }
+    .footer__brand {
+      grid-column: 1 / 2;
+    }
+  }
+</style>

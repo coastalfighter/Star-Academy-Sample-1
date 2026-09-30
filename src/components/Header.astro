@@ -1,0 +1,460 @@
+---
+import Logo from './Logo.astro';
+import Icon from './Icon.astro';
+import { PRIMARY_NAV, UTILITY_NAV, PRIMARY_CTA, isActive } from '@/lib/navigation';
+import { SITE } from '@/lib/site';
+
+const pathname = Astro.url.pathname;
+---
+
+<header class="site-header" data-header>
+  <div class="utility">
+    <div class="container utility__inner">
+      <p class="utility__tagline">Pediatric developmental day treatment · Batesville, Arkansas</p>
+      <nav aria-label="Utility">
+        <ul class="utility__links" role="list">
+          {
+            UTILITY_NAV.map((link) => (
+              <li>
+                <a href={link.href} aria-current={isActive(link.href, pathname) ? 'page' : undefined}>
+                  {link.label}
+                </a>
+              </li>
+            ))
+          }
+          <li>
+            <a href={SITE.phoneHref} class="utility__phone">
+              <Icon name="phone" size={15} />
+              {SITE.phone}
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+
+  <div class="container bar">
+    <Logo />
+
+    <nav class="primary" aria-label="Main">
+      <ul class="primary__list" role="list">
+        {
+          PRIMARY_NAV.map((item) =>
+            item.children ? (
+              <li class="primary__item has-menu" data-menu>
+                <button
+                  type="button"
+                  class:list={['primary__link', 'primary__trigger', { 'is-active': isActive(item.href, pathname) }]}
+                  aria-expanded="false"
+                  aria-controls="menu-services"
+                  data-menu-trigger
+                >
+                  {item.label}
+                  <Icon name="chevron-down" size={16} />
+                </button>
+                <div class="menu" id="menu-services" hidden data-menu-panel>
+                  <ul role="list" class="menu__list">
+                    {item.children.map((child, i) => (
+                      <li class:list={{ 'menu__overview': i === 0 }}>
+                        <a
+                          href={child.href}
+                          class="menu__link"
+                          aria-current={pathname.replace(/\.html$/, '') === child.href ? 'page' : undefined}
+                        >
+                          <span class="menu__label">{child.label}</span>
+                          {child.description && <span class="menu__desc">{child.description}</span>}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </li>
+            ) : (
+              <li class="primary__item">
+                <a
+                  href={item.href}
+                  class:list={['primary__link', { 'is-active': isActive(item.href, pathname) }]}
+                  aria-current={isActive(item.href, pathname) ? 'page' : undefined}
+                >
+                  {item.label}
+                </a>
+              </li>
+            ),
+          )
+        }
+      </ul>
+    </nav>
+
+    <div class="bar__actions">
+      <a href={PRIMARY_CTA.href} class="btn btn--small bar__cta">{PRIMARY_CTA.label}</a>
+      <button
+        type="button"
+        class="menu-toggle"
+        aria-expanded="false"
+        aria-controls="mobile-menu"
+        data-mobile-toggle
+      >
+        <span class="menu-toggle__open"><Icon name="menu" size={24} /></span>
+        <span class="menu-toggle__close"><Icon name="close" size={24} /></span>
+        <span class="menu-toggle__label" data-mobile-label>Menu</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="mobile" id="mobile-menu" hidden data-mobile-panel>
+    <nav class="container mobile__inner" aria-label="Main (mobile)">
+      <ul role="list" class="mobile__list">
+        {
+          PRIMARY_NAV.map((item) => (
+            <li>
+              <a href={item.href} class="mobile__link" aria-current={isActive(item.href, pathname) ? 'page' : undefined}>
+                {item.label}
+              </a>
+              {item.children && (
+                <ul role="list" class="mobile__sub">
+                  {item.children.slice(1).map((child) => (
+                    <li>
+                      <a href={child.href}>{child.label}</a>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </li>
+          ))
+        }
+      </ul>
+      <ul role="list" class="mobile__utility">
+        {
+          UTILITY_NAV.map((link) => (
+            <li>
+              <a href={link.href}>{link.label}</a>
+            </li>
+          ))
+        }
+      </ul>
+      <div class="mobile__actions">
+        <a href={PRIMARY_CTA.href} class="btn">{PRIMARY_CTA.label}</a>
+        <a href={SITE.phoneHref} class="btn btn--secondary"><Icon name="phone" size={18} /> Call {SITE.phone}</a>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<script>
+  import { initNavigation } from '@/scripts/nav';
+  initNavigation();
+</script>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: rgb(251 248 243 / 0.94);
+    backdrop-filter: saturate(1.4) blur(10px);
+    -webkit-backdrop-filter: saturate(1.4) blur(10px);
+    border-bottom: 1px solid transparent;
+    transition:
+      border-color var(--duration-m) ease,
+      box-shadow var(--duration-m) ease;
+  }
+  :global(.site-header.is-scrolled) {
+    border-bottom-color: var(--color-line-soft);
+    box-shadow: 0 6px 24px -18px rgb(23 21 58 / 0.4);
+  }
+
+  /* Utility bar */
+  .utility {
+    display: none;
+    background: var(--navy-900);
+    color: #d6d5e6;
+    font-size: 0.875rem;
+  }
+  .utility__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-m);
+    min-height: 2.5rem;
+  }
+  .utility__tagline {
+    letter-spacing: 0.02em;
+  }
+  .utility__links {
+    display: flex;
+    align-items: center;
+    gap: var(--space-m);
+    padding: 0;
+    list-style: none;
+  }
+  .utility a {
+    color: #ffffff;
+    text-decoration: none;
+    font-weight: 500;
+  }
+  .utility a:hover,
+  .utility a[aria-current='page'] {
+    color: var(--gold-400);
+  }
+  .utility__phone {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-weight: 650 !important;
+  }
+  .utility :focus-visible {
+    outline-color: var(--gold-400);
+  }
+
+  /* Main bar */
+  .bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-s);
+    min-height: var(--header-h);
+  }
+  .bar__actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .bar__cta {
+    display: none;
+    white-space: nowrap;
+  }
+
+  .primary {
+    display: none;
+  }
+  .primary__list {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0;
+    list-style: none;
+  }
+  .primary__item {
+    position: relative;
+  }
+  .primary__link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    min-height: 2.75rem;
+    padding: 0.4rem 0.7rem;
+    border: 0;
+    background: none;
+    color: var(--ink-900);
+    font-size: 0.975rem;
+    font-weight: 560;
+    text-decoration: none;
+    position: relative;
+  }
+  .primary__link::after {
+    content: '';
+    position: absolute;
+    left: 0.7rem;
+    right: 0.7rem;
+    bottom: 0.3rem;
+    height: 2px;
+    background: var(--red-600);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform var(--duration-m) var(--ease-out);
+  }
+  .primary__link:hover {
+    color: var(--navy-800);
+  }
+  .primary__link:hover::after,
+  .primary__link.is-active::after {
+    transform: scaleX(1);
+  }
+  .primary__trigger :global(svg) {
+    transition: transform var(--duration-m) var(--ease-out);
+  }
+  .primary__trigger[aria-expanded='true'] :global(svg) {
+    transform: rotate(180deg);
+  }
+
+  /* Services dropdown */
+  .menu {
+    position: absolute;
+    top: calc(100% + 0.5rem);
+    left: -1rem;
+    width: min(36rem, 90vw);
+    padding: 0.75rem;
+    background: var(--white);
+    border: 1px solid var(--color-line-soft);
+    border-radius: var(--radius-m);
+    box-shadow: var(--shadow-m);
+  }
+  .menu__list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.25rem;
+    padding: 0;
+    list-style: none;
+  }
+  .menu__overview {
+    grid-column: 1 / -1;
+    border-bottom: 1px solid var(--color-line-soft);
+    margin-bottom: 0.25rem;
+    padding-bottom: 0.25rem;
+  }
+  .menu__link {
+    display: grid;
+    gap: 0.15rem;
+    padding: 0.75rem 0.85rem;
+    border-radius: var(--radius-s);
+    text-decoration: none;
+    color: var(--ink-900);
+  }
+  .menu__link:hover,
+  .menu__link[aria-current='page'] {
+    background: var(--sand-100);
+    color: var(--ink-900);
+  }
+  .menu__label {
+    font-weight: 640;
+    font-size: 0.975rem;
+  }
+  .menu__overview .menu__label {
+    color: var(--red-700);
+  }
+  .menu__desc {
+    font-size: 0.875rem;
+    line-height: 1.45;
+    color: var(--ink-600);
+  }
+
+  /* Mobile toggle */
+  .menu-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    min-height: 2.75rem;
+    min-width: 2.75rem;
+    padding: 0.4rem 0.75rem;
+    border: 1.5px solid var(--color-line);
+    border-radius: var(--radius-s);
+    background: var(--white);
+    color: var(--navy-900);
+    font-weight: 620;
+    font-size: 0.95rem;
+  }
+  .menu-toggle > span {
+    display: inline-flex;
+  }
+  .menu-toggle > .menu-toggle__close,
+  .menu-toggle[aria-expanded='true'] > .menu-toggle__open {
+    display: none;
+  }
+  .menu-toggle[aria-expanded='true'] > .menu-toggle__close {
+    display: inline-flex;
+  }
+
+  /* Mobile panel */
+  .mobile {
+    position: fixed;
+    inset: var(--mobile-top, var(--header-h)) 0 0 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    background: var(--paper);
+    border-top: 1px solid var(--color-line-soft);
+  }
+  .mobile__inner {
+    padding-block: var(--space-m) var(--space-xl);
+  }
+  .mobile__list,
+  .mobile__sub,
+  .mobile__utility {
+    list-style: none;
+    padding: 0;
+  }
+  .mobile__list > li {
+    border-bottom: 1px solid var(--color-line-soft);
+    padding-block: 0.35rem;
+  }
+  .mobile__link {
+    display: flex;
+    align-items: center;
+    min-height: 3rem;
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    color: var(--navy-900);
+    text-decoration: none;
+  }
+  .mobile__link[aria-current='page'] {
+    color: var(--red-700);
+  }
+  .mobile__sub {
+    display: grid;
+    gap: 0.1rem;
+    padding: 0 0 0.75rem 0.1rem;
+  }
+  .mobile__sub a {
+    display: flex;
+    align-items: center;
+    min-height: 2.75rem;
+    color: var(--ink-700);
+    text-decoration: none;
+    font-weight: 540;
+  }
+  .mobile__utility {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 1.5rem;
+    margin-top: var(--space-m);
+  }
+  .mobile__utility a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.75rem;
+    font-weight: 600;
+  }
+  .mobile__actions {
+    display: grid;
+    gap: 0.75rem;
+    margin-top: var(--space-m);
+  }
+
+  @media (min-width: 23em) {
+    .bar__cta {
+      display: inline-flex;
+    }
+  }
+  @media (max-width: 29.99em) {
+    .bar__cta {
+      padding-inline: 0.75em;
+      font-size: 0.85rem;
+    }
+    .bar {
+      gap: 0.5rem;
+    }
+  }
+
+  @media (min-width: 72em) {
+    .utility {
+      display: block;
+    }
+    .primary {
+      display: block;
+    }
+    .menu-toggle,
+    .mobile {
+      display: none !important;
+    }
+  }
+
+  @media (max-width: 29.99em) {
+    .menu-toggle__label {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+      white-space: nowrap;
+    }
+  }
+</style>

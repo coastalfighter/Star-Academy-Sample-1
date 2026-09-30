@@ -1,0 +1,49 @@
+---
+import LegalLayout from '@/layouts/LegalLayout.astro';
+import Confirm from '@/components/Confirm.astro';
+import { SITE } from '@/lib/site';
+---
+
+<LegalLayout
+  title="Privacy"
+  path="/privacy"
+  eyebrow="Privacy"
+  heading="Website privacy notice"
+  lede="How this website collects and uses information."
+  description="How the STARS Academy website collects, uses and protects information submitted through its forms and analytics."
+>
+  <p><Confirm note="Have this notice reviewed by STARS' legal/compliance advisor before launch. It covers the website only — not STARS' HIPAA Notice of Privacy Practices." /></p>
+
+  <h2>Information you choose to send us</h2>
+  <p>
+    When you use a form on this website — for example to request a tour, send an enrollment inquiry, contact us, or apply
+    for a job — we collect the information you enter, such as your name, phone number, email address and message. We use it
+    only to respond to your request.
+  </p>
+  <p>
+    Please do not send diagnoses, medical records or other health information through website forms. Our team will arrange
+    a secure way to share that information when it is needed.
+  </p>
+
+  <h2>Analytics</h2>
+  <p>
+    We may use Google Analytics to understand, in aggregate, how visitors use this site (for example, which pages are
+    visited most). Analytics does not tell us who you are. You can opt out using your browser’s privacy settings or the
+    <a href="https://tools.google.com/dlpage/gaoptout" target="_blank" rel="noopener">Google Analytics opt-out add-on<span class="visually-hidden"> (opens in a new tab)</span></a>.
+  </p>
+
+  <h2>How information is stored and shared</h2>
+  <p>
+    Form submissions are stored with our website hosting provider and delivered to STARS staff by email. We do not sell
+    personal information. <Confirm note="Hosting provider name and data-retention period for form submissions" />
+  </p>
+
+  <h2>Your health information</h2>
+  <p>
+    How STARS uses and protects health information about children in our care is described in our HIPAA Notice of Privacy
+    Practices. <Confirm note="Link to STARS' Notice of Privacy Practices (PDF)" />
+  </p>
+
+  <h2>Contact</h2>
+  <p>Questions about this notice? Call us at <a href={SITE.phoneHref}>{SITE.phone}</a>.</p>
+</LegalLayout>

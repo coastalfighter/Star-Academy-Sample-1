@@ -1,0 +1,172 @@
+---
+import Icon from '../Icon.astro';
+import Photo from '../Photo.astro';
+import { SITE } from '@/lib/site';
+---
+
+<section class="hero" aria-labelledby="hero-title">
+  <div class="container hero__grid">
+    <div class="hero__text">
+      <p class="eyebrow">Pediatric therapy &amp; developmental preschool · Batesville</p>
+      <h1 id="hero-title">
+        Therapy, learning and care for young children, <em>woven into one full&nbsp;day.</em>
+      </h1>
+      <p class="hero__lede">
+        STARS Academy serves children from birth to age six who need extra support with development. Speech,
+        occupational and physical therapy, licensed nursing care and developmental classrooms all happen here — together,
+        with one team that knows your child.
+      </p>
+      <div class="cluster hero__actions">
+        <a class="btn" href="/getting-started">
+          See if STARS is right for your child
+          <span class="btn__arrow"><Icon name="arrow-right" size={18} /></span>
+        </a>
+        <a class="btn btn--secondary" href="/schedule-a-tour">Schedule a tour</a>
+      </div>
+      <p class="hero__call small">
+        Prefer to talk? Call <a href={SITE.phoneHref}>{SITE.phone}</a> — weekdays {SITE.hours.open}–{SITE.hours.close}
+      </p>
+    </div>
+
+    <div class="hero__media">
+      <Photo
+        class="hero__photo"
+        ratio="4 / 5"
+        tone="sand"
+        priority
+        brief="A therapist and a preschooler at eye level in a sunlit classroom, mid-laugh — real STARS moment, natural light."
+      />
+      <div class="hero__inset" aria-hidden="true">
+        <Photo ratio="1 / 1" tone="gold" brief="Small hands on sensory play — beans, scoops, a teacher's hand nearby." />
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <dl class="hero__facts">
+      <div>
+        <dt>Serving families since</dt>
+        <dd>{SITE.founded}</dd>
+      </div>
+      <div>
+        <dt>Children from</dt>
+        <dd>Birth to age 6</dd>
+      </div>
+      <div>
+        <dt>Paid through</dt>
+        <dd>Medicaid, incl. ARKids First-A, SSI &amp; TEFRA</dd>
+      </div>
+      <div>
+        <dt>Speech therapy</dt>
+        <dd>Offered in English &amp; Spanish</dd>
+      </div>
+    </dl>
+  </div>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    padding-block: var(--space-l) var(--space-xl);
+    overflow: hidden;
+  }
+  .hero::before {
+    /* Soft warm light behind the composition — no loud gradients. */
+    content: '';
+    position: absolute;
+    inset: -20% -10% auto auto;
+    width: 60vw;
+    height: 60vw;
+    max-width: 52rem;
+    max-height: 52rem;
+    background: radial-gradient(closest-side, rgb(242 194 48 / 0.16), transparent);
+    pointer-events: none;
+  }
+  .hero__grid {
+    position: relative;
+    display: grid;
+    gap: var(--space-xl);
+    align-items: center;
+  }
+  .hero__text {
+    display: grid;
+    gap: var(--space-s);
+    max-width: 40rem;
+  }
+  .hero h1 {
+    font-size: clamp(2.35rem, 1.6rem + 3.6vw, 4.6rem);
+    line-height: 1.04;
+  }
+  .hero__lede {
+    font-size: var(--step-1);
+    line-height: 1.55;
+    color: var(--ink-700);
+    max-width: 36rem;
+  }
+  .hero__actions {
+    margin-top: var(--space-2xs);
+  }
+  .hero__call {
+    color: var(--ink-600);
+  }
+  .hero__call a {
+    font-weight: 650;
+    white-space: nowrap;
+  }
+  .hero__media {
+    position: relative;
+    max-width: 34rem;
+    width: 100%;
+    justify-self: center;
+    padding-left: 12%;
+  }
+  .hero__inset {
+    position: absolute;
+    left: 0;
+    top: 10%;
+    width: 38%;
+    padding: 6px;
+    background: var(--paper);
+    border-radius: var(--radius-m);
+    box-shadow: var(--shadow-m);
+  }
+  .hero__inset :global(.photo__note) {
+    display: none;
+  }
+  .hero__facts {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 9.5rem), 1fr));
+    gap: 0 var(--space-s);
+    margin-top: var(--space-xl);
+    border-top: 1px solid var(--color-line);
+  }
+  .hero__facts > div {
+    padding: var(--space-s) var(--space-s) 0 0;
+  }
+  .hero__facts dt {
+    font-size: var(--step--1);
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-600);
+  }
+  .hero__facts dd {
+    margin-top: 0.2rem;
+    font-family: var(--font-display);
+    font-size: var(--step-1);
+    line-height: 1.3;
+    color: var(--navy-900);
+  }
+  @media (min-width: 60em) {
+    .hero {
+      padding-top: var(--space-xl);
+    }
+    .hero__grid {
+      grid-template-columns: 1.15fr 0.85fr;
+    }
+    .hero__facts > div + div {
+      padding-left: var(--space-s);
+      border-left: 1px solid var(--color-line);
+    }
+  }
+</style>

@@ -1,0 +1,58 @@
+---
+import { buildTitle, cleanDescription, DEFAULT_DESCRIPTION } from '@/lib/seo';
+import { SITE } from '@/lib/site';
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  imageAlt?: string;
+  noindex?: boolean;
+  type?: 'website' | 'article';
+  jsonLd?: (Record<string, unknown> | null)[];
+}
+
+const {
+  title,
+  description = DEFAULT_DESCRIPTION,
+  image = '/og/default.png',
+  imageAlt = 'STARS Academy — therapy, learning and care for young children in Batesville, Arkansas',
+  noindex = false,
+  type = 'website',
+  jsonLd = [],
+} = Astro.props;
+
+const site = Astro.site ?? new URL('https://www.mystarsacademy.org');
+const fullTitle = buildTitle(title);
+const desc = cleanDescription(description);
+const canonicalPath = Astro.url.pathname.replace(/\.html$/, '').replace(/(.)\/$/, '$1');
+const canonical = new URL(canonicalPath, site).toString();
+const ogImage = new URL(image, site).toString();
+const robotsNoindex = noindex || import.meta.env.PUBLIC_NOINDEX === 'true';
+const schemas = jsonLd.filter((s): s is Record<string, unknown> => Boolean(s));
+---
+
+<title>{fullTitle}</title>
+<meta name="description" content={desc} />
+<link rel="canonical" href={canonical} />
+{robotsNoindex && <meta name="robots" content="noindex, nofollow" />}
+
+<meta property="og:type" content={type} />
+<meta property="og:site_name" content={SITE.name} />
+<meta property="og:locale" content="en_US" />
+<meta property="og:title" content={fullTitle} />
+<meta property="og:description" content={desc} />
+<meta property="og:url" content={canonical} />
+<meta property="og:image" content={ogImage} />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content={imageAlt} />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={fullTitle} />
+<meta name="twitter:description" content={desc} />
+<meta name="twitter:image" content={ogImage} />
+
+<meta name="geo.region" content="US-AR" />
+<meta name="geo.placename" content="Batesville, Arkansas" />
+
+{schemas.map((schema) => <script type="application/ld+json" set:html={JSON.stringify(schema)} />)}

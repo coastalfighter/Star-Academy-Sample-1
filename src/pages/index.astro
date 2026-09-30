@@ -1,0 +1,41 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Hero from '@/components/home/Hero.astro';
+import AudienceRouter from '@/components/home/AudienceRouter.astro';
+import WhatIsStars from '@/components/home/WhatIsStars.astro';
+import DayAtStars from '@/components/home/DayAtStars.astro';
+import ServicesIndex from '@/components/home/ServicesIndex.astro';
+import ApproachTeaser from '@/components/home/ApproachTeaser.astro';
+import FamilyPathway from '@/components/home/FamilyPathway.astro';
+import Credibility from '@/components/home/Credibility.astro';
+import PartnersCareers from '@/components/home/PartnersCareers.astro';
+import VisitCta from '@/components/home/VisitCta.astro';
+
+/*
+ * Homepage narrative (see docs/02-strategy.md):
+ * 1. Hero — what STARS is, who it's for, why it's different, next step
+ * 2. Router — every audience finds its door in one glance
+ * 3–4. Explain the model, then make it concrete ("a day at STARS")
+ * 5. Services — scannable, not a card grid
+ * 6. Approach — the philosophy, in plain language
+ * 7. Family pathway — fit + the four steps to start
+ * 8. Credibility — facts, then (real) family voice
+ * 9. Referral partners + careers
+ * 10. Visit — the single most persuasive action
+ */
+---
+
+<BaseLayout
+  description="STARS Academy in Batesville, Arkansas brings speech, occupational and physical therapy, licensed nursing care and developmental classrooms together in one full day for children from birth to age six."
+>
+  <Hero />
+  <AudienceRouter />
+  <WhatIsStars />
+  <DayAtStars />
+  <ServicesIndex />
+  <ApproachTeaser />
+  <FamilyPathway />
+  <Credibility />
+  <PartnersCareers />
+  <VisitCta />
+</BaseLayout>

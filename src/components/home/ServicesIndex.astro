@@ -1,0 +1,126 @@
+---
+import { getCollection } from 'astro:content';
+import Icon from '../Icon.astro';
+
+const services = (await getCollection('services')).sort((a, b) => a.data.order - b.data.order);
+
+// Short, plain-language "helps with" lines for scanning.
+const helpsWith: Record<string, string> = {
+  '/classrooms': 'Learning, play, routines, kindergarten readiness',
+  '/speech-therapy': 'Talking, understanding, social connection, eating & swallowing',
+  '/occupational-therapy': 'Sensory needs, big feelings, self-care, using hands',
+  '/physical-therapy': 'Crawling, walking, balance, strength, equipment',
+  '/nursing': 'Medications, feedings, respiratory & complex medical needs',
+};
+---
+
+<section class="section services" aria-labelledby="services-title">
+  <div class="container">
+    <div class="section-head section-head--split">
+      <div class="stack">
+        <p class="eyebrow">Services</p>
+        <h2 id="services-title">Everything your child needs, <em>under one roof.</em></h2>
+      </div>
+      <div class="stack">
+        <p class="lede">
+          Each service is led by professionals in that field. What makes STARS different is how closely they work together —
+          every day, around the same child.
+        </p>
+        <a class="link-arrow" href="/services">How our services fit together <Icon name="arrow-right" size={18} /></a>
+      </div>
+    </div>
+
+    <ul class="svc" role="list">
+      {
+        services.map((s, i) => (
+          <li data-reveal style={`--reveal-delay: ${i * 60}ms`}>
+            <a class="svc__row" href={s.data.path}>
+              <span class="svc__num" aria-hidden="true">
+                {String(i + 1).padStart(2, '0')}
+              </span>
+              <span class="svc__title">{s.data.title}</span>
+              <span class="svc__helps">
+                <span class="visually-hidden">Helps with: </span>
+                {helpsWith[s.data.path]}
+              </span>
+              <span class="svc__go" aria-hidden="true">
+                <Icon name="arrow-right" size={22} />
+              </span>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  .svc {
+    padding: 0;
+    list-style: none;
+    border-top: 1px solid var(--color-heading);
+  }
+  .svc li {
+    border-bottom: 1px solid var(--color-line);
+  }
+  .svc__row {
+    display: grid;
+    grid-template-columns: 2rem minmax(0, 1fr) auto;
+    grid-template-areas:
+      'num title go'
+      '. helps go';
+    gap: 0.25rem var(--space-s);
+    align-items: center;
+    padding-block: var(--space-m);
+    text-decoration: none;
+    color: var(--ink-900);
+    transition: background-color var(--duration-m) ease;
+  }
+  .svc__num {
+    grid-area: num;
+    font-family: var(--font-display);
+    font-style: italic;
+    color: var(--red-700);
+  }
+  .svc__title {
+    grid-area: title;
+    font-family: var(--font-display);
+    font-size: var(--step-3);
+    line-height: 1.1;
+    color: var(--navy-900);
+    transition: color var(--duration-s) ease;
+  }
+  .svc__helps {
+    grid-area: helps;
+    color: var(--ink-700);
+  }
+  .svc__go {
+    grid-area: go;
+    display: grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    border: 1px solid var(--color-line);
+    border-radius: 50%;
+    color: var(--navy-900);
+    transition:
+      background-color var(--duration-m) ease,
+      color var(--duration-m) ease,
+      transform var(--duration-m) var(--ease-out);
+  }
+  .svc__row:hover .svc__title {
+    color: var(--red-700);
+  }
+  .svc__row:hover .svc__go {
+    background: var(--navy-900);
+    border-color: var(--navy-900);
+    color: #ffffff;
+    transform: translateX(4px);
+  }
+  @media (min-width: 56em) {
+    .svc__row {
+      grid-template-columns: 3.5rem minmax(0, 1.1fr) minmax(0, 1fr) auto;
+      grid-template-areas: 'num title helps go';
+    }
+  }
+</style>

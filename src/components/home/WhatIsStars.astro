@@ -1,0 +1,135 @@
+---
+/**
+ * The core explainer. Answers "what is STARS?" by contrast with the
+ * categories families already know, then shows how the parts combine.
+ */
+const parts = [
+  {
+    label: 'A developmental preschool',
+    body: 'Warm, well-run classrooms for infants, toddlers and preschoolers — built so every child learns at their own pace.',
+  },
+  {
+    label: 'A pediatric therapy team',
+    body: 'Licensed speech, occupational and physical therapists who work with your child during the day, not across town.',
+  },
+  {
+    label: 'On-site licensed nurses',
+    body: 'Full-time nurses who manage medications, feedings and complex medical needs so children can join in fully.',
+  },
+];
+---
+
+<section class="section what" aria-labelledby="what-title">
+  <div class="container">
+    <div class="section-head section-head--split">
+      <div class="stack">
+        <p class="eyebrow">What STARS is</p>
+        <h2 id="what-title">Not a daycare. Not a therapy clinic. <em>Both, working as one.</em></h2>
+      </div>
+      <p class="lede">
+        Many families piece support together — a preschool in one place, therapy appointments somewhere else, medical
+        instructions on a sheet of paper. At STARS, it all happens here, in one day, with one team that talks to each other
+        about your child.
+      </p>
+    </div>
+
+    <ol class="what__parts" role="list">
+      {
+        parts.map((p, i) => (
+          <li class="what__part" data-reveal style={`--reveal-delay: ${i * 100}ms`}>
+            <span class="what__num" aria-hidden="true">
+              {i + 1}
+            </span>
+            <h3>{p.label}</h3>
+            <p>{p.body}</p>
+          </li>
+        ))
+      }
+    </ol>
+
+    <p class="what__sum" data-reveal>
+      <span class="what__sum-kicker">At STARS, these aren’t three separate places.</span>
+      <span class="what__sum-line">One day. One plan. One team.</span>
+    </p>
+  </div>
+</section>
+
+<style>
+  .what__parts {
+    display: grid;
+    gap: var(--space-m);
+    padding: 0;
+    list-style: none;
+  }
+  .what__part {
+    position: relative;
+    display: grid;
+    align-content: start;
+    gap: var(--space-2xs);
+    padding: var(--space-m) 0 0;
+    border-top: 1px solid var(--color-line);
+  }
+  .what__num {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: var(--step-3);
+    line-height: 1;
+    color: var(--gold-700);
+  }
+  .what__part h3 {
+    font-size: var(--step-2);
+  }
+  .what__part p {
+    color: var(--ink-700);
+    max-width: 24rem;
+  }
+  .what__sum {
+    display: grid;
+    gap: 0.3rem;
+    margin-top: var(--space-xl);
+    padding: var(--space-m) var(--space-l);
+    background: var(--navy-900);
+    border-radius: var(--radius-m);
+    color: #ffffff;
+    text-align: center;
+  }
+  .what__sum-kicker {
+    font-size: var(--step--1);
+    letter-spacing: 0.06em;
+    color: #c7c5dc;
+  }
+  .what__sum-line {
+    font-family: var(--font-display);
+    font-size: var(--step-3);
+    line-height: 1.15;
+  }
+  @media (min-width: 56em) {
+    .what__parts {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0;
+    }
+    .what__part {
+      padding: var(--space-m) var(--space-l) 0 0;
+    }
+    .what__part + .what__part {
+      padding-left: var(--space-l);
+    }
+    .what__part + .what__part::before {
+      /* The "+" between the parts makes the idea of combination literal. */
+      content: '+';
+      position: absolute;
+      left: -0.75rem;
+      top: -1.05rem;
+      display: grid;
+      place-items: center;
+      width: 1.9rem;
+      height: 1.9rem;
+      border-radius: 50%;
+      background: var(--paper);
+      border: 1px solid var(--color-line);
+      font-family: var(--font-body);
+      font-weight: 600;
+      color: var(--red-700);
+    }
+  }
+</style>

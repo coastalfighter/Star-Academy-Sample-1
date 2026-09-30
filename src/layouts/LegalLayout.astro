@@ -1,0 +1,42 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import PageHero from '@/components/PageHero.astro';
+import { breadcrumbSchema } from '@/lib/seo';
+
+interface Props {
+  title: string;
+  description: string;
+  path: string;
+  eyebrow: string;
+  heading: string;
+  lede: string;
+  updated?: string;
+}
+const { title, description, path, eyebrow, heading, lede, updated } = Astro.props;
+const site = Astro.site ?? new URL('https://www.mystarsacademy.org');
+const crumbs = [
+  { label: 'Home', href: '/' },
+  { label: title, href: path },
+];
+---
+
+<BaseLayout {title} {description} jsonLd={[breadcrumbSchema(crumbs, site)]}>
+  <PageHero {eyebrow} title={heading} {lede} {crumbs} compact />
+  <section class="section">
+    <div class="container">
+      <article class="prose legal">
+        {updated && <p class="small muted">Last updated: {updated}</p>}
+        <slot />
+      </article>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .legal {
+    color: var(--ink-700);
+  }
+  .legal :global(h2) {
+    color: var(--navy-900);
+  }
+</style>

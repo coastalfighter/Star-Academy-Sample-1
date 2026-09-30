@@ -1,0 +1,58 @@
+---
+import Form from './Form.astro';
+import Field from './Field.astro';
+const f = 'enrollment-inquiry';
+---
+
+<Form
+  name={f}
+  submitLabel="Send my inquiry"
+  successTitle="Thank you — we’ve received your inquiry."
+  successBody="Someone from our enrollment team will contact you to talk about your child, answer your questions and explain next steps. There’s no commitment — this is just the start of a conversation."
+>
+  <Field form={f} name="parent_name" label="Parent or guardian name" required autocomplete="name" width="half" />
+  <Field form={f} name="phone" label="Phone" type="tel" required autocomplete="tel" inputmode="tel" width="half" />
+  <Field form={f} name="email" label="Email" type="email" required autocomplete="email" inputmode="email" />
+  <Field
+    form={f}
+    name="child_age"
+    label="Child’s age"
+    type="select"
+    required
+    options={['Under 12 months', '1 year', '2 years', '3 years', '4 years', '5 years', '6 years']}
+    width="half"
+  />
+  <Field
+    form={f}
+    name="contact_preference"
+    label="Best way to reach you"
+    type="select"
+    options={['Phone call', 'Text message', 'Email']}
+    width="half"
+  />
+  <Field
+    form={f}
+    name="language"
+    label="Preferred language"
+    type="select"
+    options={['English', 'Español']}
+    width="half"
+  />
+  <Field
+    form={f}
+    name="has_pcp"
+    label="Does your child have a primary care doctor?"
+    type="select"
+    options={['Yes', 'No', 'Not sure']}
+    width="half"
+  />
+  <Field
+    form={f}
+    name="message"
+    label="What would you like help with?"
+    type="textarea"
+    rows={4}
+    maxLength={1000}
+    hint="A sentence or two is plenty — for example, “My 2-year-old isn’t talking much yet.” Please don’t include diagnoses or medical records."
+  />
+</Form>

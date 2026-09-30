@@ -1,0 +1,157 @@
+---
+import Icon from '../Icon.astro';
+import { SITE } from '@/lib/site';
+
+const fits = [
+  'is behind in talking, moving, playing or self-care',
+  'has a diagnosis such as autism, Down syndrome, cerebral palsy, or a history of prematurity',
+  'has medical needs that make a typical preschool or daycare hard',
+  'has been recommended for therapy by a doctor, therapist or school',
+];
+
+const steps = [
+  { title: 'Reach out', body: 'Call or send an inquiry. We’ll listen and answer your questions.' },
+  { title: 'Visit', body: 'Tour STARS and meet the team who would work with your child.' },
+  { title: 'Evaluation & prescription', body: 'Your child is evaluated, and their doctor prescribes treatment.' },
+  { title: 'First day', body: 'We verify coverage, build a plan together and welcome your child.' },
+];
+---
+
+<section class="section section--white pathway" aria-labelledby="pathway-title">
+  <div class="container pathway__grid">
+    <div class="pathway__fit stack">
+      <p class="eyebrow">For families</p>
+      <h2 id="pathway-title">Could STARS help <em>your</em> child?</h2>
+      <p class="lede">STARS may be a good fit if your child is between birth and age six and…</p>
+      <ul role="list" class="pathway__list">
+        {
+          fits.map((f) => (
+            <li>
+              <span class="pathway__check" aria-hidden="true">
+                <Icon name="check" size={16} />
+              </span>
+              {f}
+            </li>
+          ))
+        }
+      </ul>
+      <p class="pathway__funding small">
+        Services are paid for through Medicaid funding, including ARKids First-A, SSI and TEFRA. We can check your child’s
+        coverage for you.
+      </p>
+    </div>
+
+    <div class="pathway__steps">
+      <h3 class="pathway__steps-title">Getting started takes four steps</h3>
+      <ol role="list">
+        {
+          steps.map((s, i) => (
+            <li data-reveal style={`--reveal-delay: ${i * 80}ms`}>
+              <span class="pathway__n" aria-hidden="true">
+                {i + 1}
+              </span>
+              <div>
+                <h4>{s.title}</h4>
+                <p>{s.body}</p>
+              </div>
+            </li>
+          ))
+        }
+      </ol>
+      <div class="cluster">
+        <a class="btn" href="/getting-started">
+          How enrollment works <span class="btn__arrow"><Icon name="arrow-right" size={18} /></span>
+        </a>
+        <a class="btn btn--secondary" href={SITE.phoneHref}><Icon name="phone" size={18} /> {SITE.phone}</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .pathway__grid {
+    display: grid;
+    gap: var(--space-xl);
+  }
+  .pathway__list {
+    display: grid;
+    gap: var(--space-xs);
+    padding: 0;
+    list-style: none;
+  }
+  .pathway__list li {
+    display: grid;
+    grid-template-columns: 1.75rem 1fr;
+    gap: var(--space-xs);
+    align-items: start;
+    font-size: var(--step-1);
+    line-height: 1.45;
+    color: var(--ink-900);
+  }
+  .pathway__check {
+    display: grid;
+    place-items: center;
+    width: 1.75rem;
+    height: 1.75rem;
+    margin-top: 0.1rem;
+    border-radius: 50%;
+    background: var(--gold-200);
+    color: var(--navy-900);
+  }
+  .pathway__funding {
+    padding: var(--space-s);
+    border-left: 3px solid var(--gold-400);
+    background: var(--sand-100);
+    color: var(--ink-700);
+  }
+  .pathway__steps {
+    display: grid;
+    gap: var(--space-m);
+    align-content: start;
+    padding: clamp(1.25rem, 4vw, 2.5rem);
+    background: var(--paper);
+    border: 1px solid var(--color-line-soft);
+    border-radius: var(--radius-l);
+  }
+  .pathway__steps-title {
+    font-size: var(--step-2);
+  }
+  .pathway__steps ol {
+    display: grid;
+    gap: var(--space-s);
+    padding: 0;
+    list-style: none;
+  }
+  .pathway__steps li {
+    display: grid;
+    grid-template-columns: 2.5rem 1fr;
+    gap: var(--space-s);
+    align-items: start;
+  }
+  .pathway__n {
+    display: grid;
+    place-items: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    background: var(--navy-900);
+    color: #ffffff;
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+  }
+  .pathway__steps h4 {
+    font-family: var(--font-body);
+    font-size: var(--step-0);
+    font-weight: 700;
+  }
+  .pathway__steps p {
+    color: var(--ink-700);
+  }
+  @media (min-width: 60em) {
+    .pathway__grid {
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-2xl);
+      align-items: start;
+    }
+  }
+</style>

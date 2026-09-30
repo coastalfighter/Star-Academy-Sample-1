@@ -1,0 +1,81 @@
+---
+/**
+ * Inner-page hero. Editorial split: title and plain-language lede on the
+ * left, an optional photograph (or aside slot) on the right.
+ */
+import Breadcrumbs from './Breadcrumbs.astro';
+import Photo from './Photo.astro';
+import type { Crumb } from '@/lib/seo';
+
+interface Props {
+  eyebrow: string;
+  title: string;
+  lede: string;
+  crumbs: Crumb[];
+  photo?: { brief: string; src?: string; alt?: string; tone?: 'sand' | 'navy' | 'teal' | 'gold' };
+  compact?: boolean;
+}
+
+const { eyebrow, title, lede, crumbs, photo, compact = false } = Astro.props;
+const hasAside = Boolean(photo) || Astro.slots.has('aside');
+---
+
+<section class:list={['page-hero', { 'page-hero--compact': compact, 'page-hero--split': hasAside }]}>
+  <div class="container">
+    <Breadcrumbs items={crumbs} />
+    <div class="page-hero__grid">
+      <div class="page-hero__text">
+        <p class="eyebrow">{eyebrow}</p>
+        <h1 set:html={title} />
+        <p class="lede">{lede}</p>
+        {Astro.slots.has('actions') && <div class="cluster page-hero__actions"><slot name="actions" /></div>}
+      </div>
+      {
+        hasAside && (
+          <div class="page-hero__aside">
+            {photo ? <Photo {...photo} ratio="5 / 4" priority /> : <slot name="aside" />}
+          </div>
+        )
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .page-hero {
+    padding-block: var(--space-m) var(--space-2xl);
+    border-bottom: 1px solid var(--color-line-soft);
+  }
+  .page-hero--compact {
+    padding-bottom: var(--space-xl);
+  }
+  .page-hero__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-l);
+    margin-top: var(--space-xl);
+    align-items: center;
+  }
+  .page-hero__text {
+    min-width: 0;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-s);
+    max-width: 44rem;
+  }
+  .page-hero h1 {
+    font-size: var(--step-5);
+  }
+  .page-hero--split h1 {
+    font-size: var(--step-4);
+  }
+  .page-hero__actions {
+    margin-top: var(--space-xs);
+  }
+  @media (min-width: 56em) {
+    .page-hero--split .page-hero__grid {
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: var(--space-xl);
+    }
+  }
+</style>

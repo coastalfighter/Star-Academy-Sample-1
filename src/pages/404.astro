@@ -1,0 +1,50 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Icon from '@/components/Icon.astro';
+
+const popular = [
+  { label: 'Getting started', href: '/getting-started' },
+  { label: 'Services', href: '/services' },
+  { label: 'Schedule a tour', href: '/schedule-a-tour' },
+  { label: 'Careers', href: '/careers' },
+  { label: 'Contact', href: '/contact-us' },
+];
+---
+
+<BaseLayout title="Page Not Found" description="The page you were looking for could not be found." noindex>
+  <section class="section">
+    <div class="container stack notfound">
+      <p class="eyebrow">Page not found</p>
+      <h1>We couldn’t find that page.</h1>
+      <p class="lede">
+        Our website has been redesigned, so some old links have moved. One of these might be what you’re looking for:
+      </p>
+      <ul role="list" class="notfound__links">
+        {
+          popular.map((p) => (
+            <li>
+              <a class="link-arrow" href={p.href}>
+                {p.label} <Icon name="arrow-right" size={18} />
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .notfound {
+    --stack-space: var(--space-m);
+    max-width: 48rem;
+    padding-block: var(--space-xl);
+  }
+  .notfound__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-s) var(--space-l);
+    padding: 0;
+    list-style: none;
+  }
+</style>

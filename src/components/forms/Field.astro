@@ -1,0 +1,210 @@
+---
+/**
+ * Accessible form field: visible label, optional hint, inline error slot
+ * wired up with aria-describedby. Validation rules are declared as data
+ * attributes and enforced by src/scripts/forms.ts (and mirrored by
+ * native HTML constraints for no-JS users).
+ */
+import type { Rule } from '@/lib/validation';
+
+type Option = string | { value: string; label: string };
+
+interface Props {
+  /** Form name — keeps ids unique when several forms share a page. */
+  form: string;
+  name: string;
+  label: string;
+  type?: 'text' | 'email' | 'tel' | 'textarea' | 'select' | 'date' | 'file';
+  required?: boolean;
+  hint?: string;
+  autocomplete?: string;
+  options?: Option[];
+  placeholderOption?: string;
+  rows?: number;
+  maxLength?: number;
+  accept?: string[];
+  maxBytes?: number;
+  inputmode?: 'text' | 'email' | 'tel' | 'numeric';
+  width?: 'full' | 'half';
+}
+
+const {
+  form,
+  name,
+  label,
+  type = 'text',
+  required = false,
+  hint,
+  autocomplete,
+  options = [],
+  placeholderOption = 'Choose one',
+  rows = 5,
+  maxLength,
+  accept,
+  maxBytes,
+  inputmode,
+  width = 'full',
+} = Astro.props;
+
+const id = `${form}-${name}`;
+const hintId = hint ? `${id}-hint` : undefined;
+const errorId = `${id}-error`;
+const describedBy = [hintId, errorId].filter(Boolean).join(' ');
+
+const rules: Rule[] = [];
+if (required) rules.push('required');
+if (type === 'email') rules.push('email');
+if (type === 'tel') rules.push('phone');
+if (maxLength) rules.push('maxlength');
+if (type === 'file') rules.push('file');
+
+const verb = type === 'select' || type === 'file' ? 'choose' : 'enter';
+const shared = {
+  id,
+  name,
+  required,
+  'aria-describedby': describedBy,
+  'data-rules': rules.join(' '),
+  'data-label': label,
+  'data-verb': verb,
+};
+const normalized = options.map((o) => (typeof o === 'string' ? { value: o, label: o } : o));
+---
+
+<div class:list={['field', `field--${width}`]} data-field>
+  <label for={id} class="field__label">
+    {label}
+    {required ? <span class="field__req" aria-hidden="true">*</span> : <span class="field__opt">(optional)</span>}
+  </label>
+  {hint && <p class="field__hint" id={hintId}>{hint}</p>}
+  {
+    type === 'textarea' ? (
+      <textarea {...shared} rows={rows} maxlength={maxLength} data-maxlength={maxLength} autocomplete={autocomplete} />
+    ) : type === 'select' ? (
+      <select {...shared} autocomplete={autocomplete}>
+        <option value="">{placeholderOption}</option>
+        {normalized.map((o) => (
+          <option value={o.value}>{o.label}</option>
+        ))}
+      </select>
+    ) : type === 'file' ? (
+      <input
+        {...shared}
+        type="file"
+        accept={accept?.map((a) => `.${a}`).join(',')}
+        data-accept={accept?.join(',')}
+        data-maxbytes={maxBytes}
+      />
+    ) : (
+      <input
+        {...shared}
+        type={type}
+        autocomplete={autocomplete}
+        inputmode={inputmode}
+        maxlength={maxLength}
+        data-maxlength={maxLength}
+      />
+    )
+  }
+  <p class="field__error" id={errorId} data-error hidden></p>
+</div>
+
+<style>
+  .field {
+    display: grid;
+    gap: 0.4rem;
+    grid-column: 1 / -1;
+  }
+  @media (min-width: 40em) {
+    .field--half {
+      grid-column: span 1;
+    }
+  }
+  .field__label {
+    font-weight: 620;
+    color: var(--navy-900);
+  }
+  .field__req {
+    margin-left: 0.2em;
+    color: var(--red-700);
+  }
+  .field__opt {
+    margin-left: 0.35em;
+    font-weight: 450;
+    font-size: var(--step--1);
+    color: var(--ink-600);
+  }
+  .field__hint {
+    font-size: var(--step--1);
+    color: var(--ink-600);
+    line-height: 1.5;
+  }
+  input,
+  select,
+  textarea {
+    width: 100%;
+    min-height: 3rem;
+    padding: 0.7rem 0.85rem;
+    border: 1.5px solid var(--sand-300);
+    border-radius: var(--radius-s);
+    background: var(--white);
+    color: var(--ink-900);
+    font-size: 1rem;
+    line-height: 1.4;
+    transition:
+      border-color var(--duration-s) ease,
+      box-shadow var(--duration-s) ease;
+  }
+  input[type='file'] {
+    padding: 0.6rem;
+    background: var(--sand-100);
+  }
+  textarea {
+    resize: vertical;
+    min-height: 8rem;
+  }
+  select {
+    appearance: none;
+    padding-right: 2.5rem;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' stroke='%23221f55' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m3 6 5 5 5-5'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.9rem center;
+  }
+  input:hover,
+  select:hover,
+  textarea:hover {
+    border-color: var(--stone-500);
+  }
+  input:focus-visible,
+  select:focus-visible,
+  textarea:focus-visible {
+    outline: none;
+    border-color: var(--teal-600);
+    box-shadow: 0 0 0 3px rgb(46 122 140 / 0.3);
+  }
+  [aria-invalid='true'] {
+    border-color: var(--color-error);
+    background-color: #fffafa;
+  }
+  .field__error {
+    display: flex;
+    gap: 0.4rem;
+    font-size: var(--step--1);
+    font-weight: 600;
+    color: var(--color-error);
+  }
+  .field__error::before {
+    content: '!';
+    display: inline-grid;
+    place-items: center;
+    flex: none;
+    width: 1.15rem;
+    height: 1.15rem;
+    margin-top: 0.1rem;
+    border-radius: 50%;
+    background: var(--color-error);
+    color: #ffffff;
+    font-size: 0.75rem;
+    font-weight: 800;
+  }
+</style>

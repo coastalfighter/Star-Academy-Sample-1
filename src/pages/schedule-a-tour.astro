@@ -1,0 +1,155 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PageHero from '@/components/PageHero.astro';
+import TourForm from '@/components/forms/TourForm.astro';
+import Icon from '@/components/Icon.astro';
+import Confirm from '@/components/Confirm.astro';
+import { SITE, LOCATIONS, fullAddress, mapsUrl } from '@/lib/site';
+import { breadcrumbSchema } from '@/lib/seo';
+
+const site = Astro.site ?? new URL('https://www.mystarsacademy.org');
+const crumbs = [
+  { label: 'Home', href: '/' },
+  { label: 'Schedule a Tour', href: '/schedule-a-tour' },
+];
+const expect = [
+  'Walk through classrooms and therapy spaces while the day is in motion.',
+  'Meet teachers, therapists and nurses who would work with your child.',
+  'Ask anything — about eligibility, funding, transportation or a typical day.',
+  'Leave with clear next steps, and no pressure to decide on the spot.',
+];
+---
+
+<BaseLayout
+  title="Schedule a Tour"
+  description="Visit STARS Academy in Batesville, Arkansas. Tour our classrooms and therapy spaces, meet the team and get your questions answered — no commitment."
+  jsonLd={[breadcrumbSchema(crumbs, site)]}
+>
+  <PageHero
+    eyebrow="Schedule a tour"
+    title="Come see STARS <em>for yourself.</em>"
+    lede="A tour is the best way to understand what makes STARS different. It’s relaxed, and there’s no commitment."
+    crumbs={crumbs}
+    compact
+  />
+
+  <section class="section">
+    <div class="container tour">
+      <div class="tour__info">
+        <section aria-labelledby="expect-title" class="stack">
+          <h2 id="expect-title" class="tour__h">What to expect</h2>
+          <ul role="list" class="tour__list">
+            {
+              expect.map((e) => (
+                <li>
+                  <span class="tour__icon" aria-hidden="true">
+                    <Icon name="check" size={16} />
+                  </span>
+                  {e}
+                </li>
+              ))
+            }
+          </ul>
+          <p class="small muted"><Confirm note="Typical tour length, and whether children are welcome on tours" /></p>
+        </section>
+
+        <section aria-labelledby="where-title" class="tour__where">
+          <h2 id="where-title" class="tour__h">Where we are</h2>
+          <ul role="list">
+            {
+              LOCATIONS.map((loc) => {
+                const addr = fullAddress(loc);
+                const map = mapsUrl(loc);
+                return (
+                  <li>
+                    <Icon name="pin" size={20} />
+                    <span>
+                      <strong>{loc.name}</strong>
+                      <br />
+                      {addr && map ? (
+                        <a href={map} target="_blank" rel="noopener">
+                          {addr}
+                          <span class="visually-hidden"> (opens Google Maps in a new tab)</span>
+                        </a>
+                      ) : (
+                        <Confirm note="Street address" />
+                      )}
+                    </span>
+                  </li>
+                );
+              })
+            }
+            <li><Icon name="clock" size={20} /> <span>{SITE.hours.days}<br />{SITE.hours.open} – {SITE.hours.close}</span></li>
+            <li><Icon name="phone" size={20} /> <a href={SITE.phoneHref}>{SITE.phone}</a></li>
+          </ul>
+        </section>
+      </div>
+
+      <div class="tour__form">
+        <h2 class="tour__h">Request a tour</h2>
+        <p class="muted tour__sub">Share a few details and a time that works. We’ll confirm by phone or email.</p>
+        <TourForm />
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .tour {
+    display: grid;
+    gap: var(--space-xl);
+    align-items: start;
+  }
+  .tour__info {
+    display: grid;
+    gap: var(--space-xl);
+  }
+  .tour__h {
+    font-size: var(--step-3);
+  }
+  .tour__sub {
+    margin-block: var(--space-2xs) var(--space-m);
+  }
+  .tour__list {
+    display: grid;
+    gap: var(--space-s);
+    padding: 0;
+    list-style: none;
+  }
+  .tour__list li {
+    display: grid;
+    grid-template-columns: 1.75rem 1fr;
+    gap: var(--space-xs);
+  }
+  .tour__icon {
+    display: grid;
+    place-items: center;
+    width: 1.75rem;
+    height: 1.75rem;
+    border-radius: 50%;
+    background: var(--gold-200);
+  }
+  .tour__where ul {
+    display: grid;
+    gap: var(--space-s);
+    margin-top: var(--space-s);
+    padding: 0;
+    list-style: none;
+  }
+  .tour__where li {
+    display: grid;
+    grid-template-columns: 1.5rem 1fr;
+    gap: var(--space-xs);
+    align-items: start;
+  }
+  .tour__where :global(svg) {
+    color: var(--red-600);
+    margin-top: 0.2rem;
+  }
+  @media (min-width: 64em) {
+    .tour {
+      grid-template-columns: 0.85fr 1.15fr;
+      gap: var(--space-2xl);
+    }
+  }
+</style>

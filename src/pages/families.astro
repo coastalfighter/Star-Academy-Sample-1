@@ -1,0 +1,339 @@
+---
+/**
+ * New page for enrolled families. Built as a quick-reference hub: the
+ * things families look up most sit at the top as jump links, followed by
+ * short, scannable sections. Much of the operational detail must come
+ * from STARS and is clearly marked.
+ */
+import { getCollection } from 'astro:content';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PageHero from '@/components/PageHero.astro';
+import Faq from '@/components/Faq.astro';
+import Icon from '@/components/Icon.astro';
+import Confirm from '@/components/Confirm.astro';
+import Rich from '@/components/Rich.astro';
+import NextSteps from '@/components/NextSteps.astro';
+import { SITE, CONTACTS } from '@/lib/site';
+import { breadcrumbSchema } from '@/lib/seo';
+
+const site = Astro.site ?? new URL('https://www.mystarsacademy.org');
+const crumbs = [
+  { label: 'Home', href: '/' },
+  { label: 'Current Families', href: '/families' },
+];
+const faqs = (await getCollection('faqs'))
+  .map((f) => f.data)
+  .filter((f) => f.audience === 'current')
+  .sort((a, b) => a.order - b.order);
+
+const today = new Date().toISOString().slice(0, 10);
+const announcements = (await getCollection('announcements'))
+  .map((a) => a.data)
+  .filter((a) => !a.expires || a.expires >= today);
+
+const quick = [
+  { id: 'hours', label: 'Hours & closures' },
+  { id: 'absences', label: 'Absences' },
+  { id: 'transportation', label: 'Transportation' },
+  { id: 'health', label: 'Health & medications' },
+  { id: 'kindergarten', label: 'Kindergarten transition' },
+  { id: 'resources', label: 'Resources' },
+  { id: 'contacts', label: 'Who to contact' },
+];
+---
+
+<BaseLayout
+  title="Current Families"
+  description="Information for current STARS Academy families: hours, closures, absences, transportation, health and medications, kindergarten transition, resources and who to contact."
+  jsonLd={[breadcrumbSchema(crumbs, site)]}
+>
+  <PageHero
+    eyebrow="For current families"
+    title="Everything you need, <em>in one place.</em>"
+    lede="Quick answers for families whose children already attend STARS. Can’t find what you need? Call us — we’re glad to help."
+    crumbs={crumbs}
+    compact
+  >
+    <Fragment slot="actions">
+      <a class="btn" href={SITE.phoneHref}><Icon name="phone" size={18} /> Call {SITE.phone}</a>
+    </Fragment>
+  </PageHero>
+
+  <section class="section section--tight" aria-labelledby="notice-title">
+    <div class="container">
+      <div class="notice" role="note">
+        <p class="eyebrow" id="notice-title">Announcements</p>
+        {
+          announcements.length > 0 ? (
+            <ul role="list" class="notice__list">
+              {announcements.map((a) => (
+                <li>
+                  <strong>{a.title}</strong>
+                  <Rich text={a.body} />
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p>
+              <Confirm note="Add current announcements — closures, events, reminders — in the CMS (Content Manager → Announcements)" />
+            </p>
+          )
+        }
+      </div>
+    </div>
+  </section>
+
+  <div class="container fam">
+    <nav class="fam__nav" aria-label="On this page">
+      <p class="fam__nav-title">On this page</p>
+      <ul role="list">
+        {
+          quick.map((q) => (
+            <li>
+              <a href={`#${q.id}`}>{q.label}</a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <div class="fam__content">
+      <section id="hours" aria-labelledby="hours-title" class="fam__sec">
+        <h2 id="hours-title">Hours &amp; closures</h2>
+        <p><strong>{SITE.hours.days}, {SITE.hours.open} – {SITE.hours.close}.</strong></p>
+        <p><Confirm note="How weather and emergency closures are announced (Facebook, text alerts, local media)" /></p>
+        <p><Confirm note="Holiday closure calendar for the current school year (PDF or list)" /></p>
+      </section>
+
+      <section id="absences" aria-labelledby="absences-title" class="fam__sec">
+        <h2 id="absences-title">Absences</h2>
+        <p>If your child will be absent, please let us know as early as possible by calling <a href={SITE.phoneHref}>{SITE.phone}</a>.</p>
+        <p><Confirm note="Absence reporting deadline and any dedicated line or text option" /></p>
+      </section>
+
+      <section id="transportation" aria-labelledby="transport-title" class="fam__sec">
+        <h2 id="transport-title">Transportation</h2>
+        <p>
+          STARS operates clinic-owned vans to bring children to and from the clinic. Van drivers and van riders work together
+          to keep children safe along the way.
+        </p>
+        <p><Confirm note="Pick-up/drop-off windows, what to do if your child won't be riding, and how to request route changes" /></p>
+      </section>
+
+      <section id="health" aria-labelledby="health-title" class="fam__sec">
+        <h2 id="health-title">Health &amp; medications</h2>
+        <p>
+          Our licensed nurses coordinate your child’s care with you and your child’s health care provider. If your child’s
+          medications, diet or health needs change, please tell the nursing team as soon as possible so they can update the
+          care plan.
+        </p>
+        <p><Confirm note="Illness/exclusion policy (when to keep a child home) and required medication forms" /></p>
+      </section>
+
+      <section id="kindergarten" aria-labelledby="k-title" class="fam__sec">
+        <h2 id="k-title">Kindergarten transition</h2>
+        <p>
+          We want every child to leave STARS ready for kindergarten. Our team works with parents and local school districts
+          to make the move to public school as smooth as possible.
+        </p>
+        <p><Confirm note="When families should expect transition conversations to begin, and what to prepare" /></p>
+      </section>
+
+      <section id="resources" aria-labelledby="res-title" class="fam__sec">
+        <h2 id="res-title">Resources for families</h2>
+        <ul role="list" class="res">
+          <li>
+            <a href="https://consciousdiscipline.com/" target="_blank" rel="noopener">
+              Conscious Discipline<span class="visually-hidden"> (opens in a new tab)</span>
+              <Icon name="arrow-up-right" size={16} />
+            </a>
+            <p>The social-emotional approach we use at STARS — with ideas you can try at home.</p>
+          </li>
+          <li>
+            <a href="/approach">Our approach, in plain language</a>
+            <p>What relationships, regulation and neuroaffirming care look like day to day.</p>
+          </li>
+          <li>
+            <a href={SITE.social.facebook} target="_blank" rel="noopener">
+              STARS on Facebook<span class="visually-hidden"> (opens in a new tab)</span>
+              <Icon name="arrow-up-right" size={16} />
+            </a>
+            <p>Photos, reminders and news from our classrooms.</p>
+          </li>
+        </ul>
+        <p><Confirm note="Parent handbook, forms and any family videos (the current site's 'Videos' page is empty)" /></p>
+      </section>
+
+      <section id="contacts" aria-labelledby="contacts-title" class="fam__sec">
+        <h2 id="contacts-title">Who to contact</h2>
+        <ul role="list" class="contacts">
+          {
+            CONTACTS.map((c) => (
+              <li>
+                <h3>{c.label}</h3>
+                <p>{c.purpose}</p>
+                <p>
+                  {c.phone && <a href={SITE.phoneHref}>{c.phone}</a>}
+                  {c.email ? <a href={`mailto:${c.email}`}>{c.email}</a> : <Confirm note="Direct email" />}
+                </p>
+              </li>
+            ))
+          }
+        </ul>
+      </section>
+
+      <section aria-labelledby="faq-title" class="fam__sec">
+        <h2 id="faq-title">Quick questions</h2>
+        <Faq items={faqs} />
+      </section>
+    </div>
+  </div>
+
+  <NextSteps
+    heading="Have a question we didn’t answer?"
+    body="Send us a message and we’ll route it to the right person."
+    primary={{ label: 'Contact STARS', href: '/contact-us' }}
+    links={[
+      { label: 'Nursing care', href: '/nursing', description: 'How our nurses support your child’s health.' },
+      { label: 'All FAQs', href: '/faq', description: 'Answers for families, partners and job seekers.' },
+    ]}
+  />
+</BaseLayout>
+
+<style>
+  .notice {
+    display: grid;
+    gap: var(--space-2xs);
+    padding: var(--space-m);
+    background: var(--gold-200);
+    border-radius: var(--radius-m);
+    --color-accent-text: var(--navy-900);
+  }
+  .notice__list {
+    display: grid;
+    gap: var(--space-xs);
+    padding: 0;
+    list-style: none;
+  }
+  .notice__list li {
+    display: grid;
+    gap: 0.15rem;
+  }
+  .fam {
+    display: grid;
+    gap: var(--space-xl);
+    padding-bottom: var(--space-2xl);
+  }
+  .fam__nav {
+    align-self: start;
+  }
+  .fam__nav-title {
+    font-size: var(--step--1);
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-600);
+    margin-bottom: var(--space-2xs);
+  }
+  .fam__nav ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    padding: 0;
+    list-style: none;
+  }
+  .fam__nav a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.75rem;
+    padding: 0.4rem 0.9rem;
+    border: 1px solid var(--color-line);
+    border-radius: 999px;
+    background: var(--white);
+    font-size: 0.925rem;
+    font-weight: 600;
+    text-decoration: none;
+    color: var(--navy-900);
+  }
+  .fam__nav a:hover {
+    border-color: var(--navy-800);
+  }
+  .fam__content {
+    display: grid;
+  }
+  .fam__sec {
+    display: grid;
+    gap: var(--space-xs);
+    padding-block: var(--space-l);
+    border-top: 1px solid var(--color-line);
+    scroll-margin-top: calc(var(--header-h) + 3rem);
+  }
+  .fam__sec h2 {
+    font-size: var(--step-3);
+  }
+  .fam__sec > p {
+    max-width: var(--measure);
+    color: var(--ink-700);
+  }
+  .res,
+  .contacts {
+    display: grid;
+    gap: var(--space-s);
+    padding: 0;
+    list-style: none;
+  }
+  .res a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-weight: 650;
+  }
+  .res p,
+  .contacts p {
+    color: var(--ink-700);
+  }
+  .contacts {
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
+  }
+  .contacts li {
+    display: grid;
+    gap: 0.25rem;
+    align-content: start;
+    padding: var(--space-s);
+    background: var(--white);
+    border: 1px solid var(--color-line-soft);
+    border-radius: var(--radius-m);
+  }
+  .contacts h3 {
+    font-size: var(--step-1);
+  }
+  .contacts p:last-child {
+    display: grid;
+    gap: 0.2rem;
+  }
+  @media (min-width: 64em) {
+    .fam {
+      grid-template-columns: 15rem 1fr;
+      gap: var(--space-2xl);
+    }
+    .fam__nav {
+      position: sticky;
+      top: calc(var(--header-h) + 3.5rem);
+      padding-top: var(--space-l);
+    }
+    .fam__nav ul {
+      flex-direction: column;
+      gap: 0.1rem;
+    }
+    .fam__nav a {
+      padding: 0.35rem 0;
+      border: 0;
+      border-radius: 0;
+      background: none;
+      color: var(--ink-700);
+    }
+    .fam__nav a:hover {
+      color: var(--red-700);
+    }
+  }
+</style>

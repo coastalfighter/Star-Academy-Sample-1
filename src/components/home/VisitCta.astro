@@ -1,0 +1,67 @@
+---
+import Icon from '../Icon.astro';
+import Photo from '../Photo.astro';
+import { SITE, LOCATIONS, fullAddress, mapsUrl } from '@/lib/site';
+
+const main = LOCATIONS[0]!;
+const address = fullAddress(main);
+const map = mapsUrl(main);
+---
+
+<section class="section visit" aria-labelledby="visit-title">
+  <div class="container visit__grid">
+    <Photo ratio="4 / 5" tone="gold" brief="Exterior of the STARS building at 200 General St. in warm late-afternoon light, a family walking in." />
+    <div class="visit__text stack">
+      <p class="eyebrow">Come see for yourself</p>
+      <h2 id="visit-title">The best way to understand STARS is to <em>walk through the door.</em></h2>
+      <p class="lede">
+        Tours are relaxed and there’s no commitment. You’ll see the classrooms and therapy spaces, meet our team and get
+        your questions answered.
+      </p>
+      <ul role="list" class="visit__info">
+        <li>
+          <Icon name="pin" size={20} />
+          {map && address ? <a href={map} target="_blank" rel="noopener">{address}<span class="visually-hidden"> (opens Google Maps in a new tab)</span></a> : null}
+        </li>
+        <li><Icon name="clock" size={20} /> {SITE.hours.days}, {SITE.hours.open}–{SITE.hours.close}</li>
+        <li><Icon name="phone" size={20} /> <a href={SITE.phoneHref}>{SITE.phone}</a></li>
+      </ul>
+      <div class="cluster">
+        <a class="btn" href="/schedule-a-tour">
+          Schedule a tour <span class="btn__arrow"><Icon name="arrow-right" size={18} /></span>
+        </a>
+        <a class="btn btn--secondary" href="/contact-us">Contact us</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .visit__grid {
+    display: grid;
+    gap: var(--space-xl);
+    align-items: center;
+  }
+  .visit__info {
+    display: grid;
+    gap: 0.6rem;
+    padding: 0;
+    list-style: none;
+  }
+  .visit__info li {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+    color: var(--ink-900);
+  }
+  .visit__info :global(svg) {
+    flex: none;
+    color: var(--red-600);
+  }
+  @media (min-width: 60em) {
+    .visit__grid {
+      grid-template-columns: 0.85fr 1fr;
+      gap: var(--space-2xl);
+    }
+  }
+</style>

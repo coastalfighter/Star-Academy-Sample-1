@@ -1,0 +1,144 @@
+{
+  "faqs": [
+    {
+      "id": "what-is-stars",
+      "audience": "families",
+      "order": 1,
+      "question": "What exactly is STARS Academy?",
+      "answer": "STARS is a pediatric developmental day treatment program in Batesville. Children spend the day with us in developmental classrooms, and speech, occupational and physical therapy and nursing care happen during that same day, with one team working together. It isn't just a daycare, and it isn't a clinic you drive to for a separate appointment. It's both, designed as one."
+    },
+    {
+      "id": "ages",
+      "audience": "families",
+      "order": 2,
+      "question": "What ages does STARS serve?",
+      "answer": "STARS serves children from birth to age six. [CLIENT TO CONFIRM: whether STARS offers summer services for school-age children]"
+    },
+    {
+      "id": "eligibility",
+      "audience": "families",
+      "order": 3,
+      "question": "How do I know if my child qualifies?",
+      "answer": "Your child is eligible if they have active health insurance, qualify for developmental services plus at least one of speech therapy, occupational therapy, physical therapy or nursing services, and have treatment prescribed by their primary care physician. You don't need to figure this out alone — call us or send an inquiry and we'll walk you through it."
+    },
+    {
+      "id": "cost",
+      "audience": "families",
+      "order": 4,
+      "question": "How is STARS paid for? Do you take my insurance?",
+      "answer": "Day treatment services are paid for through Medicaid funding, including ARKids First-A, SSI and TEFRA. STARS can contact your insurance provider to find out what therapy services your child's plan covers. [CLIENT TO CONFIRM: whether private insurance is accepted and whether families ever have out-of-pocket costs]"
+    },
+    {
+      "id": "prescription",
+      "audience": "families",
+      "order": 5,
+      "question": "Do I need a referral from our doctor?",
+      "answer": "Yes. Treatment at STARS must be prescribed by your child's primary care physician. If you're not sure how to start that conversation, we can help. [CLIENT TO CONFIRM: whether STARS requests the prescription from the physician on the family's behalf]"
+    },
+    {
+      "id": "daycare",
+      "audience": "families",
+      "order": 6,
+      "question": "Is STARS a daycare?",
+      "answer": "Not exactly. Children spend the day with us in classrooms, so it can look like a preschool or daycare. But every child at STARS has an individual developmental plan, and licensed therapists and nurses are part of the team all day long."
+    },
+    {
+      "id": "hours",
+      "audience": "families",
+      "order": 7,
+      "question": "What are your hours?",
+      "answer": "STARS is open Monday through Friday, 7:00 a.m. to 3:00 p.m."
+    },
+    {
+      "id": "transportation",
+      "audience": "families",
+      "order": 8,
+      "question": "Do you provide transportation?",
+      "answer": "STARS operates clinic-owned vans that bring children to and from the clinic. [CLIENT TO CONFIRM: who is eligible for transportation, the service area, and how families request it]"
+    },
+    {
+      "id": "spanish",
+      "audience": "families",
+      "order": 9,
+      "question": "Do you offer services in Spanish?",
+      "answer": "Yes. Speech-language evaluations and therapy are offered in Spanish. [CLIENT TO CONFIRM: other Spanish-language support available to families]"
+    },
+    {
+      "id": "tour",
+      "audience": "families",
+      "order": 10,
+      "question": "Can I visit before deciding?",
+      "answer": "Absolutely — we encourage it. A tour is the best way to see how STARS works and meet the people who would work with your child. Request a tour online or call us."
+    },
+    {
+      "id": "timeline",
+      "audience": "families",
+      "order": 11,
+      "question": "How long does it take to get started?",
+      "answer": "It depends on evaluations, your child's prescription and insurance verification. [CLIENT TO CONFIRM: typical time from first call to first day, and whether there is a waitlist]"
+    },
+    {
+      "id": "who-can-refer",
+      "audience": "referrals",
+      "order": 1,
+      "question": "Who can refer a child to STARS?",
+      "answer": "Physicians, therapists, schools, early intervention programs and other professionals can recommend STARS to families, and families can contact us directly. For services to begin, treatment must be prescribed by the child's primary care physician."
+    },
+    {
+      "id": "how-to-send",
+      "audience": "referrals",
+      "order": 2,
+      "question": "How do I send a referral or prescription?",
+      "answer": "Call our main line or use the referral contact form on this page and our team will follow up with your office. [CLIENT TO CONFIRM: fax number or secure method for sending prescriptions and records]"
+    },
+    {
+      "id": "updates",
+      "audience": "referrals",
+      "order": 3,
+      "question": "Will you keep me informed about my patient?",
+      "answer": "Yes. STARS therapists and nurses communicate with each child's physicians and other professionals as needed. [CLIENT TO CONFIRM: format and frequency of progress reports to prescribing physicians]"
+    },
+    {
+      "id": "medically-complex",
+      "audience": "referrals",
+      "order": 4,
+      "question": "Can STARS serve medically complex children?",
+      "answer": "Yes. Full-time licensed nurses are on staff and routinely care for children with needs such as tube feedings, trach care, supplemental oxygen, catheterization, ostomy care and epilepsy."
+    },
+    {
+      "id": "absent",
+      "audience": "current",
+      "order": 1,
+      "question": "Who do I contact if my child will be absent?",
+      "answer": "Call the main line at 870-793-3200. [CLIENT TO CONFIRM: absence reporting process and any dedicated line or text option]"
+    },
+    {
+      "id": "closures",
+      "audience": "current",
+      "order": 2,
+      "question": "How will I know if STARS is closed for weather?",
+      "answer": "[CLIENT TO CONFIRM: how weather and emergency closures are announced — e.g. Facebook, text alerts, local media]"
+    },
+    {
+      "id": "medications",
+      "audience": "current",
+      "order": 3,
+      "question": "My child's medication or health needs changed. What do I do?",
+      "answer": "Let our nursing team know as soon as possible so they can update your child's care plan and coordinate with your child's health care provider. [CLIENT TO CONFIRM: forms or physician orders required for medication changes]"
+    },
+    {
+      "id": "degree",
+      "audience": "careers",
+      "order": 1,
+      "question": "Do I need a degree to work at STARS?",
+      "answer": "It depends on the role. Developmental technician, van rider and van driver positions require a high school diploma or GED. Early Childhood Developmental Specialists need a four-year degree with an emphasis in early childhood education. Therapy and nursing roles require licensure in your discipline."
+    },
+    {
+      "id": "apply-process",
+      "audience": "careers",
+      "order": 2,
+      "question": "What does the application process look like?",
+      "answer": "Start by telling us a little about yourself online, then complete the official STARS employment application. Our team will contact you about next steps. Some roles require a pre-employment drug screen. [CLIENT TO CONFIRM: interview steps and typical hiring timeline]"
+    }
+  ]
+}

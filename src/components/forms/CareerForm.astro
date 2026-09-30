@@ -1,0 +1,42 @@
+---
+import Form from './Form.astro';
+import Field from './Field.astro';
+import { getCollection } from 'astro:content';
+
+const f = 'career-interest';
+const jobs = (await getCollection('jobs')).filter((j) => j.data.status !== 'closed').sort((a, b) => a.data.order - b.data.order);
+const positions = [...jobs.map((j) => j.data.title), 'Not sure yet — tell me about openings'];
+---
+
+<Form
+  name={f}
+  multipart
+  submitLabel="Send my information"
+  successTitle="Thank you for your interest in STARS."
+  successBody="If you haven’t already, please complete our official employment application (linked on this page). Our team will contact you about next steps."
+  privacyNote="We use this information only to consider you for employment at STARS Academy."
+>
+  <Field form={f} name="first_name" label="First name" required autocomplete="given-name" width="half" />
+  <Field form={f} name="last_name" label="Last name" required autocomplete="family-name" width="half" />
+  <Field form={f} name="email" label="Email" type="email" required autocomplete="email" inputmode="email" width="half" />
+  <Field form={f} name="phone" label="Phone" type="tel" required autocomplete="tel" inputmode="tel" width="half" />
+  <Field form={f} name="position" label="Position" type="select" required options={positions} width="half" />
+  <Field form={f} name="start_date" label="Earliest start date" type="date" width="half" />
+  <Field
+    form={f}
+    name="resume"
+    label="Résumé"
+    type="file"
+    accept={['pdf', 'doc', 'docx']}
+    maxBytes={8_000_000}
+    hint="PDF or Word, up to 8 MB."
+  />
+  <Field
+    form={f}
+    name="message"
+    label="Why are you interested in STARS?"
+    type="textarea"
+    rows={4}
+    maxLength={1200}
+  />
+</Form>

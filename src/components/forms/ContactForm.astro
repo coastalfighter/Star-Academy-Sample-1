@@ -1,0 +1,26 @@
+---
+import Form from './Form.astro';
+import Field from './Field.astro';
+const f = 'contact';
+---
+
+<Form
+  name={f}
+  submitLabel="Send message"
+  successTitle="Thank you — your message is on its way."
+  successBody="We’ll route it to the right person, and they’ll get back to you by email or phone."
+>
+  <Field form={f} name="name" label="Your name" required autocomplete="name" width="half" />
+  <Field form={f} name="email" label="Email" type="email" required autocomplete="email" inputmode="email" width="half" />
+  <Field form={f} name="phone" label="Phone" type="tel" autocomplete="tel" inputmode="tel" width="half" />
+  <Field
+    form={f}
+    name="topic"
+    label="What is this about?"
+    type="select"
+    required
+    options={['Enrolling a child', 'Scheduling a tour', 'I’m a current STARS family', 'Making a referral', 'Jobs and careers', 'Something else']}
+    width="half"
+  />
+  <Field form={f} name="message" label="Message" type="textarea" required rows={5} maxLength={1500} />
+</Form>

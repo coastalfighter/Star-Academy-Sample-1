@@ -1,0 +1,121 @@
+---
+import Photo from '../Photo.astro';
+import { SITE } from '@/lib/site';
+
+const moments = [
+  { time: SITE.hours.open, title: 'Arrive & connect', body: 'Familiar faces greet each child. A calm, predictable start helps them feel safe enough to learn.' },
+  { time: 'Morning', title: 'Learn through play', body: 'Circle time, centers and sensory play — each set up around the skills in your child’s plan.' },
+  { time: 'Through the day', title: 'Therapy, woven in', body: 'Therapists work one-on-one and in the classroom, so new skills show up in real moments.' },
+  { time: 'Midday', title: 'Care & nourishment', body: 'Nurses handle medications and feedings on site; mealtimes become practice for independence.' },
+  { time: SITE.hours.close, title: 'Head home', body: 'Children leave with a full day of learning — and families stay in the loop about their progress.' },
+];
+---
+
+<section class="section section--sand day" aria-labelledby="day-title">
+  <div class="container day__grid">
+    <div class="day__intro stack">
+      <p class="eyebrow">A day at STARS</p>
+      <h2 id="day-title">What “one full day” actually looks like.</h2>
+      <p class="lede">
+        Therapy isn’t a separate trip across town that has to fit around everything else. It’s part of how the whole day works.
+      </p>
+      <Photo ratio="4 / 3" tone="teal" brief="Wide shot of a STARS classroom mid-morning: children at centers, a therapist and teacher working side by side." />
+    </div>
+
+    <ol class="day__timeline" role="list">
+      {
+        moments.map((m, i) => (
+          <li class="day__moment" data-reveal style={`--reveal-delay: ${i * 70}ms`}>
+            <span class="day__time">{m.time}</span>
+            <div>
+              <h3>{m.title}</h3>
+              <p>{m.body}</p>
+            </div>
+          </li>
+        ))
+      }
+      <li class="day__note small">
+        Every child’s schedule is individualized. Open {SITE.hours.days}, {SITE.hours.open}–{SITE.hours.close}
+      </li>
+    </ol>
+  </div>
+</section>
+
+<style>
+  .day__grid {
+    display: grid;
+    gap: var(--space-xl);
+  }
+  .day__intro {
+    --stack-space: var(--space-s);
+    align-self: start;
+  }
+  .day__intro :global(.photo) {
+    margin-top: var(--space-m);
+  }
+  .day__timeline {
+    position: relative;
+    display: grid;
+    gap: var(--space-m);
+    padding: 0 0 0 1.75rem;
+    list-style: none;
+  }
+  .day__timeline::before {
+    content: '';
+    position: absolute;
+    left: 0.35rem;
+    top: 0.6rem;
+    bottom: 2.5rem;
+    width: 2px;
+    background: linear-gradient(var(--gold-400), var(--red-600));
+    border-radius: 2px;
+  }
+  .day__moment {
+    position: relative;
+    display: grid;
+    gap: 0.35rem;
+  }
+  .day__moment::before {
+    content: '';
+    position: absolute;
+    left: -1.75rem;
+    top: 0.35rem;
+    width: 0.85rem;
+    height: 0.85rem;
+    border-radius: 50%;
+    background: var(--sand-100);
+    border: 2px solid var(--navy-800);
+  }
+  .day__time {
+    font-size: var(--step--1);
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--red-700);
+  }
+  .day__moment h3 {
+    font-size: var(--step-2);
+  }
+  .day__moment p {
+    margin-top: 0.25rem;
+    color: var(--ink-700);
+    max-width: 30rem;
+  }
+  .day__note {
+    color: var(--ink-600);
+    font-style: italic;
+  }
+  @media (min-width: 60em) {
+    .day__grid {
+      grid-template-columns: 0.9fr 1.1fr;
+      gap: var(--space-2xl);
+    }
+    .day__intro {
+      position: sticky;
+      top: calc(var(--header-h) + 3.5rem);
+    }
+    .day__timeline {
+      padding-top: var(--space-s);
+    }
+  }
+</style>

@@ -1,0 +1,38 @@
+---
+import LegalLayout from '@/layouts/LegalLayout.astro';
+import { SITE } from '@/lib/site';
+---
+
+<LegalLayout
+  title="Accessibility"
+  path="/accessibility"
+  eyebrow="Accessibility"
+  heading="Accessibility statement"
+  lede="STARS Academy wants every family, partner and job seeker to be able to use this website."
+  description="STARS Academy's commitment to website accessibility, the standards we follow, and how to report a barrier."
+>
+  <h2>Our commitment</h2>
+  <p>
+    We designed this website to meet the Web Content Accessibility Guidelines (WCAG) 2.2, Level AA. That includes:
+  </p>
+  <ul>
+    <li>Text and interface colors with sufficient contrast.</li>
+    <li>Full keyboard navigation, with visible focus indicators.</li>
+    <li>Page structure, headings and labels that work with screen readers.</li>
+    <li>Forms with clear labels, instructions and error messages.</li>
+    <li>Layouts that adapt to phones, tablets, desktop and browser zoom up to 400%.</li>
+    <li>Reduced motion for visitors who prefer it.</li>
+  </ul>
+
+  <h2>Ongoing work</h2>
+  <p>
+    Accessibility is ongoing. We test new content as it is added and review the site regularly. Some linked content hosted by
+    other services (such as our secure application forms) may not be fully within our control.
+  </p>
+
+  <h2>Tell us about a barrier</h2>
+  <p>
+    If anything on this site is difficult to use, please call us at <a href={SITE.phoneHref}>{SITE.phone}</a> or use our
+    <a href="/contact-us">contact form</a>. We’ll work to provide the information you need in a format that works for you.
+  </p>
+</LegalLayout>

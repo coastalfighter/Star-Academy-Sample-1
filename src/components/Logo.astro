@@ -1,0 +1,84 @@
+---
+/**
+ * Interim horizontal lockup for digital use: the gold STARS star with the
+ * wordmark set in the site display face. The full-color master logo is
+ * preserved (footer, About page, print). See docs/03-design-system.md for
+ * the recommended logo-refinement workstream.
+ */
+interface Props {
+  variant?: 'default' | 'inverse';
+}
+const { variant = 'default' } = Astro.props;
+---
+
+<a href="/" class:list={['logo', `logo--${variant}`]} aria-label="STARS Academy — home">
+  <svg class="logo__star" viewBox="0 0 48 48" aria-hidden="true" focusable="false">
+    <path
+      d="M24 3.5 29.6 17l14.4 1.2-11 9.5 3.4 14.2L24 34.3l-12.4 7.6L15 27.7 4 18.2 18.4 17Z"
+      fill="var(--gold-400)"
+      stroke="var(--red-600)"
+      stroke-width="1.6"
+      stroke-linejoin="round"></path>
+    <path d="m24 14.5 1.9 4.4 4.7.4-3.6 3.1 1.1 4.6-4.1-2.5-4.1 2.5 1.1-4.6-3.6-3.1 4.7-.4Z" fill="var(--navy-800)"></path>
+  </svg>
+  <span class="logo__type">
+    <span class="logo__stars">STARS</span>
+    <span class="logo__academy">Academy</span>
+  </span>
+</a>
+
+<style>
+  .logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    min-height: 2.75rem;
+    text-decoration: none;
+    color: var(--navy-800);
+  }
+  .logo__star {
+    width: 2.35rem;
+    height: 2.35rem;
+    flex: none;
+    transition: transform var(--duration-l) var(--ease-out);
+  }
+  .logo:hover .logo__star {
+    transform: rotate(-12deg);
+  }
+  .logo__type {
+    display: flex;
+    flex-direction: column;
+    line-height: 1;
+  }
+  .logo__stars {
+    font-family: var(--font-display);
+    font-weight: 650;
+    font-size: 1.45rem;
+    letter-spacing: 0.06em;
+    font-variation-settings: 'opsz' 72;
+  }
+  .logo__academy {
+    margin-top: 0.2rem;
+    font-family: var(--font-body);
+    font-size: 0.66rem;
+    font-weight: 700;
+    letter-spacing: 0.34em;
+    text-transform: uppercase;
+    color: var(--red-700);
+  }
+  .logo--inverse {
+    color: #ffffff;
+  }
+  .logo--inverse .logo__academy {
+    color: var(--gold-400);
+  }
+  .logo:hover {
+    color: inherit;
+  }
+  .logo--default:hover {
+    color: var(--navy-800);
+  }
+  .logo--inverse:hover {
+    color: #ffffff;
+  }
+</style>

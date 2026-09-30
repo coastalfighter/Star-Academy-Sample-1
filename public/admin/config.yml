@@ -1,0 +1,152 @@
+# Decap CMS configuration — lets STARS staff edit content in the browser.
+# Every save is a commit to STARS' own GitHub repository, which triggers a
+# rebuild and deploy. No database, no vendor lock-in.
+#
+# Setup (one time, see docs/06-launch-and-operations.md):
+#  1. Set `repo` below to STARS' GitHub repository (owner/name).
+#  2. In Netlify: Site settings → Access control → OAuth → install GitHub provider.
+backend:
+  name: github
+  repo: STARS-ORG/stars-academy-website # CLIENT TO CONFIRM
+  branch: main
+  base_url: https://api.netlify.com
+
+# Editors can save drafts and publish when ready.
+publish_mode: editorial_workflow
+media_folder: public/uploads
+public_folder: /uploads
+site_url: https://www.mystarsacademy.org
+display_url: https://www.mystarsacademy.org
+logo_url: /apple-touch-icon.png
+
+collections:
+  - name: announcements
+    label: Announcements (Current Families page)
+    files:
+      - name: announcements
+        label: Announcements
+        file: src/content/announcements.json
+        format: json
+        fields:
+          - label: Announcements
+            name: announcements
+            widget: list
+            summary: '{{fields.title}}'
+            fields:
+              - { label: ID (short, no spaces), name: id, widget: string }
+              - { label: Title, name: title, widget: string }
+              - { label: Details, name: body, widget: text }
+              - { label: Hide after (optional), name: expires, widget: datetime, format: 'YYYY-MM-DD', date_format: 'YYYY-MM-DD', time_format: false, required: false }
+
+  - name: jobs
+    label: Careers — Positions
+    label_singular: Position
+    folder: src/content/jobs
+    create: true
+    slug: '{{slug}}'
+    extension: md
+    format: frontmatter
+    summary: '{{title}} ({{status}})'
+    sortable_fields: [order, title]
+    fields:
+      - { label: Job title, name: title, widget: string }
+      - { label: Abbreviation (optional), name: abbreviation, widget: string, required: false }
+      - label: Team
+        name: team
+        widget: select
+        options: [Classroom, Therapy, Nursing, Transportation, Operations]
+      - label: Status
+        name: status
+        widget: select
+        hint: '"Closed" hides the position from the website without deleting it.'
+        options:
+          - { label: 'Open now', value: open }
+          - { label: 'Hiring on an ongoing basis', value: ongoing }
+          - { label: 'Closed (hidden)', value: closed }
+      - { label: Short description, name: summary, widget: text }
+      - { label: Requirements, name: requirements, widget: list, field: { label: Requirement, name: item, widget: string } }
+      - { label: Display order, name: order, widget: number, value_type: int, default: 10 }
+
+  - name: faqs
+    label: Frequently Asked Questions
+    files:
+      - name: faqs
+        label: All FAQs
+        file: src/content/faqs.json
+        format: json
+        fields:
+          - label: Questions
+            name: faqs
+            widget: list
+            summary: '{{fields.audience}} — {{fields.question}}'
+            fields:
+              - { label: ID (short, no spaces), name: id, widget: string }
+              - label: Audience
+                name: audience
+                widget: select
+                options:
+                  - { label: Families considering STARS, value: families }
+                  - { label: Current families, value: current }
+                  - { label: Referral partners, value: referrals }
+                  - { label: Job seekers, value: careers }
+              - { label: Question, name: question, widget: string }
+              - { label: Answer, name: answer, widget: text }
+              - { label: Order, name: order, widget: number, value_type: int }
+
+  - name: services
+    label: Services
+    label_singular: Service
+    folder: src/content/services
+    create: false
+    delete: false
+    extension: md
+    format: frontmatter
+    summary: '{{title}}'
+    fields:
+      - { label: Service name, name: title, widget: string }
+      - { label: Menu order, name: order, widget: number, value_type: int }
+      - { label: URL path (do not change after launch), name: path, widget: string }
+      - { label: Eyebrow label, name: eyebrow, widget: string }
+      - { label: Headline (wrap words in <em></em> for the red italic accent), name: headline, widget: string }
+      - { label: Introduction, name: lede, widget: text }
+      - { label: Search title, name: metaTitle, widget: string }
+      - { label: Search description (max ~160 characters), name: metaDescription, widget: text }
+      - label: Photo
+        name: photo
+        widget: object
+        fields:
+          - { label: Photo brief (shown until a photo is added), name: brief, widget: string }
+          - { label: Photo, name: src, widget: image, required: false }
+          - { label: Photo description for screen readers, name: alt, widget: string, required: false }
+      - { label: What is it?, name: whatItIs, widget: text }
+      - { label: Who is it for?, name: forWho, widget: text }
+      - { label: Why a child might need it, name: signs, widget: list, field: { label: Reason, name: item, widget: string } }
+      - { label: What STARS provides, name: provides, widget: list, field: { label: Item, name: item, widget: string } }
+      - label: How it works
+        name: process
+        widget: list
+        fields:
+          - { label: Step title, name: title, widget: string }
+          - { label: Step description, name: body, widget: text }
+      - { label: What families can expect, name: expect, widget: list, field: { label: Item, name: item, widget: string } }
+      - label: How it connects to other services
+        name: connects
+        widget: list
+        fields:
+          - { label: Service path, name: path, widget: string }
+          - { label: Description, name: text, widget: text }
+      - label: For referral partners
+        name: forProviders
+        widget: object
+        required: false
+        fields:
+          - { label: Heading, name: heading, widget: string }
+          - { label: Introduction, name: intro, widget: text, required: false }
+          - { label: Items, name: items, widget: list, field: { label: Item, name: item, widget: string } }
+      - label: FAQs
+        name: faqs
+        widget: list
+        required: false
+        fields:
+          - { label: Question, name: question, widget: string }
+          - { label: Answer, name: answer, widget: text }

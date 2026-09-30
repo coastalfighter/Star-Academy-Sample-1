@@ -1,0 +1,101 @@
+---
+import Icon from '../Icon.astro';
+import Photo from '../Photo.astro';
+---
+
+<section class="section section--sand duo" aria-label="Referral partners and careers">
+  <div class="container duo__grid">
+    <article class="duo__partners" aria-labelledby="partners-title">
+      <p class="eyebrow">For physicians, therapists &amp; schools</p>
+      <h2 id="partners-title">A clear path to refer a child.</h2>
+      <p>
+        Everything you need before referring: who we serve, eligibility, the conditions our nurses and therapists routinely
+        support, and exactly how to send a prescription.
+      </p>
+      <ul role="list" class="duo__facts">
+        <li><strong>Ages</strong> Birth to 6</li>
+        <li><strong>Services</strong> Speech, OT, PT, nursing, developmental classrooms</li>
+        <li><strong>Requires</strong> Prescription from the child’s primary care physician</li>
+        <li><strong>Funding</strong> Medicaid, including ARKids First-A, SSI, TEFRA</li>
+      </ul>
+      <a class="btn" href="/referrals">
+        Referral information <span class="btn__arrow"><Icon name="arrow-right" size={18} /></span>
+      </a>
+    </article>
+
+    <article class="duo__careers" aria-labelledby="careers-title">
+      <Photo ratio="16 / 10" tone="navy" brief="Two STARS therapists and a teacher debriefing together in a hallway, relaxed and laughing." />
+      <div class="duo__careers-body">
+        <p class="eyebrow">Careers</p>
+        <h2 id="careers-title">Do the work you trained for, <em>with a team behind you.</em></h2>
+        <p>
+          Therapists, nurses and educators at STARS work side by side, every day, around the same children. If that’s the
+          kind of practice you’ve been looking for, we’d love to meet you.
+        </p>
+        <a class="link-arrow" href="/careers">Explore careers at STARS <Icon name="arrow-right" size={18} /></a>
+      </div>
+    </article>
+  </div>
+</section>
+
+<style>
+  .duo__grid {
+    display: grid;
+    gap: var(--space-l);
+  }
+  .duo__partners,
+  .duo__careers {
+    display: grid;
+    gap: var(--space-s);
+    align-content: start;
+  }
+  .duo__partners {
+    padding: clamp(1.25rem, 4vw, 2.75rem);
+    background: var(--white);
+    border-top: 4px solid var(--red-600);
+    border-radius: var(--radius-s) var(--radius-s) var(--radius-l) var(--radius-l);
+  }
+  .duo__partners h2,
+  .duo__careers h2 {
+    font-size: var(--step-3);
+  }
+  .duo__partners > p,
+  .duo__careers-body > p:not(.eyebrow) {
+    color: var(--ink-700);
+  }
+  .duo__facts {
+    display: grid;
+    padding: 0;
+    margin-block: var(--space-2xs) var(--space-xs);
+    list-style: none;
+    border-top: 1px solid var(--color-line);
+  }
+  .duo__facts li {
+    display: grid;
+    grid-template-columns: 6rem 1fr;
+    gap: var(--space-s);
+    padding-block: 0.7rem;
+    border-bottom: 1px solid var(--color-line);
+    font-size: 0.975rem;
+  }
+  .duo__facts strong {
+    font-size: var(--step--1);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-600);
+    font-weight: 700;
+    padding-top: 0.1rem;
+  }
+  .duo__careers-body {
+    display: grid;
+    gap: var(--space-s);
+    padding-top: var(--space-xs);
+  }
+  @media (min-width: 60em) {
+    .duo__grid {
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-xl);
+      align-items: start;
+    }
+  }
+</style>

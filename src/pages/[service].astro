@@ -1,0 +1,409 @@
+---
+/**
+ * Service page template. Every service answers the same eight questions in
+ * the same order, so families can compare services without re-learning the
+ * page: what is it, who is it for, why might my child need it, what does
+ * STARS provide, how does it work, what can we expect, how does it connect,
+ * and what do I do next.
+ *
+ * Service URLs stay at the root (/speech-therapy, …) to preserve the
+ * existing site's search rankings.
+ */
+import { getCollection, type CollectionEntry } from 'astro:content';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PageHero from '@/components/PageHero.astro';
+import Steps from '@/components/Steps.astro';
+import Faq from '@/components/Faq.astro';
+import Rich from '@/components/Rich.astro';
+import Icon from '@/components/Icon.astro';
+import NextSteps from '@/components/NextSteps.astro';
+import { breadcrumbSchema, faqSchema } from '@/lib/seo';
+import { smartQuotes } from '@/lib/confirm';
+
+export async function getStaticPaths() {
+  const services = await getCollection('services');
+  return services.map((entry) => ({ params: { service: entry.data.path.slice(1) }, props: { entry } }));
+}
+
+interface Props {
+  entry: CollectionEntry<'services'>;
+}
+
+const { entry } = Astro.props;
+const s = entry.data;
+const all = (await getCollection('services')).sort((a, b) => a.data.order - b.data.order);
+const titleFor = (path: string) => all.find((x) => x.data.path === path)?.data.title ?? path;
+const site = Astro.site ?? new URL('https://www.mystarsacademy.org');
+const crumbs = [
+  { label: 'Home', href: '/' },
+  { label: 'Services', href: '/services' },
+  { label: s.title, href: s.path },
+];
+const lower = s.title.toLowerCase();
+const others = all.filter((x) => x.data.path !== s.path);
+---
+
+<BaseLayout
+  title={s.metaTitle}
+  description={s.metaDescription}
+  jsonLd={[breadcrumbSchema(crumbs, site), faqSchema(s.faqs)]}
+>
+  <PageHero eyebrow={s.eyebrow} title={smartQuotes(s.headline)} lede={smartQuotes(s.lede)} crumbs={crumbs} photo={s.photo}>
+    <Fragment slot="actions">
+      <a class="btn" href="/getting-started">
+        See if your child qualifies <span class="btn__arrow"><Icon name="arrow-right" size={18} /></span>
+      </a>
+      <a class="btn btn--secondary" href="/schedule-a-tour">Schedule a tour</a>
+    </Fragment>
+  </PageHero>
+
+  <section class="section" aria-labelledby="overview-title">
+    <div class="container overview">
+      <div class="overview__what stack">
+        <h2 id="overview-title" class="overview__h">What is {lower}?</h2>
+        <Rich as="p" class="lede" text={s.whatItIs} />
+      </div>
+      <div class="overview__who">
+        <h3 class="eyebrow overview__who-h">Who it’s for</h3>
+        <Rich as="p" text={s.forWho} />
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--sand" aria-labelledby="signs-title">
+    <div class="container signs">
+      <div class="stack">
+        <p class="eyebrow">Why a child might need it</p>
+        <h2 id="signs-title">You might consider {lower} if…</h2>
+        <p class="muted">
+          These are common reasons families reach out. You don’t need a diagnosis to ask us a question.
+        </p>
+      </div>
+      <ul role="list" class="signs__list">
+        {
+          s.signs.map((sign, i) => (
+            <li data-reveal style={`--reveal-delay: ${i * 60}ms`}>
+              <Rich text={sign} />
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="provides-title">
+    <div class="container provides">
+      <div class="stack">
+        <p class="eyebrow">What STARS provides</p>
+        <h2 id="provides-title">What your child receives here.</h2>
+      </div>
+      <ul role="list" class="provides__list">
+        {
+          s.provides.map((item) => (
+            <li>
+              <span class="provides__icon" aria-hidden="true">
+                <Icon name="check" size={16} />
+              </span>
+              <Rich text={item} />
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section class="section section--white" aria-labelledby="process-title">
+    <div class="container">
+      <div class="section-head">
+        <p class="eyebrow">How it works</p>
+        <h2 id="process-title">From first conversation to everyday progress.</h2>
+      </div>
+      <Steps steps={s.process} />
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="expect-title">
+    <div class="container expect">
+      <div class="expect__col stack">
+        <p class="eyebrow">What families can expect</p>
+        <h2 id="expect-title">What you can count on.</h2>
+        <ul role="list" class="expect__list">
+          {
+            s.expect.map((e) => (
+              <li>
+                <Rich text={e} />
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+      <div class="expect__col stack">
+        <p class="eyebrow">How it connects</p>
+        <h2 class="expect__h">One team around your child.</h2>
+        <ul role="list" class="connects">
+          {
+            s.connects.map((c) => (
+              <li>
+                <a href={c.path}>{titleFor(c.path)}</a>
+                <Rich as="p" text={c.text} />
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  {
+    s.forProviders && (
+      <section class="section section--tight section--sand" aria-labelledby="providers-title">
+        <div class="container providers">
+          <details class="providers__box">
+            <summary>
+              <span>
+                <span class="eyebrow">For physicians &amp; referral partners</span>
+                <span class="providers__title" id="providers-title">
+                  {s.forProviders.heading}
+                </span>
+              </span>
+              <span class="providers__toggle" aria-hidden="true">
+                <Icon name="plus" size={20} />
+              </span>
+            </summary>
+            <div class="providers__body">
+              {s.forProviders.intro && <Rich as="p" text={`${s.forProviders.intro}:`} />}
+              <ul role="list">
+                {s.forProviders.items.map((i) => (
+                  <li>
+                    <Rich text={i} />
+                  </li>
+                ))}
+              </ul>
+              <a class="link-arrow" href="/referrals">
+                How to refer a child <Icon name="arrow-right" size={18} />
+              </a>
+            </div>
+          </details>
+        </div>
+      </section>
+    )
+  }
+
+  {
+    s.faqs.length > 0 && (
+      <section class="section" aria-labelledby="faq-title">
+        <div class="container faqwrap">
+          <div class="stack">
+            <p class="eyebrow">Questions</p>
+            <h2 id="faq-title">Common questions about {lower}</h2>
+            <a class="link-arrow" href="/faq">
+              All frequently asked questions <Icon name="arrow-right" size={18} />
+            </a>
+          </div>
+          <Faq items={s.faqs} />
+        </div>
+      </section>
+    )
+  }
+
+  <NextSteps
+    heading="Wondering if STARS is right for your child?"
+    body="Start with a conversation. We’ll listen, answer your questions and explain what enrollment looks like — no commitment."
+    primary={{ label: 'See how getting started works', href: '/getting-started' }}
+    secondary={{ label: 'Schedule a tour', href: '/schedule-a-tour' }}
+    links={others.slice(0, 3).map((o) => ({ label: o.data.title, href: o.data.path }))}
+  />
+</BaseLayout>
+
+<style>
+  .overview {
+    display: grid;
+    gap: var(--space-l);
+  }
+  .overview__h {
+    font-size: var(--step-3);
+  }
+  .overview__who {
+    display: grid;
+    gap: var(--space-xs);
+    align-content: start;
+    padding: var(--space-m);
+    border-left: 3px solid var(--gold-400);
+    background: var(--white);
+    border-radius: 0 var(--radius-m) var(--radius-m) 0;
+    font-size: var(--step-1);
+    line-height: 1.5;
+    color: var(--ink-900);
+  }
+  .signs,
+  .provides,
+  .faqwrap {
+    display: grid;
+    gap: var(--space-l);
+  }
+  .signs__list {
+    display: grid;
+    gap: 0;
+    padding: 0;
+    list-style: none;
+    border-top: 1px solid var(--color-line);
+  }
+  .signs__list li {
+    padding: var(--space-s) 0 var(--space-s) 2rem;
+    border-bottom: 1px solid var(--color-line);
+    position: relative;
+    font-family: var(--font-display);
+    font-size: var(--step-1);
+    line-height: 1.4;
+    color: var(--navy-900);
+  }
+  .signs__list li::before {
+    content: '';
+    position: absolute;
+    left: 0.2rem;
+    top: calc(var(--space-s) + 0.55em);
+    width: 0.8rem;
+    height: 2px;
+    background: var(--red-600);
+  }
+  .provides__list {
+    display: grid;
+    gap: var(--space-s);
+    padding: 0;
+    list-style: none;
+  }
+  .provides__list li {
+    display: grid;
+    grid-template-columns: 1.75rem 1fr;
+    gap: var(--space-xs);
+    align-items: start;
+  }
+  .provides__icon {
+    display: grid;
+    place-items: center;
+    width: 1.75rem;
+    height: 1.75rem;
+    border-radius: 50%;
+    background: var(--navy-100);
+    color: var(--navy-800);
+    margin-top: 0.1rem;
+  }
+  .expect {
+    display: grid;
+    gap: var(--space-xl);
+  }
+  .expect h2,
+  .expect__h {
+    font-size: var(--step-3);
+  }
+  .expect__list {
+    display: grid;
+    gap: var(--space-xs);
+    padding-left: 1.2rem;
+  }
+  .expect__list li::marker {
+    color: var(--red-600);
+  }
+  .connects {
+    display: grid;
+    padding: 0;
+    list-style: none;
+    border-top: 1px solid var(--color-line);
+  }
+  .connects li {
+    display: grid;
+    gap: 0.2rem;
+    padding-block: var(--space-s);
+    border-bottom: 1px solid var(--color-line);
+  }
+  .connects a {
+    font-family: var(--font-display);
+    font-size: var(--step-1);
+    text-decoration: none;
+    color: var(--navy-900);
+  }
+  .connects a:hover {
+    color: var(--red-700);
+    text-decoration: underline;
+  }
+  .connects p {
+    color: var(--ink-700);
+  }
+  .providers__box {
+    background: var(--white);
+    border: 1px solid var(--color-line-soft);
+    border-radius: var(--radius-l);
+  }
+  .providers__box summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-s);
+    padding: var(--space-m);
+    cursor: pointer;
+    list-style: none;
+  }
+  .providers__box summary::-webkit-details-marker {
+    display: none;
+  }
+  .providers__box summary > span:first-child {
+    display: grid;
+    gap: 0.35rem;
+  }
+  .providers__title {
+    font-family: var(--font-display);
+    font-size: var(--step-2);
+    color: var(--navy-900);
+  }
+  .providers__toggle {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    border: 1px solid var(--color-line);
+    transition: transform var(--duration-m) var(--ease-out);
+  }
+  details[open] .providers__toggle {
+    transform: rotate(45deg);
+    background: var(--gold-200);
+    border-color: var(--gold-200);
+  }
+  .providers__body {
+    display: grid;
+    gap: var(--space-s);
+    padding: 0 var(--space-m) var(--space-m);
+    color: var(--ink-700);
+  }
+  .providers__body ul {
+    columns: 2 16rem;
+    column-gap: var(--space-l);
+    padding-left: 1.1rem;
+  }
+  .providers__body li {
+    break-inside: avoid;
+    padding-bottom: 0.35rem;
+  }
+  .providers__body li::marker {
+    color: var(--red-600);
+  }
+  @media (min-width: 56em) {
+    .overview {
+      grid-template-columns: 1.4fr 1fr;
+      gap: var(--space-2xl);
+      align-items: start;
+    }
+    .signs,
+    .provides,
+    .faqwrap {
+      grid-template-columns: 0.9fr 1.1fr;
+      gap: var(--space-2xl);
+      align-items: start;
+    }
+    .expect {
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-2xl);
+    }
+  }
+</style>

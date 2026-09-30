@@ -1,0 +1,112 @@
+/*
+ * STARS Academy — design tokens
+ *
+ * Palette is derived from the existing STARS logo (navy wordmark, red
+ * "Academy", gold star) and the secondary teal already used on the current
+ * site. The logo colors are deepened and desaturated slightly so they read
+ * as confident and calm rather than primary-color "kid" palette. Warm paper
+ * neutrals carry most of the page; brand color is used with intent.
+ */
+:root {
+  /* Brand */
+  --navy-950: #100e2b;
+  --navy-900: #17153a;
+  --navy-800: #221f55; /* STARS navy (logo wordmark) */
+  --navy-700: #34317a;
+  --navy-100: #e6e5f2;
+  --red-700: #a3242c; /* text-safe red */
+  --red-600: #c4323a; /* STARS red (logo "Academy") */
+  --red-100: #f8e3e1;
+  --gold-500: #e7b21c;
+  --gold-400: #f2c230; /* STARS star */
+  --gold-200: #f8e6a8;
+  --gold-700: #8a6408; /* text-safe gold — 5:1 on paper */
+  --teal-700: #1f5e6c;
+  --teal-600: #2e7a8c; /* legacy site teal, refined */
+  --teal-100: #e1eef0;
+
+  /* Neutrals (warm) */
+  --paper: #fbf8f3;
+  --white: #ffffff;
+  --sand-100: #f5efe5;
+  --sand-200: #ebe3d5;
+  --sand-300: #ddd2c0;
+  --stone-500: #857c70;
+  --ink-900: #1c1a33;
+  --ink-700: #423f58; /* secondary text — 9.7:1 on paper */
+  --ink-600: #57536b; /* tertiary text — 7:1 on paper */
+
+  /* Semantic */
+  --color-bg: var(--paper);
+  --color-surface: var(--white);
+  --color-surface-muted: var(--sand-100);
+  --color-text: var(--ink-900);
+  --color-text-muted: var(--ink-700);
+  --color-heading: var(--navy-900);
+  --color-link: var(--navy-700);
+  --color-link-hover: var(--red-700);
+  --color-accent: var(--red-600);
+  --color-accent-text: var(--red-700);
+  --color-line: var(--sand-300);
+  --color-line-soft: var(--sand-200);
+  --color-focus: var(--teal-600);
+  --color-error: #a3242c;
+  --color-success: #1f6b4f;
+
+  /* Typography */
+  --font-display: 'Fraunces Variable', 'Iowan Old Style', 'Palatino Linotype', Georgia, serif;
+  --font-body: 'Figtree Variable', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  /* Fluid type scale (min @320px → max @1440px) */
+  --step--1: clamp(0.875rem, 0.85rem + 0.1vw, 0.9375rem);
+  --step-0: clamp(1.0625rem, 1.02rem + 0.22vw, 1.1875rem);
+  --step-1: clamp(1.1875rem, 1.1rem + 0.45vw, 1.4375rem);
+  --step-2: clamp(1.4375rem, 1.27rem + 0.85vw, 1.9375rem);
+  --step-3: clamp(1.75rem, 1.45rem + 1.5vw, 2.75rem);
+  --step-4: clamp(2.125rem, 1.62rem + 2.5vw, 3.75rem);
+  --step-5: clamp(2.5rem, 1.75rem + 3.75vw, 5.125rem);
+
+  --leading-tight: 1.08;
+  --leading-snug: 1.25;
+  --leading-body: 1.65;
+  --measure: 38em;
+  --measure-narrow: 30em;
+
+  /* Fluid space scale */
+  --space-3xs: clamp(0.25rem, 0.23rem + 0.1vw, 0.3125rem);
+  --space-2xs: clamp(0.5rem, 0.47rem + 0.15vw, 0.625rem);
+  --space-xs: clamp(0.75rem, 0.7rem + 0.25vw, 0.9375rem);
+  --space-s: clamp(1rem, 0.93rem + 0.35vw, 1.25rem);
+  --space-m: clamp(1.5rem, 1.4rem + 0.5vw, 1.875rem);
+  --space-l: clamp(2rem, 1.8rem + 1vw, 2.75rem);
+  --space-xl: clamp(3rem, 2.6rem + 2vw, 4.5rem);
+  --space-2xl: clamp(4rem, 3.3rem + 3.5vw, 7rem);
+  --space-3xl: clamp(5rem, 3.9rem + 5.5vw, 9.5rem);
+
+  /* Layout */
+  --container: 76rem;
+  --container-wide: 88rem;
+  --gutter: clamp(1rem, 0.5rem + 3vw, 2.5rem);
+  --header-h: 4.5rem;
+
+  /* Shape & depth — restrained on purpose */
+  --radius-s: 4px;
+  --radius-m: 8px;
+  --radius-l: 14px;
+  --shadow-s: 0 1px 2px rgb(23 21 58 / 0.06), 0 1px 1px rgb(23 21 58 / 0.04);
+  --shadow-m: 0 12px 32px -12px rgb(23 21 58 / 0.18);
+
+  /* Motion */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --duration-s: 160ms;
+  --duration-m: 320ms;
+  --duration-l: 700ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --duration-s: 0ms;
+    --duration-m: 0ms;
+    --duration-l: 0ms;
+  }
+}

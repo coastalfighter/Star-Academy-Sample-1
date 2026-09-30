@@ -1,0 +1,150 @@
+---
+/**
+ * Photography slot with built-in art direction.
+ *
+ * STARS has asked for authentic, documentary photography of real children,
+ * staff and families — not stock. Until that shoot happens, each slot renders
+ * a clearly labeled placeholder that carries the shot brief for the
+ * photographer. Pass `src` + `alt` to swap in the real image.
+ */
+import Icon from './Icon.astro';
+
+interface Props {
+  brief: string;
+  src?: string;
+  alt?: string;
+  width?: number;
+  height?: number;
+  ratio?: string;
+  tone?: 'sand' | 'navy' | 'teal' | 'gold';
+  priority?: boolean;
+  class?: string;
+  caption?: string;
+}
+
+const {
+  brief,
+  src,
+  alt = '',
+  width = 1600,
+  height = 1200,
+  ratio = '4 / 3',
+  tone = 'sand',
+  priority = false,
+  class: className,
+  caption,
+} = Astro.props;
+---
+
+<figure class:list={['photo', `photo--${tone}`, className]} style={`--ratio: ${ratio}`}>
+  {
+    src ? (
+      <img
+        src={src}
+        alt={alt}
+        width={width}
+        height={height}
+        loading={priority ? 'eager' : 'lazy'}
+        decoding={priority ? 'sync' : 'async'}
+        fetchpriority={priority ? 'high' : 'auto'}
+      />
+    ) : (
+      <div class="photo__placeholder" role="img" aria-label={`Photograph placeholder: ${brief}`}>
+        <svg class="photo__arc" viewBox="0 0 400 300" preserveAspectRatio="none" aria-hidden="true">
+          <path d="M-20 250 C 90 150, 210 330, 420 120" />
+          <path d="M-20 285 C 110 190, 240 360, 420 160" />
+        </svg>
+        <div class="photo__note">
+          <span class="photo__tag">
+            <Icon name="camera" size={16} />
+            STARS photography
+          </span>
+          <span class="photo__brief">{brief}</span>
+        </div>
+      </div>
+    )
+  }
+  {caption && <figcaption>{caption}</figcaption>}
+</figure>
+
+<style>
+  .photo {
+    position: relative;
+    margin: 0;
+  }
+  .photo img,
+  .photo__placeholder {
+    width: 100%;
+    aspect-ratio: var(--ratio);
+    object-fit: cover;
+    border-radius: var(--radius-m);
+  }
+  .photo__placeholder {
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    overflow: hidden;
+    padding: clamp(0.9rem, 3vw, 1.5rem);
+    background:
+      radial-gradient(120% 90% at 85% 10%, rgb(255 255 255 / 0.55), transparent 60%),
+      var(--ph-bg);
+    color: var(--ph-fg);
+  }
+  .photo--sand {
+    --ph-bg: #e9dfcf;
+    --ph-fg: var(--navy-900);
+    --ph-line: rgb(34 31 85 / 0.12);
+  }
+  .photo--navy {
+    --ph-bg: #2b2866;
+    --ph-fg: #ffffff;
+    --ph-line: rgb(242 194 48 / 0.35);
+  }
+  .photo--teal {
+    --ph-bg: #cfe3e6;
+    --ph-fg: var(--teal-700);
+    --ph-line: rgb(31 94 108 / 0.18);
+  }
+  .photo--gold {
+    --ph-bg: #f3e2b0;
+    --ph-fg: var(--navy-900);
+    --ph-line: rgb(163 36 44 / 0.16);
+  }
+  .photo__arc {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    fill: none;
+    stroke: var(--ph-line);
+    stroke-width: 1.5;
+    vector-effect: non-scaling-stroke;
+  }
+  .photo__note {
+    position: relative;
+    display: grid;
+    gap: 0.35rem;
+    max-width: 30rem;
+  }
+  .photo__tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    opacity: 0.85;
+  }
+  .photo__brief {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: clamp(0.95rem, 0.9rem + 0.3vw, 1.1rem);
+    line-height: 1.4;
+  }
+  figcaption {
+    margin-top: 0.6rem;
+    font-size: var(--step--1);
+    color: var(--color-text-muted);
+  }
+</style>

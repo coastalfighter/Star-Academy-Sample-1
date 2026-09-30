@@ -1,0 +1,88 @@
+---
+/**
+ * FAQ accordion built on native <details>/<summary>: keyboard and
+ * screen-reader accessible with zero JavaScript, and still searchable
+ * with the browser's find-in-page.
+ */
+import Rich from './Rich.astro';
+import Icon from './Icon.astro';
+import { smartQuotes } from '@/lib/confirm';
+
+interface Props {
+  items: { question: string; answer: string; id?: string }[];
+  headingLevel?: 'h3' | 'h4';
+}
+const { items, headingLevel: H = 'h3' } = Astro.props;
+---
+
+<div class="faq">
+  {
+    items.map((item) => (
+      <details class="faq__item" id={item.id ? `faq-${item.id}` : undefined}>
+        <summary>
+          <H class="faq__q">{smartQuotes(item.question)}</H>
+          <span class="faq__icon">
+            <Icon name="plus" size={20} />
+          </span>
+        </summary>
+        <div class="faq__a">
+          <Rich as="p" text={item.answer} />
+        </div>
+      </details>
+    ))
+  }
+</div>
+
+<style>
+  .faq {
+    border-top: 1px solid var(--color-line);
+  }
+  .faq__item {
+    border-bottom: 1px solid var(--color-line);
+  }
+  summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-s);
+    padding-block: var(--space-s);
+    cursor: pointer;
+    list-style: none;
+  }
+  summary::-webkit-details-marker {
+    display: none;
+  }
+  .faq__q {
+    font-family: var(--font-display);
+    font-size: var(--step-1);
+    font-weight: 450;
+    line-height: 1.35;
+  }
+  summary:hover .faq__q {
+    color: var(--color-accent-text);
+  }
+  .faq__icon {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 2.25rem;
+    height: 2.25rem;
+    border: 1px solid var(--color-line);
+    border-radius: 50%;
+    color: var(--color-heading);
+    transition:
+      transform var(--duration-m) var(--ease-out),
+      background-color var(--duration-s) ease;
+  }
+  details[open] .faq__icon {
+    transform: rotate(45deg);
+    background: var(--gold-200);
+    border-color: var(--gold-200);
+    color: var(--navy-900);
+  }
+  .faq__a {
+    max-width: var(--measure);
+    padding-bottom: var(--space-m);
+    color: var(--color-text-muted);
+  }
+</style>

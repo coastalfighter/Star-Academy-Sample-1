@@ -1,0 +1,40 @@
+---
+import Form from './Form.astro';
+import Field from './Field.astro';
+const f = 'tour';
+---
+
+<Form
+  name={f}
+  submitLabel="Request my tour"
+  successTitle="Thank you — your tour request is in."
+  successBody="A member of our team will reach out by phone or email to find a time that works for you. Tours happen Monday–Friday during program hours."
+>
+  <Field form={f} name="name" label="Your name" required autocomplete="name" width="half" />
+  <Field form={f} name="phone" label="Phone" type="tel" required autocomplete="tel" inputmode="tel" width="half" />
+  <Field form={f} name="email" label="Email" type="email" required autocomplete="email" inputmode="email" />
+  <Field
+    form={f}
+    name="times"
+    label="Days or times that work best"
+    hint="For example: “Tuesday or Thursday mornings.” We’re open Monday–Friday, 7 a.m.–3 p.m."
+    maxLength={200}
+  />
+  <Field
+    form={f}
+    name="child_age"
+    label="Your child’s age"
+    type="select"
+    options={['Under 12 months', '1 year', '2 years', '3 years', '4 years', '5 years', '6 years', 'I’m a professional, not a parent']}
+    width="half"
+  />
+  <Field
+    form={f}
+    name="heard_about"
+    label="How did you hear about STARS?"
+    type="select"
+    options={['Our doctor', 'A therapist or school', 'Family or friend', 'Facebook or Instagram', 'Search engine', 'Other']}
+    width="half"
+  />
+  <Field form={f} name="message" label="Anything you’d like us to know" type="textarea" rows={4} maxLength={1000} />
+</Form>

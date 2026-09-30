@@ -1,0 +1,23 @@
+/** Every indexable page on the site. Kept in sync by tests/e2e/links.spec.ts. */
+export const PAGES = [
+  '/',
+  '/approach',
+  '/services',
+  '/classrooms',
+  '/speech-therapy',
+  '/occupational-therapy',
+  '/physical-therapy',
+  '/nursing',
+  '/getting-started',
+  '/schedule-a-tour',
+  '/referrals',
+  '/families',
+  '/careers',
+  '/careers/apply',
+  '/about-us',
+  '/contact-us',
+  '/faq',
+  '/privacy',
+  '/accessibility',
+  '/nondiscrimination',
+] as const;

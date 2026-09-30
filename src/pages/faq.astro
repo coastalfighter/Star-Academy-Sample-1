@@ -1,0 +1,110 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PageHero from '@/components/PageHero.astro';
+import Faq from '@/components/Faq.astro';
+import NextSteps from '@/components/NextSteps.astro';
+import { breadcrumbSchema, faqSchema } from '@/lib/seo';
+
+const site = Astro.site ?? new URL('https://www.mystarsacademy.org');
+const crumbs = [
+  { label: 'Home', href: '/' },
+  { label: 'FAQ', href: '/faq' },
+];
+const all = (await getCollection('faqs')).map((f) => f.data).sort((a, b) => a.order - b.order);
+const groups = [
+  { id: 'families', title: 'For families considering STARS' },
+  { id: 'current', title: 'For current families' },
+  { id: 'referrals', title: 'For physicians & referral partners' },
+  { id: 'careers', title: 'For job seekers' },
+] as const;
+---
+
+<BaseLayout
+  title="Frequently Asked Questions"
+  description="Answers to common questions about STARS Academy: eligibility, ages, Medicaid funding, prescriptions, hours, transportation, referrals and careers."
+  jsonLd={[breadcrumbSchema(crumbs, site), faqSchema(all)]}
+>
+  <PageHero
+    eyebrow="FAQ"
+    title="Questions, <em>answered plainly.</em>"
+    lede="Can’t find what you’re looking for? Call us at 870-793-3200 — we’re happy to help."
+    crumbs={crumbs}
+    compact
+  />
+
+  <nav class="container faq-nav" aria-label="FAQ topics">
+    <ul role="list">
+      {
+        groups.map((g) => (
+          <li>
+            <a href={`#${g.id}`}>{g.title}</a>
+          </li>
+        ))
+      }
+    </ul>
+  </nav>
+
+  <div class="container faq-page">
+    {
+      groups.map((g) => (
+        <section id={g.id} aria-labelledby={`${g.id}-title`} class="faq-group">
+          <h2 id={`${g.id}-title`}>{g.title}</h2>
+          <Faq items={all.filter((f) => f.audience === g.id)} />
+        </section>
+      ))
+    }
+  </div>
+
+  <NextSteps
+    heading="Still have a question?"
+    primary={{ label: 'Contact STARS', href: '/contact-us' }}
+    secondary={{ label: 'Schedule a tour', href: '/schedule-a-tour' }}
+  />
+</BaseLayout>
+
+<style>
+  .faq-nav ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    padding: var(--space-m) 0 0;
+    list-style: none;
+  }
+  .faq-nav a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.75rem;
+    padding: 0.4rem 0.95rem;
+    border: 1px solid var(--color-line);
+    border-radius: 999px;
+    background: var(--white);
+    font-size: 0.925rem;
+    font-weight: 600;
+    text-decoration: none;
+    color: var(--navy-900);
+  }
+  .faq-nav a:hover {
+    border-color: var(--navy-800);
+  }
+  .faq-page {
+    display: grid;
+    gap: var(--space-2xl);
+    padding-block: var(--space-xl) var(--space-2xl);
+  }
+  .faq-group {
+    display: grid;
+    gap: var(--space-m);
+    scroll-margin-top: calc(var(--header-h) + 2rem);
+  }
+  .faq-group h2 {
+    font-size: var(--step-3);
+  }
+  @media (min-width: 60em) {
+    .faq-group {
+      grid-template-columns: 0.8fr 1.2fr;
+      gap: var(--space-2xl);
+      align-items: start;
+    }
+  }
+</style>

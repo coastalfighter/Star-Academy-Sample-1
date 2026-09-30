@@ -1,0 +1,244 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PageHero from '@/components/PageHero.astro';
+import NextSteps from '@/components/NextSteps.astro';
+import Rich from '@/components/Rich.astro';
+import Icon from '@/components/Icon.astro';
+import Photo from '@/components/Photo.astro';
+import { breadcrumbSchema } from '@/lib/seo';
+
+const services = (await getCollection('services')).sort((a, b) => a.data.order - b.data.order);
+const site = Astro.site ?? new URL('https://www.mystarsacademy.org');
+const crumbs = [
+  { label: 'Home', href: '/' },
+  { label: 'Services', href: '/services' },
+];
+
+const whyTogether = [
+  {
+    title: 'One plan, shared goals',
+    body: 'Teachers, therapists and nurses work from the same understanding of your child — so everyone is pulling in the same direction.',
+  },
+  {
+    title: 'Skills practiced all day',
+    body: 'A new word from speech therapy gets used at snack time. A calming strategy from OT gets used during a hard transition. Practice happens in real moments.',
+  },
+  {
+    title: 'Less running around',
+    body: 'Instead of driving between a preschool and separate therapy appointments, your child’s care happens here, during the day.',
+  },
+];
+---
+
+<BaseLayout
+  title="Pediatric Therapy & Developmental Services"
+  description="Speech, occupational and physical therapy, on-site nursing and developmental classrooms at STARS Academy in Batesville, Arkansas — coordinated around each child in one full day."
+  jsonLd={[breadcrumbSchema(crumbs, site)]}
+>
+  <PageHero
+    eyebrow="Services"
+    title="Five disciplines. <em>One coordinated plan.</em>"
+    lede="Every child at STARS spends the day in a developmental classroom, with the therapy and nursing care they need woven into that same day. Here’s how each part works — and how they work together."
+    crumbs={crumbs}
+  />
+
+  <section class="section" aria-labelledby="together-title">
+    <div class="container together">
+      <div class="together__intro stack">
+        <p class="eyebrow">Why it works better together</p>
+        <h2 id="together-title">Children don’t grow in separate boxes. <em>Their care shouldn’t either.</em></h2>
+        <Photo ratio="4 / 3" tone="teal" brief="A speech therapist and occupational therapist working with the same child during classroom play, teacher looking on." />
+      </div>
+      <ol role="list" class="together__list">
+        {
+          whyTogether.map((w, i) => (
+            <li data-reveal style={`--reveal-delay: ${i * 90}ms`}>
+              <span class="together__n" aria-hidden="true">
+                {String(i + 1).padStart(2, '0')}
+              </span>
+              <h3>{w.title}</h3>
+              <p>{w.body}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <section class="section section--white" aria-labelledby="list-title">
+    <div class="container">
+      <div class="section-head">
+        <p class="eyebrow">Our services</p>
+        <h2 id="list-title">Explore each service.</h2>
+      </div>
+      <div class="svc-list">
+        {
+          services.map((s, i) => (
+            <article class="svc-item" aria-labelledby={`svc-${s.id}`} data-reveal>
+              <span class="svc-item__num" aria-hidden="true">
+                {String(i + 1).padStart(2, '0')}
+              </span>
+              <div class="svc-item__head">
+                <h3 id={`svc-${s.id}`}>
+                  <a href={s.data.path}>{s.data.title}</a>
+                </h3>
+                <Rich as="p" text={s.data.whatItIs} class="svc-item__what" />
+              </div>
+              <ul role="list" class="svc-item__points">
+                {s.data.provides.slice(0, 3).map((p) => (
+                  <li>
+                    <Rich text={p} />
+                  </li>
+                ))}
+              </ul>
+              <a class="link-arrow svc-item__more" href={s.data.path} aria-describedby={`svc-${s.id}`}>
+                Learn more <Icon name="arrow-right" size={18} />
+              </a>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--tight" aria-labelledby="pay-title">
+    <div class="container pay">
+      <h2 id="pay-title" class="pay__title">How services are paid for</h2>
+      <p>
+        Day treatment services are paid for through Medicaid funding, including ARKids First-A, SSI and TEFRA. STARS can
+        contact your insurance provider to find out what therapy services your child’s plan covers. Treatment must be
+        prescribed by your child’s primary care physician.
+      </p>
+      <a class="link-arrow" href="/getting-started#eligibility">Eligibility &amp; enrollment <Icon name="arrow-right" size={18} /></a>
+    </div>
+  </section>
+
+  <NextSteps
+    heading="Not sure which services your child needs?"
+    body="You don’t have to know. Tell us what you’re noticing, and we’ll help you figure out the right next step."
+    primary={{ label: 'Start a conversation', href: '/getting-started#inquiry' }}
+    secondary={{ label: 'Schedule a tour', href: '/schedule-a-tour' }}
+    links={[
+      { label: 'Our approach', href: '/approach', description: 'The philosophy behind how we work with children.' },
+      { label: 'For referral partners', href: '/referrals', description: 'Eligibility and how to refer a child.' },
+    ]}
+  />
+</BaseLayout>
+
+<style>
+  .together {
+    display: grid;
+    gap: var(--space-xl);
+  }
+  .together__intro {
+    --stack-space: var(--space-m);
+  }
+  .together__list {
+    display: grid;
+    gap: var(--space-l);
+    padding: 0;
+    list-style: none;
+    align-content: center;
+  }
+  .together__list li {
+    display: grid;
+    gap: var(--space-2xs);
+    padding-top: var(--space-s);
+    border-top: 1px solid var(--color-line);
+  }
+  .together__n {
+    font-family: var(--font-display);
+    font-style: italic;
+    color: var(--red-700);
+  }
+  .together__list p {
+    color: var(--ink-700);
+    max-width: 32rem;
+  }
+  .svc-list {
+    border-top: 1px solid var(--navy-900);
+  }
+  .svc-item {
+    display: grid;
+    grid-template-columns: 2.5rem 1fr;
+    gap: var(--space-s);
+    padding-block: var(--space-l);
+    border-bottom: 1px solid var(--color-line);
+  }
+  .svc-item__num {
+    font-family: var(--font-display);
+    font-style: italic;
+    color: var(--red-700);
+    padding-top: 0.5rem;
+  }
+  .svc-item__head,
+  .svc-item__points,
+  .svc-item__more {
+    grid-column: 2;
+  }
+  .svc-item__head {
+    display: grid;
+    gap: var(--space-xs);
+  }
+  .svc-item h3 {
+    font-size: var(--step-3);
+  }
+  .svc-item h3 a {
+    color: var(--navy-900);
+    text-decoration: none;
+  }
+  .svc-item h3 a:hover {
+    color: var(--red-700);
+  }
+  .svc-item__what {
+    color: var(--ink-700);
+    max-width: 36rem;
+  }
+  .svc-item__points {
+    display: grid;
+    gap: 0.5rem;
+    padding-left: 1.1rem;
+    font-size: 0.975rem;
+    color: var(--ink-700);
+  }
+  .svc-item__points li::marker {
+    color: var(--red-600);
+  }
+  .svc-item__more {
+    justify-self: start;
+  }
+  .pay {
+    display: grid;
+    gap: var(--space-s);
+    max-width: 48rem;
+    padding: var(--space-l);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-l);
+  }
+  .pay__title {
+    font-size: var(--step-2);
+  }
+  @media (min-width: 60em) {
+    .together {
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-2xl);
+    }
+    .svc-item {
+      grid-template-columns: 3.5rem 1.2fr 1fr;
+      column-gap: var(--space-l);
+      align-items: start;
+    }
+    .svc-item__head {
+      grid-column: 2;
+    }
+    .svc-item__points {
+      grid-column: 3;
+      grid-row: 1 / span 2;
+      padding-top: 0.75rem;
+    }
+    .svc-item__more {
+      grid-column: 2;
+    }
+  }
+</style>

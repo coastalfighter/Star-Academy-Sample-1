@@ -1,0 +1,308 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PageHero from '@/components/PageHero.astro';
+import Photo from '@/components/Photo.astro';
+import Confirm from '@/components/Confirm.astro';
+import NextSteps from '@/components/NextSteps.astro';
+import { SITE, LOCATIONS, fullAddress } from '@/lib/site';
+import { breadcrumbSchema } from '@/lib/seo';
+
+const site = Astro.site ?? new URL('https://www.mystarsacademy.org');
+const crumbs = [
+  { label: 'Home', href: '/' },
+  { label: 'About', href: '/about-us' },
+];
+
+// Values and vision are STARS' own words from the current site.
+const values = [
+  { name: 'Positivity', text: 'We celebrate a culture of love, hope, and compassion which drives our success.' },
+  { name: 'Purpose', text: 'We provide superior quality care while working as a team to fuel success.' },
+  { name: 'Communication', text: 'We strive for transparency that encourages sharing information which leads to success.' },
+  { name: 'Empowerment', text: 'We equip our patients and staff with the tools necessary to achieve success.' },
+  {
+    name: 'Adaptability',
+    text: 'We dedicate ourselves to overcome challenges and obstacles with a positive attitude to deliver success.',
+  },
+];
+
+const acronym = [
+  ['S', 'triving'],
+  ['T', 'o'],
+  ['A', 'chieve'],
+  ['R', 'eal'],
+  ['S', 'uccess'],
+];
+---
+
+<BaseLayout
+  title="About STARS Academy"
+  description="STARS Academy is a locally owned pediatric therapy clinic and developmental preschool in Batesville, Arkansas, serving children and families since 2009. Our story, vision and values."
+  jsonLd={[breadcrumbSchema(crumbs, site)]}
+>
+  <PageHero
+    eyebrow="About STARS"
+    title="Locally owned. Deeply rooted. <em>Built around children.</em>"
+    lede={`Since ${SITE.founded}, STARS Academy has grown from a Batesville therapy clinic and developmental preschool into a team of about ${SITE.staffCount} people serving about ${SITE.childrenServed} children and their families.`}
+    crumbs={crumbs}
+    photo={{ brief: 'The whole STARS team gathered outside the building — candid, joyful, a few children’s art pieces visible in the windows.', tone: 'sand' }}
+  />
+
+  <section class="section" aria-labelledby="story-title">
+    <div class="container story">
+      <div class="stack">
+        <p class="eyebrow">Our story</p>
+        <h2 id="story-title">We are family.</h2>
+      </div>
+      <div class="prose story__body">
+        <p>
+          STARS Academy was established in {SITE.founded} as a locally owned and operated therapy clinic and developmental
+          preschool. Today we have two family-friendly facilities in Batesville and a highly educated, experienced team with
+          diverse backgrounds.
+        </p>
+        <p>
+          Teamwork is central to who we are. We celebrate our culture with the people we serve and the people who serve
+          alongside us — and we believe that, together, we can meet and exceed the needs and expectations of every child.
+        </p>
+        <p>
+          Over the years, our work has been shaped by what we’ve learned from children themselves: that they thrive when they
+          feel safe, connected and understood. That belief now guides everything from our classrooms to how we support our own
+          team.
+        </p>
+        <p><Confirm note="Founder story — who started STARS, why, and key milestones (e.g. opening STARS Academy South)" /></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--navy" aria-labelledby="name-title">
+    <div class="container name">
+      <div class="stack">
+        <p class="eyebrow">Our name</p>
+        <h2 id="name-title">What STARS stands for.</h2>
+        <p class="lede">Our name is also our promise to every child and family.</p>
+      </div>
+      <p class="name__acronym">
+        <span class="visually-hidden">{SITE.acronym}</span>
+        {
+          acronym.map(([letter, rest]) => (
+            <span class="name__word" aria-hidden="true">
+              <span class="name__letter">{letter}</span>
+              {rest}
+            </span>
+          ))
+        }
+      </p>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="vision-title">
+    <div class="container vision">
+      <p class="eyebrow">Our vision</p>
+      <h2 id="vision-title" class="visually-hidden">Our vision</h2>
+      <blockquote class="vision__quote">
+        <p>
+          STARS Academy embraces the belief that there is something good in every day. We provide a superior therapeutic
+          environment that fosters individual treatment for each child and family, building the foundation for their future
+          success story.
+        </p>
+      </blockquote>
+    </div>
+  </section>
+
+  <section class="section section--sand" id="values" aria-labelledby="values-title">
+    <div class="container">
+      <div class="section-head">
+        <p class="eyebrow">Our values</p>
+        <h2 id="values-title">Five values that guide how we work.</h2>
+      </div>
+      <ol role="list" class="values">
+        {
+          values.map((v, i) => (
+            <li data-reveal style={`--reveal-delay: ${i * 70}ms`}>
+              <span class="values__n" aria-hidden="true">
+                {String(i + 1).padStart(2, '0')}
+              </span>
+              <h3>{v.name}</h3>
+              <p>{v.text}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="leaders-title">
+    <div class="container leaders">
+      <div class="stack">
+        <p class="eyebrow">Leadership</p>
+        <h2 id="leaders-title">The people behind STARS.</h2>
+        <p class="muted">
+          Families and referral partners want to know who leads the organization. We recommend short profiles for the
+          leadership team and clinical leads.
+        </p>
+      </div>
+      <ul role="list" class="leaders__grid">
+        {
+          [1, 2, 3].map(() => (
+            <li>
+              <Photo ratio="4 / 5" tone="sand" brief="Natural-light portrait, candid rather than posed." />
+              <p class="leaders__name"><Confirm note="Name, title, credentials" /></p>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section class="section section--white" aria-labelledby="loc-title">
+    <div class="container locations">
+      <div class="stack">
+        <p class="eyebrow">Our facilities</p>
+        <h2 id="loc-title">Two family-friendly facilities in Batesville.</h2>
+      </div>
+      <ul role="list" class="locations__list">
+        {
+          LOCATIONS.map((loc) => (
+            <li>
+              <h3>{loc.name}</h3>
+              <p>{fullAddress(loc) ?? <Confirm note="Street address and what's offered at this facility" />}</p>
+            </li>
+          ))
+        }
+      </ul>
+      <figure class="locations__logo">
+        <img src="/brand/stars-logo-full-color.jpg" alt="STARS Academy full-color logo" width="792" height="517" loading="lazy" decoding="async" />
+      </figure>
+    </div>
+  </section>
+
+  <NextSteps
+    heading="Get to know us in person."
+    body="Visit STARS, meet our team and see how we work with children every day."
+    primary={{ label: 'Schedule a tour', href: '/schedule-a-tour' }}
+    secondary={{ label: 'Careers at STARS', href: '/careers' }}
+    links={[
+      { label: 'Our approach', href: '/approach', description: 'The philosophy behind the work.' },
+      { label: 'Services', href: '/services', description: 'Therapy, nursing and developmental classrooms.' },
+    ]}
+  />
+</BaseLayout>
+
+<style>
+  .story {
+    display: grid;
+    gap: var(--space-l);
+  }
+  .story__body {
+    font-size: var(--step-1);
+    line-height: 1.6;
+    color: var(--ink-700);
+  }
+  .name {
+    display: grid;
+    gap: var(--space-xl);
+    align-items: center;
+  }
+  .name__acronym {
+    display: grid;
+    gap: 0.1rem;
+    font-family: var(--font-display);
+    font-size: var(--step-4);
+    line-height: 1.1;
+    color: #ffffff;
+  }
+  .name__letter {
+    color: var(--gold-400);
+    font-weight: 600;
+  }
+  .vision {
+    display: grid;
+    gap: var(--space-m);
+    justify-items: center;
+    text-align: center;
+  }
+  .vision__quote p {
+    max-width: 50rem;
+    font-family: var(--font-display);
+    font-size: var(--step-3);
+    line-height: 1.3;
+    color: var(--navy-900);
+  }
+  .values {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 13rem), 1fr));
+    gap: var(--space-l) var(--space-m);
+    padding: 0;
+    list-style: none;
+  }
+  .values li {
+    display: grid;
+    gap: var(--space-2xs);
+    align-content: start;
+    padding-top: var(--space-s);
+    border-top: 2px solid var(--navy-900);
+  }
+  .values__n {
+    font-family: var(--font-display);
+    font-style: italic;
+    color: var(--red-700);
+  }
+  .values h3 {
+    font-size: var(--step-2);
+  }
+  .values p {
+    color: var(--ink-700);
+  }
+  .leaders {
+    display: grid;
+    gap: var(--space-l);
+  }
+  .leaders__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr));
+    gap: var(--space-m);
+    padding: 0;
+    list-style: none;
+  }
+  .leaders__grid :global(.photo__brief) {
+    font-size: 0.9rem;
+  }
+  .leaders__name {
+    margin-top: var(--space-xs);
+  }
+  .locations {
+    display: grid;
+    gap: var(--space-l);
+    align-items: center;
+  }
+  .locations__list {
+    display: grid;
+    gap: var(--space-m);
+    padding: 0;
+    list-style: none;
+  }
+  .locations__list li {
+    padding-top: var(--space-s);
+    border-top: 1px solid var(--color-line);
+  }
+  .locations__list h3 {
+    font-size: var(--step-2);
+  }
+  .locations__logo img {
+    width: min(100%, 18rem);
+    margin-inline: auto;
+    mix-blend-mode: multiply;
+  }
+  @media (min-width: 60em) {
+    .story {
+      grid-template-columns: 0.8fr 1.2fr;
+      gap: var(--space-2xl);
+    }
+    .name {
+      grid-template-columns: 1fr 1fr;
+    }
+    .locations {
+      grid-template-columns: 1fr 1fr 0.8fr;
+      gap: var(--space-xl);
+    }
+  }
+</style>

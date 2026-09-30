@@ -1,0 +1,330 @@
+---
+/**
+ * Replaces /enroll-now. "Enroll now" asked families to commit before they
+ * understood eligibility, funding or the process. This page answers those
+ * questions in order, then offers a low-pressure inquiry.
+ */
+import { getCollection } from 'astro:content';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PageHero from '@/components/PageHero.astro';
+import Steps from '@/components/Steps.astro';
+import Faq from '@/components/Faq.astro';
+import Icon from '@/components/Icon.astro';
+import Confirm from '@/components/Confirm.astro';
+import NextSteps from '@/components/NextSteps.astro';
+import InquiryForm from '@/components/forms/InquiryForm.astro';
+import { SITE } from '@/lib/site';
+import { breadcrumbSchema, faqSchema } from '@/lib/seo';
+
+const site = Astro.site ?? new URL('https://www.mystarsacademy.org');
+const crumbs = [
+  { label: 'Home', href: '/' },
+  { label: 'Getting Started', href: '/getting-started' },
+];
+const faqs = (await getCollection('faqs'))
+  .map((f) => f.data)
+  .filter((f) => f.audience === 'families')
+  .sort((a, b) => a.order - b.order);
+
+const fits = [
+  'Your child is between birth and age six.',
+  'Your child is behind in talking, understanding, moving, playing or self-care.',
+  'Your child has a diagnosis such as autism, Down syndrome or cerebral palsy, or was born prematurely.',
+  'Your child has medical needs — like tube feedings, breathing treatments or seizures — that make a typical preschool or daycare hard.',
+  'A doctor, therapist, school or early intervention program has suggested developmental services.',
+];
+
+const criteria = [
+  { title: 'Active health insurance', body: 'Day treatment is paid for through Medicaid funding, including ARKids First-A, SSI and TEFRA. We can check your child’s coverage.' },
+  {
+    title: 'A qualifying evaluation',
+    body: 'Your child qualifies for developmental services and at least one of: speech therapy, occupational therapy, physical therapy or nursing services.',
+  },
+  { title: 'A prescription from your child’s doctor', body: 'Treatment must be prescribed by your child’s primary care physician.' },
+];
+
+const steps = [
+  { title: 'Reach out', body: 'Call us or send an inquiry below. Tell us a little about your child — we’ll listen and answer your questions.' },
+  { title: 'Visit STARS', body: 'Tour the classrooms and therapy spaces and meet the people who would work with your child.' },
+  {
+    title: 'Evaluation',
+    body: 'Your child’s development is evaluated to see where support would help. [CLIENT TO CONFIRM: who completes evaluations and how they are scheduled]',
+  },
+  { title: 'Prescription', body: 'Your child’s primary care physician reviews the results and prescribes treatment at STARS.' },
+  { title: 'Welcome to STARS', body: 'We check your child’s coverage, build an individual plan with you and set a first day.' },
+];
+---
+
+<BaseLayout
+  title="Getting Started — Eligibility & Enrollment"
+  description="Could STARS help your child? Eligibility, Medicaid funding (ARKids First-A, SSI, TEFRA), the steps to enroll, and how to reach our team in Batesville, Arkansas."
+  jsonLd={[breadcrumbSchema(crumbs, site), faqSchema(faqs)]}
+>
+  <PageHero
+    eyebrow="Getting started"
+    title="Could STARS help your child? <em>Let’s find out together.</em>"
+    lede="You don’t need to have everything figured out before you contact us. This page explains who STARS serves, how services are paid for and what the steps look like — and our team will walk you through the rest."
+    crumbs={crumbs}
+    photo={{ brief: 'A parent holding a toddler while talking with a STARS staff member at the front desk — relaxed, welcoming.', tone: 'gold' }}
+  >
+    <Fragment slot="actions">
+      <a class="btn" href="#inquiry">Send an inquiry <span class="btn__arrow"><Icon name="arrow-right" size={18} /></span></a>
+      <a class="btn btn--secondary" href={SITE.phoneHref}><Icon name="phone" size={18} /> {SITE.phone}</a>
+    </Fragment>
+  </PageHero>
+
+  <section class="section" aria-labelledby="fit-title">
+    <div class="container split">
+      <div class="stack">
+        <p class="eyebrow">Is STARS a good fit?</p>
+        <h2 id="fit-title">STARS may be right for your child if…</h2>
+        <p class="muted">Any one of these is a good reason to call. You don’t need a diagnosis to ask a question.</p>
+      </div>
+      <ul role="list" class="fit">
+        {
+          fits.map((f) => (
+            <li>
+              <span class="fit__icon" aria-hidden="true">
+                <Icon name="check" size={16} />
+              </span>
+              {f}
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section class="section section--sand" id="eligibility" aria-labelledby="elig-title">
+    <div class="container">
+      <div class="section-head">
+        <p class="eyebrow">Eligibility</p>
+        <h2 id="elig-title">Three things determine eligibility.</h2>
+        <p class="lede">We’ll help you with each one — including checking your coverage and coordinating with your child’s doctor.</p>
+      </div>
+      <ol role="list" class="criteria">
+        {
+          criteria.map((c, i) => (
+            <li data-reveal style={`--reveal-delay: ${i * 90}ms`}>
+              <span class="criteria__n" aria-hidden="true">
+                {i + 1}
+              </span>
+              <h3>{c.title}</h3>
+              <p>{c.body}</p>
+            </li>
+          ))
+        }
+      </ol>
+      <div class="funding">
+        <h3>Paying for services</h3>
+        <p>
+          Day treatment services are paid for through Medicaid funding, including <strong>ARKids First-A</strong>,
+          <strong>SSI</strong> and <strong>TEFRA</strong>. STARS can contact your insurance provider to find out what therapy
+          services your child’s plan covers.
+        </p>
+        <p class="small"><Confirm note="Whether private insurance is accepted, and whether families ever have out-of-pocket costs" /></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="steps-title">
+    <div class="container">
+      <div class="section-head">
+        <p class="eyebrow">The process</p>
+        <h2 id="steps-title">From first call to first day.</h2>
+        <p class="lede"><Confirm note="Typical timeline from first call to first day, and whether there is a waitlist" /></p>
+      </div>
+      <Steps steps={steps} />
+    </div>
+  </section>
+
+  <section class="section section--white" aria-labelledby="practical-title">
+    <div class="container practical">
+      <h2 id="practical-title" class="visually-hidden">Practical details</h2>
+      <article>
+        <h3>Hours</h3>
+        <p>{SITE.hours.days}, {SITE.hours.open} – {SITE.hours.close}.</p>
+      </article>
+      <article>
+        <h3>Transportation</h3>
+        <p>STARS operates clinic-owned vans that bring children to and from the clinic.</p>
+        <p class="small"><Confirm note="Transportation eligibility, service area and how to request it" /></p>
+      </article>
+      <article>
+        <h3>Language</h3>
+        <p>Speech-language evaluations and therapy are offered in Spanish.</p>
+      </article>
+      <article>
+        <h3>Medical needs</h3>
+        <p>Full-time licensed nurses are on staff. <a href="/nursing">Learn about nursing care</a>.</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="section section--sand" id="inquiry" aria-labelledby="inquiry-title">
+    <div class="container inquiry">
+      <div class="inquiry__intro stack">
+        <p class="eyebrow">Start the conversation</p>
+        <h2 id="inquiry-title">Tell us about your child.</h2>
+        <p class="lede">
+          Send a short inquiry and someone from our team will contact you. There’s no commitment — it’s simply the first step.
+        </p>
+        <div class="inquiry__alt">
+          <h3>Prefer to talk?</h3>
+          <p>
+            Call <a href={SITE.phoneHref}>{SITE.phone}</a><br />
+            {SITE.hours.days}, {SITE.hours.open} – {SITE.hours.close}
+          </p>
+        </div>
+        <div class="inquiry__alt">
+          <h3>Already spoken with our team?</h3>
+          <p>
+            If STARS has asked you to complete the enrollment inquiry packet, you can
+            <a href={SITE.externalForms.enrollmentPacket} target="_blank" rel="noopener">
+              open it securely here<span class="visually-hidden"> (opens Adobe Sign in a new tab)</span></a
+            >.
+          </p>
+        </div>
+      </div>
+      <InquiryForm />
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="faq-title">
+    <div class="container split">
+      <div class="stack">
+        <p class="eyebrow">Questions families ask</p>
+        <h2 id="faq-title">Frequently asked questions</h2>
+        <a class="link-arrow" href="/faq">See all FAQs <Icon name="arrow-right" size={18} /></a>
+      </div>
+      <Faq items={faqs} />
+    </div>
+  </section>
+
+  <NextSteps
+    heading="The easiest next step? Come visit."
+    body="A tour is relaxed, with no commitment. You’ll see the classrooms, meet our team and get your questions answered in person."
+    primary={{ label: 'Schedule a tour', href: '/schedule-a-tour' }}
+    secondary={{ label: 'Explore services', href: '/services' }}
+    links={[
+      { label: 'Our approach', href: '/approach', description: 'How we help children feel safe, connected and understood.' },
+      { label: 'Nursing care', href: '/nursing', description: 'Care for children with medical needs.' },
+    ]}
+  />
+</BaseLayout>
+
+<style>
+  .split {
+    display: grid;
+    gap: var(--space-l);
+  }
+  .fit {
+    display: grid;
+    gap: var(--space-s);
+    padding: 0;
+    list-style: none;
+  }
+  .fit li {
+    display: grid;
+    grid-template-columns: 1.75rem 1fr;
+    gap: var(--space-xs);
+    font-size: var(--step-1);
+    line-height: 1.45;
+  }
+  .fit__icon {
+    display: grid;
+    place-items: center;
+    width: 1.75rem;
+    height: 1.75rem;
+    margin-top: 0.1rem;
+    border-radius: 50%;
+    background: var(--gold-200);
+    color: var(--navy-900);
+  }
+  .criteria {
+    display: grid;
+    gap: var(--space-m);
+    padding: 0;
+    list-style: none;
+  }
+  .criteria li {
+    display: grid;
+    gap: var(--space-2xs);
+    align-content: start;
+    padding: var(--space-m);
+    background: var(--white);
+    border-radius: var(--radius-m);
+    border-top: 3px solid var(--navy-800);
+  }
+  .criteria__n {
+    font-family: var(--font-display);
+    font-size: var(--step-3);
+    font-style: italic;
+    line-height: 1;
+    color: var(--red-700);
+  }
+  .criteria p {
+    color: var(--ink-700);
+  }
+  .funding {
+    display: grid;
+    gap: var(--space-xs);
+    max-width: 48rem;
+    margin-top: var(--space-xl);
+  }
+  .funding h3 {
+    font-size: var(--step-2);
+  }
+  .practical {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr));
+    gap: var(--space-l);
+  }
+  .practical article {
+    display: grid;
+    gap: var(--space-2xs);
+    align-content: start;
+    padding-top: var(--space-s);
+    border-top: 1px solid var(--color-line);
+  }
+  .practical h3 {
+    font-size: var(--step-1);
+  }
+  .practical p {
+    color: var(--ink-700);
+  }
+  .inquiry {
+    display: grid;
+    gap: var(--space-xl);
+    align-items: start;
+  }
+  .inquiry__alt {
+    padding-top: var(--space-s);
+    border-top: 1px solid var(--color-line);
+  }
+  .inquiry__alt h3 {
+    font-family: var(--font-body);
+    font-size: var(--step-0);
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+  }
+  .inquiry__alt p {
+    color: var(--ink-700);
+  }
+  @media (min-width: 56em) {
+    .split {
+      grid-template-columns: 0.8fr 1.2fr;
+      gap: var(--space-2xl);
+      align-items: start;
+    }
+    .criteria {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+  @media (min-width: 64em) {
+    .inquiry {
+      grid-template-columns: 0.8fr 1.2fr;
+      gap: var(--space-2xl);
+    }
+  }
+</style>

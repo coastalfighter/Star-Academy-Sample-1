@@ -1,0 +1,175 @@
+---
+/**
+ * Form shell used by every site form.
+ *
+ * - Works without JavaScript (native validation + POST + /thank-you page).
+ * - With JavaScript: inline accessible validation, error summary, AJAX
+ *   submission and an in-place confirmation that says what happens next.
+ * - Spam protection: honeypot field + minimum fill-time check, on top of
+ *   the hosting provider's own spam filtering (Netlify Forms / Akismet).
+ * - Submissions go to a form inbox owned by STARS — no third-party form
+ *   vendor, no lock-in.
+ */
+import { SITE } from '@/lib/site';
+
+interface Props {
+  name: string;
+  submitLabel: string;
+  successTitle: string;
+  successBody: string;
+  privacyNote?: string;
+  multipart?: boolean;
+}
+
+const {
+  name,
+  submitLabel,
+  successTitle,
+  successBody,
+  privacyNote = 'We use this information only to respond to your request. Please don’t include diagnoses or medical records.',
+  multipart = false,
+} = Astro.props;
+
+const honeypot = 'company_website';
+---
+
+<div class="form-shell" data-form-shell>
+  <form
+    name={name}
+    method="POST"
+    action={`/thank-you?form=${name}`}
+    data-netlify="true"
+    netlify-honeypot={honeypot}
+    enctype={multipart ? 'multipart/form-data' : undefined}
+    data-stars-form
+    aria-describedby={`${name}-required-note`}
+  >
+    <input type="hidden" name="form-name" value={name} />
+    <div class="form-hp" aria-hidden="true">
+      <label for={`${name}-${honeypot}`}>Leave this field empty</label>
+      <input id={`${name}-${honeypot}`} name={honeypot} type="text" tabindex="-1" autocomplete="off" />
+    </div>
+
+    <div class="form-summary" role="alert" tabindex="-1" data-summary hidden>
+      <h3 class="form-summary__title" data-summary-title>Please fix the following:</h3>
+      <ul role="list" data-summary-list></ul>
+    </div>
+
+    <p class="form-required small muted" id={`${name}-required-note`}>
+      Fields marked <span aria-hidden="true">*</span><span class="visually-hidden">with an asterisk</span> are required.
+    </p>
+
+    <div class="form-grid">
+      <slot />
+    </div>
+
+    <p class="form-privacy small">{privacyNote}</p>
+
+    <div class="form-actions">
+      <button type="submit" class="btn" data-submit>
+        <span data-submit-label>{submitLabel}</span>
+      </button>
+      <p class="form-status small" role="status" aria-live="polite" data-status></p>
+    </div>
+  </form>
+
+  <div class="form-success" tabindex="-1" data-success hidden>
+    <svg viewBox="0 0 48 48" width="44" height="44" aria-hidden="true">
+      <circle cx="24" cy="24" r="22" fill="var(--teal-100)"></circle>
+      <path d="m15 24.5 6 6 12-13" fill="none" stroke="var(--teal-700)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></path>
+    </svg>
+    <h3>{successTitle}</h3>
+    <p>{successBody}</p>
+    <p class="small muted">
+      Need us sooner? Call <a href={SITE.phoneHref}>{SITE.phone}</a>, {SITE.hours.days}, {SITE.hours.open}–{SITE.hours.close}
+    </p>
+  </div>
+</div>
+
+<script>
+  import { initForms } from '@/scripts/forms';
+  initForms();
+</script>
+
+<style>
+  .form-shell {
+    padding: clamp(1.25rem, 4vw, 2.5rem);
+    background: var(--white);
+    border: 1px solid var(--color-line-soft);
+    border-radius: var(--radius-l);
+    box-shadow: var(--shadow-s);
+    color: var(--ink-900);
+    --color-link: var(--navy-700);
+    --color-heading: var(--navy-900);
+    --color-focus: var(--teal-600);
+  }
+  .form-grid {
+    display: grid;
+    gap: var(--space-s) var(--space-s);
+    margin-top: var(--space-s);
+  }
+  @media (min-width: 40em) {
+    .form-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  .form-hp {
+    position: absolute;
+    left: -10000px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
+  .form-privacy {
+    margin-top: var(--space-s);
+    color: var(--ink-600);
+  }
+  .form-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-s);
+    margin-top: var(--space-s);
+  }
+  .form-actions .btn[aria-busy='true'] {
+    opacity: 0.75;
+    cursor: progress;
+  }
+  .form-status {
+    color: var(--color-error);
+    font-weight: 600;
+  }
+  .form-summary {
+    margin-bottom: var(--space-s);
+    padding: var(--space-s);
+    border: 1.5px solid var(--color-error);
+    border-left-width: 5px;
+    border-radius: var(--radius-s);
+    background: #fff7f6;
+  }
+  .form-summary__title {
+    font-family: var(--font-body);
+    font-size: var(--step-0);
+    font-weight: 700;
+    color: var(--color-error);
+  }
+  .form-summary ul {
+    margin-top: 0.4rem;
+    padding-left: 1.1rem;
+  }
+  .form-summary a {
+    color: var(--color-error);
+    font-weight: 600;
+  }
+  .form-success {
+    display: grid;
+    gap: var(--space-xs);
+    justify-items: start;
+  }
+  .form-success h3 {
+    font-size: var(--step-2);
+  }
+  .form-success:focus {
+    outline: none;
+  }
+</style>

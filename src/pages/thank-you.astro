@@ -1,0 +1,30 @@
+---
+/** Fallback confirmation for form submissions made without JavaScript. */
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { SITE } from '@/lib/site';
+---
+
+<BaseLayout title="Thank You" description="Thank you for contacting STARS Academy." noindex>
+  <section class="section">
+    <div class="container stack thanks">
+      <p class="eyebrow">Message received</p>
+      <h1>Thank you. <em>We’ll be in touch soon.</em></h1>
+      <p class="lede">
+        A member of our team will contact you by phone or email. If you need us sooner, call
+        <a href={SITE.phoneHref}>{SITE.phone}</a>, {SITE.hours.days}, {SITE.hours.open} – {SITE.hours.close}.
+      </p>
+      <div class="cluster">
+        <a class="btn" href="/">Back to home</a>
+        <a class="btn btn--secondary" href="/services">Explore services</a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .thanks {
+    --stack-space: var(--space-m);
+    max-width: 48rem;
+    padding-block: var(--space-xl);
+  }
+</style>

@@ -1,0 +1,16 @@
+# Hosting configuration (Netlify). The site is plain static files, so it can
+# move to any static host; _headers and _redirects are generated at build.
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "22"
+  # Playwright browsers are only needed for tests, not for deploys.
+  PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD = "1"
+
+# Preview deploys must never be indexed by search engines.
+[context.deploy-preview.environment]
+  PUBLIC_NOINDEX = "true"
+[context.branch-deploy.environment]
+  PUBLIC_NOINDEX = "true"

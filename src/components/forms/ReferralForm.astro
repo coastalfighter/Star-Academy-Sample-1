@@ -1,0 +1,44 @@
+---
+import Form from './Form.astro';
+import Field from './Field.astro';
+const f = 'referral-contact';
+---
+
+<Form
+  name={f}
+  submitLabel="Request a call back"
+  successTitle="Thank you — our team will contact your office."
+  successBody="We’ll reach out to confirm what we need and how to send the prescription and records securely."
+  privacyNote="This form is for contact details only. Do not include patient names, dates of birth, diagnoses or other protected health information — we’ll arrange a secure method for those."
+>
+  <Field form={f} name="provider_name" label="Your name" required autocomplete="name" width="half" />
+  <Field
+    form={f}
+    name="role"
+    label="Your role"
+    type="select"
+    required
+    options={['Physician', 'Nurse practitioner / PA', 'Clinic staff', 'Therapist', 'School or district staff', 'Early intervention / service coordinator', 'Other']}
+    width="half"
+  />
+  <Field form={f} name="organization" label="Practice, school or organization" required autocomplete="organization" />
+  <Field form={f} name="phone" label="Office phone" type="tel" required autocomplete="tel" inputmode="tel" width="half" />
+  <Field form={f} name="email" label="Email" type="email" required autocomplete="email" inputmode="email" width="half" />
+  <Field
+    form={f}
+    name="request"
+    label="How can we help?"
+    type="select"
+    required
+    options={['I’d like to refer a patient/student', 'Please send referral information', 'I have a question about services', 'I’d like to schedule a visit']}
+  />
+  <Field
+    form={f}
+    name="message"
+    label="Notes"
+    type="textarea"
+    rows={3}
+    maxLength={600}
+    hint="General notes only — no patient identifiers."
+  />
+</Form>

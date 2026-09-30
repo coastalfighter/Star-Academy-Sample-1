@@ -1,0 +1,16 @@
+---
+/**
+ * Renders a plain-text content string (from CMS data or frontmatter),
+ * escaping HTML and converting [CLIENT TO CONFIRM: …] markers.
+ */
+import { withConfirm } from '@/lib/confirm';
+
+interface Props {
+  text: string;
+  as?: 'p' | 'span' | 'li' | 'dd' | 'div';
+  class?: string;
+}
+const { text, as: Tag = 'span', class: className } = Astro.props;
+---
+
+<Tag class={className} set:html={withConfirm(text)} />

@@ -1,0 +1,122 @@
+---
+/**
+ * Replaces /apply-now. Keeps STARS' existing official application
+ * (Adobe Sign) as step two, so HR's current workflow is not disrupted.
+ */
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PageHero from '@/components/PageHero.astro';
+import CareerForm from '@/components/forms/CareerForm.astro';
+import Icon from '@/components/Icon.astro';
+import { SITE } from '@/lib/site';
+import { breadcrumbSchema } from '@/lib/seo';
+
+const site = Astro.site ?? new URL('https://www.mystarsacademy.org');
+const crumbs = [
+  { label: 'Home', href: '/' },
+  { label: 'Careers', href: '/careers' },
+  { label: 'Apply', href: '/careers/apply' },
+];
+---
+
+<BaseLayout
+  title="Apply to Work at STARS"
+  description="Apply for a position at STARS Academy in Batesville, Arkansas — classroom, therapy, nursing and transportation roles."
+  jsonLd={[breadcrumbSchema(crumbs, site)]}
+>
+  <PageHero
+    eyebrow="Apply"
+    title="Let’s get to know you."
+    lede="Applying takes two short steps. Start by telling us about yourself below, then complete our official employment application."
+    crumbs={crumbs}
+    compact
+  />
+
+  <section class="section">
+    <div class="container apply">
+      <ol role="list" class="apply__steps">
+        <li class="is-current">
+          <span class="apply__n" aria-hidden="true">1</span>
+          <div>
+            <h2>Tell us about you</h2>
+            <p>Your contact details, the role you’re interested in and your résumé.</p>
+          </div>
+        </li>
+        <li>
+          <span class="apply__n" aria-hidden="true">2</span>
+          <div>
+            <h2>Complete the official application</h2>
+            <p>
+              Our secure employment application is hosted on Adobe Sign.
+            </p>
+            <a class="link-arrow" href={SITE.externalForms.employmentApplication} target="_blank" rel="noopener">
+              Open the employment application <Icon name="arrow-up-right" size={16} />
+              <span class="visually-hidden"> (opens Adobe Sign in a new tab)</span>
+            </a>
+          </div>
+        </li>
+      </ol>
+      <div>
+        <CareerForm />
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<script>
+  // Preselect the position when arriving from a specific job listing.
+  const position = new URLSearchParams(window.location.search).get('position');
+  const select = document.querySelector<HTMLSelectElement>('select[name="position"]');
+  if (position && select && Array.from(select.options).some((o) => o.value === position)) {
+    select.value = position;
+  }
+</script>
+
+<style>
+  .apply {
+    display: grid;
+    gap: var(--space-xl);
+    align-items: start;
+  }
+  .apply__steps {
+    display: grid;
+    gap: var(--space-m);
+    padding: 0;
+    list-style: none;
+  }
+  .apply__steps li {
+    display: grid;
+    grid-template-columns: 2.5rem 1fr;
+    gap: var(--space-s);
+    padding: var(--space-m);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-m);
+  }
+  .apply__steps li.is-current {
+    background: var(--white);
+    border-color: var(--navy-800);
+  }
+  .apply__steps h2 {
+    font-size: var(--step-1);
+    margin-bottom: 0.25rem;
+  }
+  .apply__steps p {
+    color: var(--ink-700);
+    margin-bottom: 0.5rem;
+  }
+  .apply__n {
+    display: grid;
+    place-items: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    background: var(--navy-900);
+    color: #ffffff;
+    font-family: var(--font-display);
+  }
+  @media (min-width: 64em) {
+    .apply {
+      grid-template-columns: 0.75fr 1.25fr;
+      gap: var(--space-2xl);
+    }
+  }
+</style>

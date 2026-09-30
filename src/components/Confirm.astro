@@ -1,0 +1,9 @@
+---
+/** Visible marker for information STARS must supply or verify before launch. */
+interface Props {
+  note: string;
+}
+const { note } = Astro.props;
+---
+
+<mark class="confirm" data-confirm>[Client to confirm: {note}]</mark>

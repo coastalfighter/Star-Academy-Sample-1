@@ -1,0 +1,217 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PageHero from '@/components/PageHero.astro';
+import ContactForm from '@/components/forms/ContactForm.astro';
+import Icon from '@/components/Icon.astro';
+import Confirm from '@/components/Confirm.astro';
+import { SITE, LOCATIONS, CONTACTS, fullAddress, mapsUrl } from '@/lib/site';
+import { breadcrumbSchema } from '@/lib/seo';
+
+const site = Astro.site ?? new URL('https://www.mystarsacademy.org');
+const crumbs = [
+  { label: 'Home', href: '/' },
+  { label: 'Contact', href: '/contact-us' },
+];
+
+// Route high-intent visitors to the page built for them before the generic form.
+const shortcuts = [
+  { label: 'Interested in STARS for your child?', action: 'Getting started', href: '/getting-started#inquiry' },
+  { label: 'Want to see STARS in person?', action: 'Schedule a tour', href: '/schedule-a-tour' },
+  { label: 'Referring a patient or student?', action: 'Referral information', href: '/referrals#refer' },
+  { label: 'Looking for a job?', action: 'Careers', href: '/careers' },
+];
+---
+
+<BaseLayout
+  title="Contact Us"
+  description="Contact STARS Academy in Batesville, Arkansas. Call 870-793-3200, Monday–Friday 7 a.m.–3 p.m., visit us at 200 General St., or send a message online."
+  jsonLd={[breadcrumbSchema(crumbs, site)]}
+>
+  <PageHero
+    eyebrow="Contact"
+    title="We’re here to help."
+    lede="Call, visit or send a message — we’ll make sure it reaches the right person."
+    crumbs={crumbs}
+    compact
+  />
+
+  <section class="section section--tight" aria-label="Shortcuts">
+    <div class="container">
+      <ul role="list" class="shortcuts">
+        {
+          shortcuts.map((s) => (
+            <li>
+              <a href={s.href}>
+                <span class="shortcuts__q">{s.label}</span>
+                <span class="shortcuts__a">
+                  {s.action} <Icon name="arrow-right" size={18} />
+                </span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container contact">
+      <div class="contact__info">
+        <section aria-labelledby="reach-title" class="stack">
+          <h2 id="reach-title" class="contact__h">Reach us directly</h2>
+          <p class="contact__phone">
+            <a href={SITE.phoneHref}><Icon name="phone" size={22} /> {SITE.phone}</a>
+          </p>
+          <p class="muted">{SITE.hours.days}, {SITE.hours.open} – {SITE.hours.close}</p>
+          <p class="small">Fax: <Confirm note="Main fax number" /> · Email: <Confirm note="General inbox (e.g. info@mystarsacademy.org)" /></p>
+        </section>
+
+        <section aria-labelledby="loc-title">
+          <h2 id="loc-title" class="contact__h">Locations</h2>
+          <ul role="list" class="contact__locs">
+            {
+              LOCATIONS.map((loc) => {
+                const addr = fullAddress(loc);
+                const map = mapsUrl(loc);
+                return (
+                  <li>
+                    <h3>{loc.name}</h3>
+                    {addr && map ? (
+                      <p>
+                        {addr}
+                        <br />
+                        <a href={map} target="_blank" rel="noopener">
+                          Get directions<span class="visually-hidden"> to {loc.name} (opens Google Maps in a new tab)</span>
+                        </a>
+                      </p>
+                    ) : (
+                      <p>
+                        <Confirm note="Street address" />
+                      </p>
+                    )}
+                  </li>
+                );
+              })
+            }
+          </ul>
+        </section>
+
+        <section aria-labelledby="dept-title">
+          <h2 id="dept-title" class="contact__h">Who handles what</h2>
+          <dl class="contact__dept">
+            {
+              CONTACTS.map((c) => (
+                <div>
+                  <dt>{c.label}</dt>
+                  <dd>{c.purpose}</dd>
+                </div>
+              ))
+            }
+          </dl>
+        </section>
+      </div>
+
+      <div>
+        <h2 class="contact__h">Send a message</h2>
+        <p class="muted contact__sub">For general questions. We’ll route your message to the right person.</p>
+        <ContactForm />
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .shortcuts {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
+    gap: var(--space-s);
+    padding: 0;
+    list-style: none;
+  }
+  .shortcuts a {
+    display: grid;
+    gap: 0.35rem;
+    height: 100%;
+    padding: var(--space-s) var(--space-m);
+    background: var(--white);
+    border: 1px solid var(--color-line-soft);
+    border-radius: var(--radius-m);
+    text-decoration: none;
+    color: var(--ink-900);
+    transition: border-color var(--duration-s) ease;
+  }
+  .shortcuts a:hover {
+    border-color: var(--navy-800);
+  }
+  .shortcuts__q {
+    font-size: 0.95rem;
+    color: var(--ink-700);
+  }
+  .shortcuts__a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-family: var(--font-display);
+    font-size: var(--step-1);
+    color: var(--navy-900);
+  }
+  .contact {
+    display: grid;
+    gap: var(--space-xl);
+    align-items: start;
+  }
+  .contact__info {
+    display: grid;
+    gap: var(--space-l);
+  }
+  .contact__h {
+    font-size: var(--step-2);
+    margin-bottom: var(--space-2xs);
+  }
+  .contact__sub {
+    margin-bottom: var(--space-m);
+  }
+  .contact__phone a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-display);
+    font-size: var(--step-3);
+    text-decoration: none;
+    color: var(--navy-900);
+  }
+  .contact__phone a:hover {
+    color: var(--red-700);
+  }
+  .contact__locs {
+    display: grid;
+    gap: var(--space-s);
+    padding: 0;
+    list-style: none;
+  }
+  .contact__locs h3 {
+    font-family: var(--font-body);
+    font-size: var(--step-0);
+    font-weight: 700;
+  }
+  .contact__locs p {
+    color: var(--ink-700);
+  }
+  .contact__dept > div {
+    padding-block: 0.6rem;
+    border-top: 1px solid var(--color-line);
+  }
+  .contact__dept dt {
+    font-weight: 650;
+  }
+  .contact__dept dd {
+    color: var(--ink-700);
+    font-size: 0.975rem;
+  }
+  @media (min-width: 64em) {
+    .contact {
+      grid-template-columns: 0.8fr 1.2fr;
+      gap: var(--space-2xl);
+    }
+  }
+</style>
