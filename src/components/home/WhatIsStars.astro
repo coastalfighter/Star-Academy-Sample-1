@@ -1,18 +1,27 @@
 ---
+import DuoIcon from '../graphics/DuoIcon.astro';
+import CareVenn from '../graphics/CareVenn.astro';
+import Sparkles from '../graphics/Sparkles.astro';
 /**
  * The core explainer. Answers "what is STARS?" by contrast with the
  * categories families already know, then shows how the parts combine.
  */
 const parts = [
   {
+    icon: 'blocks' as const,
+    tone: 'gold' as const,
     label: 'A developmental preschool',
     body: 'Warm, well-run classrooms for infants, toddlers and preschoolers — built so every child learns at their own pace.',
   },
   {
+    icon: 'speech' as const,
+    tone: 'teal' as const,
     label: 'A pediatric therapy team',
     body: 'Licensed speech, occupational and physical therapists who work with your child during the day, not across town.',
   },
   {
+    icon: 'nursing' as const,
+    tone: 'red' as const,
     label: 'On-site licensed nurses',
     body: 'Full-time nurses who manage medications, feedings and complex medical needs so children can join in fully.',
   },
@@ -20,7 +29,8 @@ const parts = [
 ---
 
 <section class="section what" aria-labelledby="what-title">
-  <div class="container">
+  <Sparkles />
+  <div class="container what__inner">
     <div class="section-head section-head--split">
       <div class="stack">
         <p class="eyebrow">What STARS is</p>
@@ -33,19 +43,27 @@ const parts = [
       </p>
     </div>
 
+    <div class="what__body">
     <ol class="what__parts" role="list">
       {
         parts.map((p, i) => (
           <li class="what__part" data-reveal style={`--reveal-delay: ${i * 100}ms`}>
-            <span class="what__num" aria-hidden="true">
-              {i + 1}
+            <span class="what__icon">
+              <DuoIcon name={p.icon} tone={p.tone} size={26} chip />
+              <span class="what__num" aria-hidden="true">
+                {String(i + 1).padStart(2, '0')}
+              </span>
             </span>
-            <h3>{p.label}</h3>
-            <p>{p.body}</p>
+            <div>
+              <h3>{p.label}</h3>
+              <p>{p.body}</p>
+            </div>
           </li>
         ))
       }
     </ol>
+    <CareVenn />
+    </div>
 
     <p class="what__sum" data-reveal>
       <span class="what__sum-kicker">At STARS, these aren’t three separate places.</span>
@@ -55,6 +73,17 @@ const parts = [
 </section>
 
 <style>
+  .what {
+    position: relative;
+  }
+  .what__inner {
+    position: relative;
+  }
+  .what__body {
+    display: grid;
+    gap: var(--space-xl);
+    align-items: center;
+  }
   .what__parts {
     display: grid;
     gap: var(--space-m);
@@ -62,74 +91,69 @@ const parts = [
     list-style: none;
   }
   .what__part {
-    position: relative;
     display: grid;
-    align-content: start;
-    gap: var(--space-2xs);
-    padding: var(--space-m) 0 0;
+    grid-template-columns: auto 1fr;
+    gap: var(--space-s);
+    align-items: start;
+    padding-top: var(--space-m);
     border-top: 1px solid var(--color-line);
+  }
+  .what__icon {
+    display: grid;
+    justify-items: center;
+    gap: 0.35rem;
   }
   .what__num {
     font-family: var(--font-display);
     font-style: italic;
-    font-size: var(--step-3);
-    line-height: 1;
+    font-size: 0.95rem;
     color: var(--gold-700);
   }
   .what__part h3 {
     font-size: var(--step-2);
   }
   .what__part p {
+    margin-top: 0.3rem;
     color: var(--ink-700);
-    max-width: 24rem;
+    max-width: 30rem;
   }
   .what__sum {
+    position: relative;
+    overflow: hidden;
     display: grid;
     gap: 0.3rem;
     margin-top: var(--space-xl);
     padding: var(--space-m) var(--space-l);
     background: var(--navy-900);
-    border-radius: var(--radius-m);
+    border-radius: var(--radius-l);
     color: #ffffff;
     text-align: center;
   }
+  .what__sum::before {
+    content: '';
+    position: absolute;
+    inset: -40% auto auto -10%;
+    width: 22rem;
+    height: 22rem;
+    background: radial-gradient(closest-side, rgb(242 194 48 / 0.18), transparent);
+    pointer-events: none;
+  }
   .what__sum-kicker {
+    position: relative;
     font-size: var(--step--1);
     letter-spacing: 0.06em;
     color: #c7c5dc;
   }
   .what__sum-line {
+    position: relative;
     font-family: var(--font-display);
     font-size: var(--step-3);
     line-height: 1.15;
   }
-  @media (min-width: 56em) {
-    .what__parts {
-      grid-template-columns: repeat(3, 1fr);
-      gap: 0;
-    }
-    .what__part {
-      padding: var(--space-m) var(--space-l) 0 0;
-    }
-    .what__part + .what__part {
-      padding-left: var(--space-l);
-    }
-    .what__part + .what__part::before {
-      /* The "+" between the parts makes the idea of combination literal. */
-      content: '+';
-      position: absolute;
-      left: -0.75rem;
-      top: -1.05rem;
-      display: grid;
-      place-items: center;
-      width: 1.9rem;
-      height: 1.9rem;
-      border-radius: 50%;
-      background: var(--paper);
-      border: 1px solid var(--color-line);
-      font-family: var(--font-body);
-      font-weight: 600;
-      color: var(--red-700);
+  @media (min-width: 60em) {
+    .what__body {
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: var(--space-2xl);
     }
   }
 </style>

@@ -59,10 +59,33 @@ Every text/background pairing meets WCAG AA; automated axe checks run on every p
 
 ## Motion
 
-- Content fades up gently once (`[data-reveal]`, 700ms ease-out) as it enters the viewport.
-- Hovers use 160–320ms transitions on color and small translations only.
-- There's no parallax, bounce or autoplay.
-- `prefers-reduced-motion` disables all motion, and content is never hidden if JavaScript fails (there's a 2.5s safety net).
+Subtle, calm and always optional. All motion lives in `src/styles/global.css` (the "Motion system" block) and `src/scripts/reveal.ts`.
+
+| Effect | Where | Details |
+|---|---|---|
+| Word-by-word rise | Every page H1 (`AnimatedTitle`) | 800ms per word, 55ms stagger, slight blur-to-sharp |
+| Gold highlight draw | Italic accent words in H1/H2 | A soft marker stroke draws in on load (H1) or when scrolled into view (H2) |
+| Photo reveal | All photos | Gentle wipe and fade while the image settles from a 1.08 zoom |
+| Fade-up reveal | Sections, cards, list items | 700ms ease-out with stagger via `--reveal-delay` |
+| Count-up | Trust statistics | Counts from 0 over 1.4s; the real number is in the HTML |
+| Timeline draw | "A day at STARS" | The line grows as it scrolls into view (scroll-driven CSS where supported) |
+| Organic shapes | Behind hero and visit photos | Brand-tinted blobs morph over 18–20s |
+| Twinkling stars | Heroes, key sections | 4-point brand stars fade in and out on a 5.5s cycle |
+| Float | Hero care-team card | 8px drift over 7s |
+| Hover | Cards, service rows, icons | 4px lift with a soft shadow; icon chips tilt and reshape |
+
+**Guardrails:**
+- `prefers-reduced-motion` disables everything.
+- Content is fully visible without JavaScript, with a safety net that applies only if the motion script fails to load.
+- There's no parallax, bouncing or autoplay.
+- Only `transform`, `opacity`, `clip-path` and `background-size` are animated, which keeps it smooth and avoids layout shift.
+
+## Graphics
+
+- **Duotone icon set** (`graphics/DuoIcon.astro`, 22 icons): a crisp brand-colored line over a soft tinted fill, optionally on an organic "chip". Every service has one consistent icon (`src/lib/service-icons.ts`): blocks for classrooms, speech bubbles for speech, a hand and block for OT, footsteps for PT, and a heart with a cross for nursing. Neurodiversity uses an infinity loop rather than a puzzle piece, which many autistic people find offensive.
+- **Care diagram** (`graphics/CareVenn.astro`): classroom, therapy and nursing overlap around "your child". The circles bloom in and the dashed orbit turns slowly.
+- **Brand stars** (`graphics/Sparkles.astro`) echo the gold star in the STARS logo.
+- The style stays line-based and restrained so it reads as healthcare-credible, not childish.
 
 ## Photography direction
 

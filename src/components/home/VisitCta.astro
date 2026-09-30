@@ -10,7 +10,10 @@ const map = mapsUrl(main);
 
 <section class="section visit" aria-labelledby="visit-title">
   <div class="container visit__grid">
-    <Photo image="parent-child-walk" ratio="4 / 5" tone="gold" brief="Exterior of the STARS building at 200 General St. in warm late-afternoon light, a family walking in." />
+    <div class="visit__media">
+      <div class="visit__blob" aria-hidden="true"></div>
+      <Photo image="parent-child-walk" ratio="4 / 5" tone="gold" brief="Exterior of the STARS building at 200 General St. in warm late-afternoon light, a family walking in." />
+    </div>
     <div class="visit__text stack">
       <p class="eyebrow">Come see for yourself</p>
       <h2 id="visit-title">The best way to understand STARS is to <em>walk through the door.</em></h2>
@@ -41,6 +44,24 @@ const map = mapsUrl(main);
     display: grid;
     gap: var(--space-xl);
     align-items: center;
+  }
+  .visit__media {
+    position: relative;
+  }
+  .visit__media > :global(.photo) {
+    position: relative;
+    z-index: 1;
+  }
+  .visit__blob {
+    position: absolute;
+    inset: 8% 8% -5% -6%;
+    background: linear-gradient(200deg, rgb(46 122 140 / 0.22), rgb(242 194 48 / 0.3));
+    border-radius: 44% 56% 40% 60% / 58% 42% 58% 42%;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .visit__blob {
+      animation: blob-morph 20s ease-in-out infinite reverse;
+    }
   }
   .visit__info {
     display: grid;

@@ -1,11 +1,12 @@
 ---
 import Icon from '../Icon.astro';
+import DuoIcon from '../graphics/DuoIcon.astro';
 
 const routes = [
-  { who: 'Parents & caregivers', action: 'Explore STARS for my child', href: '/getting-started' },
-  { who: 'Current STARS families', action: 'Find family information', href: '/families' },
-  { who: 'Physicians & schools', action: 'Refer a child', href: '/referrals' },
-  { who: 'Therapists, nurses & educators', action: 'Work at STARS', href: '/careers' },
+  { who: 'Parents & caregivers', action: 'Explore STARS for my child', href: '/getting-started', icon: 'family' as const },
+  { who: 'Current STARS families', action: 'Find family information', href: '/families', icon: 'home' as const },
+  { who: 'Physicians & schools', action: 'Refer a child', href: '/referrals', icon: 'stethoscope' as const },
+  { who: 'Therapists, nurses & educators', action: 'Work at STARS', href: '/careers', icon: 'briefcase' as const },
 ];
 ---
 
@@ -17,6 +18,7 @@ const routes = [
         routes.map((r) => (
           <li>
             <a href={r.href} class="router__link">
+              <DuoIcon name={r.icon} size={22} tone="inverse" chip class="router__icon" />
               <span class="router__who">{r.who}</span>
               <span class="router__action">
                 {r.action}
@@ -56,11 +58,17 @@ const routes = [
   }
   .router__link {
     display: grid;
+    grid-template-columns: auto 1fr;
+    column-gap: 0.9rem;
+    align-items: center;
     gap: 0.2rem;
     padding-block: var(--space-s);
     padding-right: var(--space-s);
     color: #ffffff;
     text-decoration: none;
+  }
+  .router__link > :global(.router__icon) {
+    grid-row: span 2;
   }
   .router__who {
     font-size: var(--step--1);

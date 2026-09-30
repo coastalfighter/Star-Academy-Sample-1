@@ -5,6 +5,9 @@
  */
 import Breadcrumbs from './Breadcrumbs.astro';
 import Photo from './Photo.astro';
+import AnimatedTitle from './AnimatedTitle.astro';
+import DuoIcon, { type DuoName } from './graphics/DuoIcon.astro';
+import Sparkles from './graphics/Sparkles.astro';
 import type { Crumb } from '@/lib/seo';
 
 interface Props {
@@ -14,25 +17,29 @@ interface Props {
   crumbs: Crumb[];
   photo?: { brief: string; image?: string; src?: string; alt?: string; tone?: 'sand' | 'navy' | 'teal' | 'gold' };
   compact?: boolean;
+  icon?: { name: DuoName; tone?: 'navy' | 'red' | 'gold' | 'teal' };
 }
 
-const { eyebrow, title, lede, crumbs, photo, compact = false } = Astro.props;
+const { eyebrow, title, lede, crumbs, photo, compact = false, icon } = Astro.props;
 const hasAside = Boolean(photo) || Astro.slots.has('aside');
 ---
 
 <section class:list={['page-hero', { 'page-hero--compact': compact, 'page-hero--split': hasAside }]}>
+  <Sparkles variant="section" />
   <div class="container">
     <Breadcrumbs items={crumbs} />
     <div class="page-hero__grid">
       <div class="page-hero__text">
+        {icon && <DuoIcon name={icon.name} tone={icon.tone ?? 'gold'} size={30} chip class="page-hero__icon anim-lede" />}
         <p class="eyebrow">{eyebrow}</p>
-        <h1 set:html={title} />
-        <p class="lede">{lede}</p>
-        {Astro.slots.has('actions') && <div class="cluster page-hero__actions"><slot name="actions" /></div>}
+        <AnimatedTitle html={title} />
+        <p class="lede anim-lede">{lede}</p>
+        {Astro.slots.has('actions') && <div class="cluster page-hero__actions anim-actions"><slot name="actions" /></div>}
       </div>
       {
         hasAside && (
           <div class="page-hero__aside">
+            {photo && <div class="page-hero__blob" aria-hidden="true" />}
             {photo ? <Photo {...photo} ratio="5 / 4" sizes="(min-width: 56em) 45vw, 100vw" priority /> : <slot name="aside" />}
           </div>
         )
@@ -43,6 +50,8 @@ const hasAside = Boolean(photo) || Astro.slots.has('aside');
 
 <style>
   .page-hero {
+    position: relative;
+    overflow: hidden;
     padding-block: var(--space-m) var(--space-2xl);
     border-bottom: 1px solid var(--color-line-soft);
   }
@@ -63,11 +72,33 @@ const hasAside = Boolean(photo) || Astro.slots.has('aside');
     gap: var(--space-s);
     max-width: 44rem;
   }
-  .page-hero h1 {
+  .page-hero :global(h1) {
     font-size: var(--step-5);
   }
-  .page-hero--split h1 {
+  .page-hero--split :global(h1) {
     font-size: var(--step-4);
+  }
+  .page-hero__aside {
+    position: relative;
+  }
+  .page-hero__aside > :global(.photo) {
+    position: relative;
+    z-index: 1;
+    box-shadow: var(--shadow-m);
+  }
+  .page-hero__blob {
+    position: absolute;
+    inset: 8% -5% -7% 10%;
+    background: linear-gradient(150deg, rgb(242 194 48 / 0.32), rgb(46 122 140 / 0.16));
+    border-radius: 58% 42% 52% 48% / 46% 56% 44% 54%;
+  }
+  .page-hero__text > :global(.page-hero__icon) {
+    margin-bottom: -0.25rem;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .page-hero__blob {
+      animation: blob-morph 18s ease-in-out infinite;
+    }
   }
   .page-hero__actions {
     margin-top: var(--space-xs);

@@ -10,6 +10,7 @@ import PageHero from '@/components/PageHero.astro';
 import NextSteps from '@/components/NextSteps.astro';
 import Photo from '@/components/Photo.astro';
 import Confirm from '@/components/Confirm.astro';
+import DuoIcon from '@/components/graphics/DuoIcon.astro';
 import { breadcrumbSchema } from '@/lib/seo';
 
 const site = Astro.site ?? new URL('https://www.mystarsacademy.org');
@@ -21,6 +22,7 @@ const crumbs = [
 const ideas = [
   {
     id: 'relationships',
+    icon: 'team' as const,
     term: 'Relationships & connection',
     plain: 'Children learn from people they trust.',
     meaning:
@@ -29,6 +31,7 @@ const ideas = [
   },
   {
     id: 'regulation',
+    icon: 'calm' as const,
     term: 'Regulation',
     plain: 'A calm body and brain are ready to learn.',
     meaning:
@@ -37,6 +40,7 @@ const ideas = [
   },
   {
     id: 'conscious-discipline',
+    icon: 'heart' as const,
     term: 'Conscious Discipline',
     plain: 'A shared approach to feelings, behavior and belonging.',
     meaning:
@@ -46,6 +50,7 @@ const ideas = [
   },
   {
     id: 'adult-first',
+    icon: 'shield' as const,
     term: 'Adult First',
     plain: 'Adults manage their own emotions first.',
     meaning:
@@ -54,6 +59,7 @@ const ideas = [
   },
   {
     id: 'sensory',
+    icon: 'senses' as const,
     term: 'Sensory-informed',
     plain: 'Every sense matters.',
     meaning:
@@ -62,6 +68,7 @@ const ideas = [
   },
   {
     id: 'neuroaffirming',
+    icon: 'neuro' as const,
     term: 'Neuroaffirming',
     plain: 'Different, not less.',
     meaning:
@@ -109,17 +116,18 @@ const ideas = [
   <div class="container ideas">
     {
       ideas.map((idea, i) => (
-        <section class="idea" id={idea.id} aria-labelledby={`${idea.id}-title`}>
+        <section class="idea" id={idea.id} aria-labelledby={`${idea.id}-title`} data-reveal>
           <div class="idea__head">
-            <span class="idea__n" aria-hidden="true">
-              {String(i + 1).padStart(2, '0')}
+            <span class="idea__mark" aria-hidden="true">
+              <DuoIcon name={idea.icon} tone={(['gold', 'teal', 'red'] as const)[i % 3]} size={28} chip />
+              <span class="idea__n">{String(i + 1).padStart(2, '0')}</span>
             </span>
             <p class="idea__term eyebrow">{idea.term}</p>
             <h2 id={`${idea.id}-title`}>{idea.plain}</h2>
           </div>
           <div class="idea__body">
             <p>{idea.meaning}</p>
-            <div class="idea__looks">
+            <div class="idea__looks lift">
               <p class="idea__looks-label">What it can look like</p>
               <p>{idea.looks}</p>
             </div>
@@ -180,8 +188,6 @@ const ideas = [
 
 <style>
   .short__lead {
-    display: grid;
-    gap: var(--space-xs);
     max-width: 58rem;
     font-family: var(--font-display);
     font-size: var(--step-3);
@@ -194,6 +200,8 @@ const ideas = [
     font-style: italic;
   }
   .short__label {
+    display: block;
+    margin-bottom: var(--space-xs);
     font-family: var(--font-body);
     font-size: var(--step--1);
     font-weight: 700;
@@ -249,6 +257,11 @@ const ideas = [
     display: grid;
     gap: var(--space-2xs);
     align-content: start;
+  }
+  .idea__mark {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
   }
   .idea__n {
     font-family: var(--font-display);

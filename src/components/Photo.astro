@@ -24,6 +24,8 @@ interface Props {
   priority?: boolean;
   class?: string;
   caption?: string;
+  /** Reveal animation (wipe on scroll; on load for priority images). */
+  animate?: boolean;
 }
 
 const {
@@ -39,13 +41,18 @@ const {
   priority = false,
   class: className,
   caption,
+  animate = true,
 } = Astro.props;
 
 if (image && !isPhotoKey(image)) throw new Error(`Unknown photo key "${image}" (see src/lib/photos.json)`);
 const registered = isPhotoKey(image) ? { key: image, ...PHOTOS[image] } : null;
 ---
 
-<figure class:list={['photo', `photo--${tone}`, className]} style={`--ratio: ${ratio}`}>
+<figure
+  class:list={['photo', `photo--${tone}`, { 'photo--intro': animate && priority, 'photo--reveal': animate && !priority }, className]}
+  style={`--ratio: ${ratio}`}
+  data-reveal={animate && !priority ? 'photo' : undefined}
+>
   {
     registered ? (
       <img
@@ -93,6 +100,8 @@ const registered = isPhotoKey(image) ? { key: image, ...PHOTOS[image] } : null;
   .photo {
     position: relative;
     margin: 0;
+    overflow: hidden;
+    border-radius: var(--radius-m);
   }
   .photo img,
   .photo__placeholder {

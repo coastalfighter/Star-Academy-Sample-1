@@ -34,10 +34,14 @@ const ga4 = import.meta.env.PUBLIC_GA4_ID;
     <SEO {title} {description} {image} {noindex} jsonLd={[organizationSchema(site), ...jsonLd]} />
     <script is:inline>
       document.documentElement.classList.add('js');
-      // Safety net: never leave content hidden if scripts fail to load.
+      // Safety net: if the motion script never loads, reveal everything.
       setTimeout(function () {
+        if (document.documentElement.hasAttribute('data-motion')) return;
         document.querySelectorAll('[data-reveal]').forEach(function (el) {
           el.classList.add('is-visible');
+        });
+        document.querySelectorAll('h2 em').forEach(function (el) {
+          el.classList.add('is-drawn');
         });
       }, 2500);
     </script>

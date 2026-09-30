@@ -1,16 +1,19 @@
 ---
 import Confirm from '../Confirm.astro';
+import DuoIcon from '../graphics/DuoIcon.astro';
+import Sparkles from '../graphics/Sparkles.astro';
 import { SITE } from '@/lib/site';
 
 const stats = [
-  { value: String(SITE.founded), label: 'Year founded — locally owned and operated' },
-  { value: String(SITE.childrenServed), label: 'Children currently served (approx.)' },
-  { value: String(SITE.staffCount), label: 'Teachers, therapists, nurses and staff (approx.)' },
-  { value: '2', label: 'Family-friendly Batesville facilities' },
+  { icon: 'calendar' as const, count: false, value: String(SITE.founded), label: 'Year founded — locally owned and operated' },
+  { icon: 'family' as const, count: true, value: String(SITE.childrenServed), label: 'Children currently served (approx.)' },
+  { icon: 'team' as const, count: true, value: String(SITE.staffCount), label: 'Teachers, therapists, nurses and staff (approx.)' },
+  { icon: 'home' as const, count: true, value: '2', label: 'Family-friendly Batesville facilities' },
 ];
 ---
 
 <section class="section cred" aria-labelledby="cred-title">
+  <Sparkles />
   <div class="container">
     <div class="section-head">
       <p class="eyebrow">Why families trust STARS</p>
@@ -20,9 +23,12 @@ const stats = [
     <dl class="cred__stats">
       {
         stats.map((s, i) => (
-          <div data-reveal style={`--reveal-delay: ${i * 80}ms`}>
+          <div class="lift" data-reveal style={`--reveal-delay: ${i * 80}ms`}>
             <dt>{s.label}</dt>
-            <dd>{s.value}</dd>
+            <dd>
+              <DuoIcon name={s.icon} tone={i % 2 ? 'teal' : 'gold'} size={22} chip class="cred__icon" />
+              <span data-count={s.count ? s.value : undefined}>{s.value}</span>
+            </dd>
           </div>
         ))
       }
@@ -48,13 +54,23 @@ const stats = [
     grid-template-columns: repeat(auto-fit, minmax(min(100%, 12.5rem), 1fr));
     gap: var(--space-m);
   }
+  .cred {
+    position: relative;
+  }
+  .cred__stats dd {
+    display: grid;
+    justify-items: start;
+    gap: var(--space-s);
+  }
   .cred__stats > div {
     display: flex;
     flex-direction: column-reverse;
     justify-content: flex-end;
     gap: var(--space-2xs);
-    padding-top: var(--space-s);
-    border-top: 2px solid var(--navy-900);
+    padding: var(--space-m);
+    background: var(--white);
+    border: 1px solid var(--color-line-soft);
+    border-radius: var(--radius-l);
   }
   .cred__stats dd {
     font-family: var(--font-display);

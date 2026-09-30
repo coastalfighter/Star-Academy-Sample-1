@@ -1,5 +1,6 @@
 ---
 import Icon from '../Icon.astro';
+import DuoIcon from '../graphics/DuoIcon.astro';
 import { SITE } from '@/lib/site';
 
 const fits = [
@@ -10,10 +11,10 @@ const fits = [
 ];
 
 const steps = [
-  { title: 'Reach out', body: 'Call or send an inquiry. We’ll listen and answer your questions.' },
-  { title: 'Visit', body: 'Tour STARS and meet the team who would work with your child.' },
-  { title: 'Evaluation & prescription', body: 'Your child is evaluated, and their doctor prescribes treatment.' },
-  { title: 'First day', body: 'We verify coverage, build a plan together and welcome your child.' },
+  { icon: 'phone' as const, title: 'Reach out', body: 'Call or send an inquiry. We’ll listen and answer your questions.' },
+  { icon: 'home' as const, title: 'Visit', body: 'Tour STARS and meet the team who would work with your child.' },
+  { icon: 'stethoscope' as const, title: 'Evaluation & prescription', body: 'Your child is evaluated, and their doctor prescribes treatment.' },
+  { icon: 'star' as const, title: 'First day', body: 'We verify coverage, build a plan together and welcome your child.' },
 ];
 ---
 
@@ -41,14 +42,15 @@ const steps = [
       </p>
     </div>
 
-    <div class="pathway__steps">
+    <div class="pathway__steps lift">
       <h3 class="pathway__steps-title">Getting started takes four steps</h3>
       <ol role="list">
         {
           steps.map((s, i) => (
             <li data-reveal style={`--reveal-delay: ${i * 80}ms`}>
               <span class="pathway__n" aria-hidden="true">
-                {i + 1}
+                <DuoIcon name={s.icon} tone={i % 2 ? 'teal' : 'gold'} size={22} chip />
+                <span class="pathway__badge">{i + 1}</span>
               </span>
               <div>
                 <h4>{s.title}</h4>
@@ -124,20 +126,28 @@ const steps = [
   }
   .pathway__steps li {
     display: grid;
-    grid-template-columns: 2.5rem 1fr;
+    grid-template-columns: 2.9rem 1fr;
     gap: var(--space-s);
     align-items: start;
   }
   .pathway__n {
+    position: relative;
     display: grid;
     place-items: center;
-    width: 2.5rem;
-    height: 2.5rem;
+  }
+  .pathway__badge {
+    position: absolute;
+    right: -0.3rem;
+    bottom: -0.3rem;
+    display: grid;
+    place-items: center;
+    width: 1.3rem;
+    height: 1.3rem;
     border-radius: 50%;
     background: var(--navy-900);
     color: #ffffff;
-    font-family: var(--font-display);
-    font-size: 1.1rem;
+    font-size: 0.72rem;
+    font-weight: 700;
   }
   .pathway__steps h4 {
     font-family: var(--font-body);

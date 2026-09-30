@@ -1,6 +1,9 @@
 ---
 import Icon from '../Icon.astro';
 import Photo from '../Photo.astro';
+import AnimatedTitle from '../AnimatedTitle.astro';
+import DuoIcon from '../graphics/DuoIcon.astro';
+import Sparkles from '../graphics/Sparkles.astro';
 import { SITE } from '@/lib/site';
 ---
 
@@ -8,27 +11,27 @@ import { SITE } from '@/lib/site';
   <div class="container hero__grid">
     <div class="hero__text">
       <p class="eyebrow">Pediatric therapy &amp; developmental preschool · Batesville</p>
-      <h1 id="hero-title">
-        Therapy, learning and care for young children, <em>woven into one full&nbsp;day.</em>
-      </h1>
-      <p class="hero__lede">
+      <AnimatedTitle id="hero-title" html="Therapy, learning and care for young children, <em>woven into one full&nbsp;day.</em>" />
+      <p class="hero__lede anim-lede">
         STARS Academy serves children from birth to age six who need extra support with development. Speech,
         occupational and physical therapy, licensed nursing care and developmental classrooms all happen here — together,
         with one team that knows your child.
       </p>
-      <div class="cluster hero__actions">
+      <div class="cluster hero__actions anim-actions">
         <a class="btn" href="/getting-started">
           See if STARS is right for your child
           <span class="btn__arrow"><Icon name="arrow-right" size={18} /></span>
         </a>
         <a class="btn btn--secondary" href="/schedule-a-tour">Schedule a tour</a>
       </div>
-      <p class="hero__call small">
+      <p class="hero__call small anim-actions">
         Prefer to talk? Call <a href={SITE.phoneHref}>{SITE.phone}</a> — weekdays {SITE.hours.open}–{SITE.hours.close}
       </p>
     </div>
 
     <div class="hero__media">
+      <div class="hero__blob" aria-hidden="true"></div>
+      <Sparkles variant="hero" />
       <Photo
         image="story-time-close"
         sizes="(min-width: 60em) 34rem, 88vw"
@@ -38,6 +41,15 @@ import { SITE } from '@/lib/site';
         priority
         brief="A therapist and a preschooler at eye level in a sunlit classroom, mid-laugh — real STARS moment, natural light."
       />
+      <div class="hero__card" role="group" aria-label="On-site care team">
+        <p class="hero__card-title">One team, on site</p>
+        <ul role="list">
+          <li><DuoIcon name="speech" size={20} tone="red" chip /> Speech</li>
+          <li><DuoIcon name="hand" size={20} tone="teal" chip /> Occupational</li>
+          <li><DuoIcon name="steps" size={20} tone="gold" chip /> Physical</li>
+          <li><DuoIcon name="nursing" size={20} tone="red" chip /> Nursing</li>
+        </ul>
+      </div>
       <div class="hero__inset" aria-hidden="true">
         <Photo image="ball-pit-play" sizes="14rem" ratio="1 / 1" tone="gold" brief="Small hands on sensory play — beans, scoops, a teacher's hand nearby." />
       </div>
@@ -95,7 +107,7 @@ import { SITE } from '@/lib/site';
     gap: var(--space-s);
     max-width: 40rem;
   }
-  .hero h1 {
+  .hero :global(h1) {
     font-size: clamp(2.35rem, 1.6rem + 3.6vw, 4.6rem);
     line-height: 1.04;
   }
@@ -122,8 +134,85 @@ import { SITE } from '@/lib/site';
     justify-self: center;
     padding-left: 12%;
   }
+  .hero__blob {
+    position: absolute;
+    z-index: 0;
+    inset: 6% -6% -4% 18%;
+    background: linear-gradient(145deg, rgb(242 194 48 / 0.35), rgb(46 122 140 / 0.18));
+    border-radius: 58% 42% 52% 48% / 46% 56% 44% 54%;
+  }
+  .hero__media > :global(.photo) {
+    position: relative;
+    z-index: 1;
+    box-shadow: var(--shadow-m);
+  }
+  .hero__card {
+    position: absolute;
+    z-index: 3;
+    right: -4%;
+    bottom: 6%;
+    display: grid;
+    gap: 0.55rem;
+    padding: 0.9rem 1rem 1rem;
+    background: rgb(255 255 255 / 0.94);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid var(--color-line-soft);
+    border-radius: var(--radius-l);
+    box-shadow: var(--shadow-m);
+  }
+  .hero__card-title {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-600);
+  }
+  .hero__card ul {
+    display: grid;
+    gap: 0.45rem;
+    padding: 0;
+    list-style: none;
+  }
+  .hero__card li {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--navy-900);
+  }
+  .hero__card :global(.duo--chip) {
+    width: 30px;
+    height: 30px;
+  }
+  @media (max-width: 29.99em) {
+    .hero__card {
+      right: 0;
+      bottom: -6%;
+      padding: 0.7rem 0.8rem;
+    }
+    .hero__card ul {
+      grid-template-columns: 1fr 1fr;
+      column-gap: 0.8rem;
+    }
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .hero__blob {
+      animation: blob-morph 18s ease-in-out infinite;
+    }
+    .hero__card {
+      animation:
+        word-rise 900ms var(--ease-out) 1100ms both,
+        gentle-float 7s ease-in-out 2s infinite;
+    }
+    .hero__inset {
+      animation: word-rise 900ms var(--ease-out) 900ms both;
+    }
+  }
   .hero__inset {
     position: absolute;
+    z-index: 2;
     left: 0;
     top: 10%;
     width: 38%;

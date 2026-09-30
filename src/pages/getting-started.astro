@@ -65,6 +65,7 @@ const steps = [
     title="Could STARS help your child? <em>Let’s find out together.</em>"
     lede="You don’t need to have everything figured out before you contact us. This page explains who STARS serves, how services are paid for and what the steps look like — and our team will walk you through the rest."
     crumbs={crumbs}
+    icon={{ name: 'family', tone: 'gold' }}
     photo={{ brief: 'A parent holding a toddler while talking with a STARS staff member at the front desk — relaxed, welcoming.', tone: 'gold', image: 'family-meeting' }}
   >
     <Fragment slot="actions">
@@ -105,7 +106,7 @@ const steps = [
       <ol role="list" class="criteria">
         {
           criteria.map((c, i) => (
-            <li data-reveal style={`--reveal-delay: ${i * 90}ms`}>
+            <li class="lift" data-reveal style={`--reveal-delay: ${i * 90}ms`}>
               <span class="criteria__n" aria-hidden="true">
                 {i + 1}
               </span>

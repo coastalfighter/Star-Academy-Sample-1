@@ -1,6 +1,8 @@
 ---
 import Logo from './Logo.astro';
 import Icon from './Icon.astro';
+import DuoIcon from './graphics/DuoIcon.astro';
+import { SERVICE_ICONS } from '@/lib/service-icons';
 import { PRIMARY_NAV, UTILITY_NAV, PRIMARY_CTA, isActive } from '@/lib/navigation';
 import { SITE } from '@/lib/site';
 
@@ -61,6 +63,9 @@ const pathname = Astro.url.pathname;
                           class="menu__link"
                           aria-current={pathname.replace(/\.html$/, '') === child.href ? 'page' : undefined}
                         >
+                          {SERVICE_ICONS[child.href] && i > 0 && (
+                            <DuoIcon name={SERVICE_ICONS[child.href]!.icon} tone={SERVICE_ICONS[child.href]!.tone} size={20} chip class="menu__icon" />
+                          )}
                           <span class="menu__label">{child.label}</span>
                           {child.description && <span class="menu__desc">{child.description}</span>}
                         </a>
@@ -304,6 +309,9 @@ const pathname = Astro.url.pathname;
   }
   .menu__link {
     display: grid;
+    grid-template-columns: auto 1fr;
+    column-gap: 0.75rem;
+    align-items: start;
     gap: 0.15rem;
     padding: 0.75rem 0.85rem;
     border-radius: var(--radius-s);
@@ -314,6 +322,21 @@ const pathname = Astro.url.pathname;
   .menu__link[aria-current='page'] {
     background: var(--sand-100);
     color: var(--ink-900);
+  }
+  .menu__link > :global(.menu__icon) {
+    grid-row: span 2;
+  }
+  .menu__link > .menu__label,
+  .menu__link > .menu__desc {
+    grid-column: 2;
+  }
+  .menu {
+    transform-origin: top left;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .menu:not([hidden]) {
+      animation: fade-down 260ms var(--ease-out);
+    }
   }
   .menu__label {
     font-weight: 640;

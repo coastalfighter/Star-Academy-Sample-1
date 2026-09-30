@@ -1,0 +1,46 @@
+---
+/**
+ * Heading whose words rise in softly, one after another, on page load.
+ * Accepts the site's title markup (plain text with optional <em>…</em>
+ * accents). Words stay real text with real spaces, so screen readers,
+ * search engines and copy/paste see a normal heading.
+ */
+import { splitTitle } from '@/lib/title';
+
+interface Props {
+  html: string;
+  as?: 'h1' | 'h2';
+  id?: string;
+  class?: string;
+}
+const { html, as: Tag = 'h1', id, class: className } = Astro.props;
+const segments = splitTitle(html);
+let i = 0;
+---
+
+<Tag id={id} class:list={['anim-title', className]}>
+  {
+    segments.map((seg) =>
+      seg.em ? (
+        <>
+          <em>
+            {seg.words.map((w, j) => (
+              <>
+                <span class="w" style={`--i:${i++}`}>{w}</span>
+                {j < seg.words.length - 1 && ' '}
+              </>
+            ))}
+          </em>
+          {seg.trailingSpace && ' '}
+        </>
+      ) : (
+        seg.words.map((w, j) => (
+          <>
+            <span class="w" style={`--i:${i++}`}>{w}</span>
+            {(j < seg.words.length - 1 || seg.trailingSpace) && ' '}
+          </>
+        ))
+      ),
+    )
+  }
+</Tag>

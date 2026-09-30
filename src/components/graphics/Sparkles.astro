@@ -1,0 +1,61 @@
+---
+/**
+ * A few small brand stars that twinkle very slowly — a quiet nod to the
+ * STARS mark. Purely decorative; hidden from assistive tech.
+ */
+interface Props {
+  variant?: 'hero' | 'section' | 'navy';
+}
+const { variant = 'section' } = Astro.props;
+
+const layouts = {
+  hero: [
+    { x: '46%', y: '8%', s: 18, d: 0 },
+    { x: '94%', y: '14%', s: 12, d: 1.4 },
+    { x: '52%', y: '88%', s: 10, d: 2.6 },
+    { x: '97%', y: '78%', s: 16, d: 3.4 },
+  ],
+  section: [
+    { x: '92%', y: '10%', s: 14, d: 0 },
+    { x: '4%', y: '82%', s: 10, d: 1.8 },
+  ],
+  navy: [
+    { x: '8%', y: '16%', s: 12, d: 0.6 },
+    { x: '88%', y: '72%', s: 16, d: 2.1 },
+    { x: '60%', y: '10%', s: 9, d: 3.3 },
+  ],
+};
+---
+
+<div class:list={['sparkles', `sparkles--${variant}`]} aria-hidden="true">
+  {
+    layouts[variant].map((p) => (
+      <svg viewBox="0 0 24 24" width={p.s} height={p.s} style={`left:${p.x};top:${p.y};animation-delay:${p.d}s`}>
+        <path d="M12 1.5c.6 4.8 2.7 7.4 10.5 10.5-7.8 3.1-9.9 5.7-10.5 10.5-.6-4.8-2.7-7.4-10.5-10.5C9.3 8.9 11.4 6.3 12 1.5Z" />
+      </svg>
+    ))
+  }
+</div>
+
+<style>
+  .sparkles {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+  }
+  svg {
+    position: absolute;
+    fill: var(--gold-400);
+    opacity: 0.85;
+  }
+  .sparkles--section svg {
+    fill: var(--gold-500);
+    opacity: 0.6;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    svg {
+      animation: twinkle 5.5s ease-in-out infinite;
+    }
+  }
+</style>

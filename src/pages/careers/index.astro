@@ -67,6 +67,7 @@ const hiring = [
     title="Do the work you trained for, <em>with a team behind you.</em>"
     lede={`About ${SITE.staffCount} therapists, nurses, educators and support staff make STARS what it is. If you want to do meaningful work with young children — as part of a team that actually works together — we’d love to meet you.`}
     crumbs={crumbs}
+    icon={{ name: 'briefcase', tone: 'gold' }}
     photo={{ brief: 'A therapist and classroom teacher planning together at a low table after the children leave — candid, warm.', tone: 'navy', image: 'easel-support' }}
   >
     <Fragment slot="actions">
@@ -124,7 +125,7 @@ const hiring = [
       <div class="jobs">
         {
           jobs.map((job) => (
-            <article class="job" aria-labelledby={`job-${job.id}`}>
+            <article class="job lift" aria-labelledby={`job-${job.id}`}>
               <div class="job__head">
                 <p class="job__team">{job.data.team}</p>
                 <h3 id={`job-${job.id}`}>

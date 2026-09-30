@@ -1,13 +1,14 @@
 ---
 import Photo from '../Photo.astro';
+import DuoIcon from '../graphics/DuoIcon.astro';
 import { SITE } from '@/lib/site';
 
 const moments = [
-  { time: SITE.hours.open, title: 'Arrive & connect', body: 'Familiar faces greet each child. A calm, predictable start helps them feel safe enough to learn.' },
-  { time: 'Morning', title: 'Learn through play', body: 'Circle time, centers and sensory play — each set up around the skills in your child’s plan.' },
-  { time: 'Through the day', title: 'Therapy, woven in', body: 'Therapists work one-on-one and in the classroom, so new skills show up in real moments.' },
-  { time: 'Midday', title: 'Care & nourishment', body: 'Nurses handle medications and feedings on site; mealtimes become practice for independence.' },
-  { time: SITE.hours.close, title: 'Head home', body: 'Children leave with a full day of learning — and families stay in the loop about their progress.' },
+  { icon: 'sun' as const, time: SITE.hours.open, title: 'Arrive & connect', body: 'Familiar faces greet each child. A calm, predictable start helps them feel safe enough to learn.' },
+  { icon: 'blocks' as const, time: 'Morning', title: 'Learn through play', body: 'Circle time, centers and sensory play — each set up around the skills in your child’s plan.' },
+  { icon: 'speech' as const, time: 'Through the day', title: 'Therapy, woven in', body: 'Therapists work one-on-one and in the classroom, so new skills show up in real moments.' },
+  { icon: 'apple' as const, time: 'Midday', title: 'Care & nourishment', body: 'Nurses handle medications and feedings on site; mealtimes become practice for independence.' },
+  { icon: 'van' as const, time: SITE.hours.close, title: 'Head home', body: 'Children leave with a full day of learning — and families stay in the loop about their progress.' },
 ];
 ---
 
@@ -22,10 +23,13 @@ const moments = [
       <Photo image="classroom-play" ratio="4 / 3" tone="teal" brief="Wide shot of a STARS classroom mid-morning: children at centers, a therapist and teacher working side by side." />
     </div>
 
-    <ol class="day__timeline" role="list">
+    <ol class="day__timeline draw-line" role="list">
       {
         moments.map((m, i) => (
           <li class="day__moment" data-reveal style={`--reveal-delay: ${i * 70}ms`}>
+            <span class="day__node" aria-hidden="true">
+              <DuoIcon name={m.icon} size={20} tone={i % 2 ? 'teal' : 'gold'} />
+            </span>
             <span class="day__time">{m.time}</span>
             <div>
               <h3>{m.title}</h3>
@@ -57,14 +61,14 @@ const moments = [
     position: relative;
     display: grid;
     gap: var(--space-m);
-    padding: 0 0 0 1.75rem;
+    padding: 0 0 0 3.25rem;
     list-style: none;
   }
   .day__timeline::before {
     content: '';
     position: absolute;
-    left: 0.35rem;
-    top: 0.6rem;
+    left: 1.15rem;
+    top: 1.2rem;
     bottom: 2.5rem;
     width: 2px;
     background: linear-gradient(var(--gold-400), var(--red-600));
@@ -75,16 +79,22 @@ const moments = [
     display: grid;
     gap: 0.35rem;
   }
-  .day__moment::before {
-    content: '';
+  .day__node {
     position: absolute;
-    left: -1.75rem;
-    top: 0.35rem;
-    width: 0.85rem;
-    height: 0.85rem;
+    left: -3.25rem;
+    top: -0.35rem;
+    display: grid;
+    place-items: center;
+    width: 2.4rem;
+    height: 2.4rem;
     border-radius: 50%;
-    background: var(--sand-100);
-    border: 2px solid var(--navy-800);
+    background: var(--white);
+    border: 1.5px solid var(--sand-300);
+    box-shadow: var(--shadow-s);
+    transition: transform var(--duration-m) var(--ease-out);
+  }
+  .day__moment:hover .day__node {
+    transform: scale(1.1) rotate(-6deg);
   }
   .day__time {
     font-size: var(--step--1);

@@ -1,0 +1,153 @@
+---
+/**
+ * "One day, one plan, one team" — classroom, therapy and nursing overlap
+ * around the child. Circles bloom in when scrolled into view; a dashed
+ * orbit turns very slowly. Fully static for reduced-motion users.
+ */
+---
+
+<figure class="venn" data-reveal="fade">
+  <svg viewBox="0 0 360 330" role="img" aria-labelledby="venn-title venn-desc">
+    <title id="venn-title">How care fits together at STARS</title>
+    <desc id="venn-desc">
+      Three overlapping circles: developmental classroom, therapy and nursing. Where all three meet is your child.
+    </desc>
+    <circle class="venn__orbit" cx="180" cy="160" r="152" />
+    <g class="venn__circles">
+      <circle class="venn__c venn__c--1" cx="128" cy="126" r="92" />
+      <circle class="venn__c venn__c--2" cx="232" cy="126" r="92" />
+      <circle class="venn__c venn__c--3" cx="180" cy="212" r="92" />
+    </g>
+    <g class="venn__labels" font-family="var(--font-body)" font-weight="700" font-size="12.5" letter-spacing="1.4">
+      <text x="92" y="100" text-anchor="middle">CLASSROOM</text>
+      <text x="268" y="100" text-anchor="middle">THERAPY</text>
+      <text x="180" y="272" text-anchor="middle">NURSING</text>
+    </g>
+    <g class="venn__center">
+      <circle cx="180" cy="156" r="38" />
+      <path d="m180 128.5 4.2 8.9 9.8 1.1-7.3 6.6 2 9.6-8.7-4.8-8.7 4.8 2-9.6-7.3-6.6 9.8-1.1Z" />
+    </g>
+    <text class="venn__child" x="180" y="178" text-anchor="middle" font-family="var(--font-display)" font-style="italic" font-size="14">
+      your child
+    </text>
+    <g class="venn__spark" aria-hidden="true">
+      <path d="m44 238 2.4 5 5.4.6-4 3.7 1.1 5.3-4.9-2.7-4.9 2.7 1.1-5.3-4-3.7 5.4-.6Z" />
+      <path d="m318 60 1.8 3.8 4 .4-3 2.8.8 4-3.6-2-3.6 2 .8-4-3-2.8 4-.4Z" />
+    </g>
+  </svg>
+</figure>
+
+<style>
+  .venn {
+    margin: 0;
+    width: 100%;
+    max-width: 26rem;
+    justify-self: center;
+  }
+  svg {
+    width: 100%;
+    height: auto;
+    overflow: visible;
+  }
+  .venn__orbit {
+    fill: none;
+    stroke: var(--sand-300);
+    stroke-width: 1.2;
+    stroke-dasharray: 2 7;
+    transform-origin: 180px 160px;
+  }
+  .venn__c {
+    stroke-width: 1.5;
+    transform-box: fill-box;
+    transform-origin: center;
+    mix-blend-mode: multiply;
+  }
+  .venn__c--1 {
+    fill: rgb(46 122 140 / 0.16);
+    stroke: var(--teal-600);
+  }
+  .venn__c--2 {
+    fill: rgb(196 50 58 / 0.12);
+    stroke: var(--red-600);
+  }
+  .venn__c--3 {
+    fill: rgb(242 194 48 / 0.26);
+    stroke: var(--gold-500);
+  }
+  .venn__labels text {
+    fill: var(--navy-900);
+  }
+  .venn__center circle {
+    fill: var(--navy-900);
+  }
+  .venn__center path {
+    fill: var(--gold-400);
+    transform-box: fill-box;
+    transform-origin: center;
+  }
+  .venn__child {
+    fill: #ffffff;
+  }
+  .venn__spark path {
+    fill: var(--gold-400);
+    transform-box: fill-box;
+    transform-origin: center;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .venn__orbit {
+      animation: venn-spin 80s linear infinite;
+    }
+    .venn__spark path {
+      animation: twinkle 5s ease-in-out infinite;
+    }
+    .venn__spark path + path {
+      animation-delay: 2.2s;
+    }
+    :global(.js) .venn .venn__c {
+      opacity: 0;
+      transform: scale(0.6);
+      transition:
+        opacity 900ms var(--ease-out),
+        transform 1100ms var(--ease-out);
+    }
+    :global(.js) .venn .venn__c--2 {
+      transition-delay: 150ms;
+    }
+    :global(.js) .venn .venn__c--3 {
+      transition-delay: 300ms;
+    }
+    :global(.js) .venn .venn__center,
+    :global(.js) .venn .venn__child,
+    :global(.js) .venn .venn__labels {
+      opacity: 0;
+      transition: opacity 700ms ease 700ms;
+    }
+    :global(.js) .venn:global(.is-visible) .venn__c {
+      opacity: 1;
+      transform: none;
+    }
+    :global(.js) .venn:global(.is-visible) .venn__center,
+    :global(.js) .venn:global(.is-visible) .venn__child,
+    :global(.js) .venn:global(.is-visible) .venn__labels {
+      opacity: 1;
+    }
+    :global(.js) .venn:global(.is-visible) .venn__center path {
+      animation: star-pulse 3.2s ease-in-out 1.6s infinite;
+    }
+  }
+  @keyframes venn-spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  @keyframes star-pulse {
+    0%,
+    100% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.12);
+    }
+  }
+</style>

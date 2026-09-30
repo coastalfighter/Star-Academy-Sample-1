@@ -32,6 +32,7 @@ const shortcuts = [
     title="We’re here to help."
     lede="Call, visit or send a message — we’ll make sure it reaches the right person."
     crumbs={crumbs}
+    icon={{ name: 'phone', tone: 'red' }}
     compact
   />
 
@@ -41,7 +42,7 @@ const shortcuts = [
         {
           shortcuts.map((s) => (
             <li>
-              <a href={s.href}>
+              <a href={s.href} class="lift">
                 <span class="shortcuts__q">{s.label}</span>
                 <span class="shortcuts__a">
                   {s.action} <Icon name="arrow-right" size={18} />

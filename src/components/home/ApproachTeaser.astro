@@ -1,15 +1,18 @@
 ---
 import Icon from '../Icon.astro';
+import DuoIcon from '../graphics/DuoIcon.astro';
+import Sparkles from '../graphics/Sparkles.astro';
 
 const ideas = [
-  { title: 'Connection comes first', body: 'Children learn from people they trust. Relationships are the foundation for everything else we do.' },
-  { title: 'Calm adults help children calm', body: 'Our “Adult First” mindset means staff learn to manage their own stress so they can steady the children in their care.' },
-  { title: 'Every sense matters', body: 'Some children feel sound, touch and movement more or less intensely. We notice, and plan for it.' },
-  { title: 'Different, not less', body: 'We’re neuroaffirming: we build on each child’s strengths and support what’s hard, without trying to make them “typical.”' },
+  { icon: 'team' as const, title: 'Connection comes first', body: 'Children learn from people they trust. Relationships are the foundation for everything else we do.' },
+  { icon: 'calm' as const, title: 'Calm adults help children calm', body: 'Our “Adult First” mindset means staff learn to manage their own stress so they can steady the children in their care.' },
+  { icon: 'senses' as const, title: 'Every sense matters', body: 'Some children feel sound, touch and movement more or less intensely. We notice, and plan for it.' },
+  { icon: 'neuro' as const, title: 'Different, not less', body: 'We’re neuroaffirming: we build on each child’s strengths and support what’s hard, without trying to make them “typical.”' },
 ];
 ---
 
 <section class="section section--navy approach" aria-labelledby="approach-title">
+  <Sparkles variant="navy" />
   <div class="container">
     <div class="approach__head">
       <p class="eyebrow">Our approach</p>
@@ -26,6 +29,7 @@ const ideas = [
       {
         ideas.map((idea, i) => (
           <li data-reveal style={`--reveal-delay: ${i * 90}ms`}>
+            <DuoIcon name={idea.icon} tone="inverse" size={26} chip />
             <h3>{idea.title}</h3>
             <p>{idea.body}</p>
           </li>
@@ -73,7 +77,8 @@ const ideas = [
   .approach__ideas li {
     display: grid;
     align-content: start;
-    gap: var(--space-2xs);
+    justify-items: start;
+    gap: var(--space-xs);
     padding-top: var(--space-s);
     border-top: 1px solid rgb(255 255 255 / 0.2);
   }

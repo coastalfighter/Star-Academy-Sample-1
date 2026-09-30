@@ -19,6 +19,8 @@ import Icon from '@/components/Icon.astro';
 import NextSteps from '@/components/NextSteps.astro';
 import { breadcrumbSchema, faqSchema } from '@/lib/seo';
 import { smartQuotes } from '@/lib/confirm';
+import { SERVICE_ICONS } from '@/lib/service-icons';
+import DuoIcon from '@/components/graphics/DuoIcon.astro';
 
 export async function getStaticPaths() {
   const services = await getCollection('services');
@@ -48,7 +50,7 @@ const others = all.filter((x) => x.data.path !== s.path);
   description={s.metaDescription}
   jsonLd={[breadcrumbSchema(crumbs, site), faqSchema(s.faqs)]}
 >
-  <PageHero eyebrow={s.eyebrow} title={smartQuotes(s.headline)} lede={smartQuotes(s.lede)} crumbs={crumbs} photo={s.photo}>
+  <PageHero eyebrow={s.eyebrow} title={smartQuotes(s.headline)} lede={smartQuotes(s.lede)} crumbs={crumbs} photo={s.photo} icon={{ name: SERVICE_ICONS[s.path]!.icon, tone: SERVICE_ICONS[s.path]!.tone }}>
     <Fragment slot="actions">
       <a class="btn" href="/getting-started">
         See if your child qualifies <span class="btn__arrow"><Icon name="arrow-right" size={18} /></span>
@@ -63,7 +65,7 @@ const others = all.filter((x) => x.data.path !== s.path);
         <h2 id="overview-title" class="overview__h">What is {lower}?</h2>
         <Rich as="p" class="lede" text={s.whatItIs} />
       </div>
-      <div class="overview__who">
+      <div class="overview__who lift">
         <h3 class="eyebrow overview__who-h">Who it’s for</h3>
         <Rich as="p" text={s.forWho} />
       </div>
@@ -144,7 +146,10 @@ const others = all.filter((x) => x.data.path !== s.path);
           {
             s.connects.map((c) => (
               <li>
-                <a href={c.path}>{titleFor(c.path)}</a>
+                <a href={c.path} class="connects__link">
+                  <DuoIcon name={SERVICE_ICONS[c.path]?.icon ?? 'star'} tone={SERVICE_ICONS[c.path]?.tone ?? 'gold'} size={18} chip />
+                  {titleFor(c.path)}
+                </a>
                 <Rich as="p" text={c.text} />
               </li>
             ))
@@ -317,6 +322,9 @@ const others = all.filter((x) => x.data.path !== s.path);
     border-bottom: 1px solid var(--color-line);
   }
   .connects a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
     font-family: var(--font-display);
     font-size: var(--step-1);
     text-decoration: none;
