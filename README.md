@@ -2,7 +2,7 @@
 
 A complete strategic redesign of [mystarsacademy.org](https://www.mystarsacademy.org) for STARS Academy, a pediatric developmental day treatment program in Batesville, Arkansas (therapy, nursing and developmental classrooms for children from birth to age six).
 
-> **Status:** design and build complete. Content marked **[Client to confirm: …]** is waiting on STARS (see [`docs/05-client-input-needed.md`](docs/05-client-input-needed.md)), and real photography will replace the art-directed placeholders.
+> **Status:** design and build complete. Content marked **[Client to confirm: …]** is waiting on STARS (see [`docs/05-client-input-needed.md`](docs/05-client-input-needed.md)), and photo slots use temporary royalty-free Pexels images until STARS' own photography is available (see [`docs/08-photography.md`](docs/08-photography.md)).
 
 ## Documentation
 
@@ -15,6 +15,7 @@ A complete strategic redesign of [mystarsacademy.org](https://www.mystarsacademy
 | [05 — Client input needed](docs/05-client-input-needed.md) | Every placeholder, grouped as a checklist |
 | [06 — Launch & operations](docs/06-launch-and-operations.md) | Migration, launch runbook, QA checklist, backups, training |
 | [07 — Vercel preview hosting](docs/07-vercel-preview-hosting.md) | Temporary Vercel deploy: setup, forms, noindex, differences from Netlify |
+| [08 — Photography](docs/08-photography.md) | Temporary Pexels photos: map, license, how to replace with real STARS photos |
 
 ## Stack
 
@@ -45,6 +46,7 @@ npm run dev        # http://localhost:4321
 | `npm run verify` | All of the above, in order: what CI runs |
 | `npm run placeholders` | List every remaining "client to confirm" marker |
 | `npm run images` | Regenerate the Open Graph image and touch icon |
+| `npm run photos` | Re-download and regenerate responsive photos from `src/lib/photos.json` |
 | `npm run vercel:config` | Regenerate `vercel.json` after changing redirects or headers |
 
 ## Project structure

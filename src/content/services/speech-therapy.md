@@ -8,6 +8,7 @@ lede: Communication is how children ask for what they need, make friends and lea
 metaTitle: Pediatric Speech Therapy in Batesville, AR
 metaDescription: Pediatric speech-language therapy for children from infancy to age six at STARS Academy in Batesville, Arkansas — including evaluations and therapy in Spanish.
 photo:
+  image: letter-cards
   brief: A speech therapist and preschooler in a quiet treatment room, sharing a picture book, both laughing.
 whatItIs: Speech-language therapy supports every part of communication — understanding words, using words, speech sounds, social communication, and the mouth skills needed for eating and swallowing. For children who aren't yet using words, it can also mean picture systems or assistive technology that give them a voice.
 forWho: Infants, toddlers and preschoolers up to age six with speech, language, social communication or feeding challenges — including children with developmental delays, autism, hearing loss, Down syndrome and other diagnoses.

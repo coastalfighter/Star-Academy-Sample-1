@@ -66,7 +66,7 @@ Every text/background pairing meets WCAG AA; automated axe checks run on every p
 
 ## Photography direction
 
-Documentary, natural light, at the child's eye level. Real STARS children, staff and families in real moments: therapy, classroom play, nurses at work, staff together. No stock photography, posed rows, clip-art children or rainbow overlays. Every placeholder on the site carries a specific shot brief, so the brief list doubles as the **shot list** for a one- or two-day professional shoot (with signed photo releases).
+Documentary, natural light, at the child's eye level. Real STARS children, staff and families in real moments: therapy, classroom play, nurses at work, staff together. No stock photography, posed rows, clip-art children or rainbow overlays. Every photo slot carries a specific shot brief, which doubles as the **shot list** for a one- or two-day professional shoot (with signed photo releases). Until then, slots use carefully matched temporary Pexels photos; see `08-photography.md`.
 
 ## Logo recommendation
 

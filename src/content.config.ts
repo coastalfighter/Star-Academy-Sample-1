@@ -10,6 +10,8 @@ import { z } from 'astro/zod';
 
 const photo = z.object({
   brief: z.string(),
+  // Key into src/lib/photos.json (responsive, optimized).
+  image: z.string().optional(),
   src: z.string().optional(),
   alt: z.string().optional(),
 });

@@ -1,0 +1,147 @@
+{
+  "_note": "Temporary stock photography (Pexels License: free for commercial use, no attribution required). Replace with real STARS photography before launch. Regenerate files with `npm run photos`.",
+  "widths": [
+    480,
+    800,
+    1200,
+    1600
+  ],
+  "photos": {
+    "story-time-close": {
+      "pexelsId": 8613091,
+      "alt": "A teacher leans in to share a picture book with two young children, who smile as they look at the page.",
+      "position": "50% 35%",
+      "width": 2000,
+      "height": 3000,
+      "source": "https://www.pexels.com/photo/8613091/"
+    },
+    "ball-pit-play": {
+      "pexelsId": 27175469,
+      "alt": "A smiling toddler sits in a colorful ball pit during sensory play.",
+      "position": "58% 62%",
+      "width": 2000,
+      "height": 1333,
+      "source": "https://www.pexels.com/photo/27175469/"
+    },
+    "classroom-play": {
+      "pexelsId": 8422204,
+      "alt": "Preschoolers play with colorful balls and a toy train on a classroom rug while two teachers join in on the floor.",
+      "position": "50% 50%",
+      "width": 2000,
+      "height": 1335,
+      "source": "https://www.pexels.com/photo/8422204/"
+    },
+    "guided-play": {
+      "pexelsId": 8535583,
+      "alt": "An adult guides two young children through a hands-on matching game on the floor.",
+      "position": "50% 50%",
+      "width": 2000,
+      "height": 1335,
+      "source": "https://www.pexels.com/photo/8535583/"
+    },
+    "floor-play": {
+      "pexelsId": 8422253,
+      "alt": "A teacher sits on the floor with three toddlers, building with wooden pegs, blocks and balls.",
+      "position": "50% 55%",
+      "width": 2000,
+      "height": 2996,
+      "source": "https://www.pexels.com/photo/8422253/"
+    },
+    "letter-cards": {
+      "pexelsId": 8087859,
+      "alt": "An educator holds up a letter A card as two young children watch and listen.",
+      "position": "45% 40%",
+      "width": 2000,
+      "height": 1125,
+      "source": "https://www.pexels.com/photo/8087859/"
+    },
+    "block-stacking": {
+      "pexelsId": 3662635,
+      "alt": "A toddler concentrates on carefully stacking colorful wooden blocks.",
+      "position": "40% 45%",
+      "width": 2000,
+      "height": 1333,
+      "source": "https://www.pexels.com/photo/3662635/"
+    },
+    "supported-steps": {
+      "pexelsId": 7491095,
+      "alt": "An adult holds a baby's hands to support their first steps across the floor.",
+      "position": "45% 55%",
+      "width": 2000,
+      "height": 1333,
+      "source": "https://www.pexels.com/photo/7491095/"
+    },
+    "breathing-treatment": {
+      "pexelsId": 7447004,
+      "alt": "A nurse in a white coat helps a young girl with a breathing treatment mouthpiece.",
+      "position": "58% 40%",
+      "width": 2000,
+      "height": 1333,
+      "source": "https://www.pexels.com/photo/7447004/"
+    },
+    "teacher-hugs": {
+      "pexelsId": 8613085,
+      "alt": "Two teachers kneel to hug a group of happy young children in a bright classroom.",
+      "position": "50% 45%",
+      "width": 2000,
+      "height": 3000,
+      "source": "https://www.pexels.com/photo/8613085/"
+    },
+    "colleagues-laughing": {
+      "pexelsId": 2041390,
+      "alt": "Three colleagues laugh together around a table with notebooks and coffee mugs.",
+      "position": "50% 45%",
+      "width": 2000,
+      "height": 1333,
+      "source": "https://www.pexels.com/photo/2041390/"
+    },
+    "family-meeting": {
+      "pexelsId": 7447259,
+      "alt": "Parents sit on a sofa with their daughter, who holds a teddy bear, as they talk with a professional.",
+      "position": "35% 40%",
+      "width": 2000,
+      "height": 1333,
+      "source": "https://www.pexels.com/photo/7447259/"
+    },
+    "easel-support": {
+      "pexelsId": 8613090,
+      "alt": "An educator sits beside a young boy as he draws on a chalkboard easel.",
+      "position": "55% 35%",
+      "width": 2000,
+      "height": 3000,
+      "source": "https://www.pexels.com/photo/8613090/"
+    },
+    "colleagues-planning": {
+      "pexelsId": 2041386,
+      "alt": "Colleagues smile and talk while working together at a shared table.",
+      "position": "40% 45%",
+      "width": 2000,
+      "height": 1333,
+      "source": "https://www.pexels.com/photo/2041386/"
+    },
+    "floor-game": {
+      "pexelsId": 8535574,
+      "alt": "An educator kneels on the floor at children's eye level, playing a picture-matching game with three preschoolers.",
+      "position": "55% 50%",
+      "width": 2000,
+      "height": 1335,
+      "source": "https://www.pexels.com/photo/8535574/"
+    },
+    "parent-child-walk": {
+      "pexelsId": 7880775,
+      "alt": "A parent and young child walk hand in hand across a sunny park lawn.",
+      "position": "62% 55%",
+      "width": 2000,
+      "height": 1333,
+      "source": "https://www.pexels.com/photo/7880775/"
+    },
+    "story-time-group": {
+      "pexelsId": 8613089,
+      "alt": "A teacher reads aloud to a group of preschoolers gathered around her in a bright classroom.",
+      "position": "65% 45%",
+      "width": 2000,
+      "height": 1333,
+      "source": "https://www.pexels.com/photo/8613089/"
+    }
+  }
+}

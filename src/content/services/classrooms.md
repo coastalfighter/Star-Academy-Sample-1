@@ -8,6 +8,7 @@ lede: STARS classrooms look and feel like a warm, well-run preschool. The differ
 metaTitle: Developmental Preschool in Batesville, AR
 metaDescription: Infant, toddler and preschool classrooms at STARS Academy in Batesville, with therapy and nursing built into the day and support for the move to kindergarten.
 photo:
+  image: floor-play
   brief: A teacher sitting on the floor at eye level with two toddlers, building with blocks in soft morning light.
 whatItIs: Our classrooms are developmentally appropriate learning spaces for infants, toddlers and preschoolers. Each room is set up so children can learn and play at their own pace — with active play, quiet play and sensory play woven through the day.
 forWho: Children from birth to age six who qualify for developmental services and benefit from learning in a group, with extra support close at hand.

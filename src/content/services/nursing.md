@@ -8,6 +8,7 @@ lede: STARS has full-time licensed nurses on staff at our facilities. They care 
 metaTitle: On-Site Pediatric Nursing Care in Batesville, AR
 metaDescription: Full-time licensed nurses at STARS Academy care for children with medical needs — tube feedings, trach care, respiratory support, medications and more.
 photo:
+  image: breathing-treatment
   brief: A nurse kneeling beside a young child in a classroom, calmly checking in, with the child's teacher nearby.
 whatItIs: Our nursing team supports each child's health throughout the day, working with families, therapists, teachers and each child's own health care provider. We believe children with developmental delays or chronic conditions are healthy as they learn to thrive with their unique needs.
 forWho: Every child at STARS — and especially children who need medications, feedings, respiratory support or other medical care during the day.

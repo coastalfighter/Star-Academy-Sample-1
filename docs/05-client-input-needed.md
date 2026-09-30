@@ -63,7 +63,7 @@ node scripts/list-placeholders.mjs --strict   # exits non-zero if any remain (us
 - [ ] Hosting provider and retention period for form data
 
 ### Photography
-- [ ] Professional one- or two-day photo shoot using the shot briefs embedded in each photo placeholder
+- [ ] Professional one- or two-day photo shoot using the shot briefs in each `Photo` slot, to replace the temporary Pexels images (`docs/08-photography.md`)
 - [ ] Signed photo releases for every child and staff member pictured
 
 ### Accounts (STARS-owned)

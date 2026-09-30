@@ -8,6 +8,7 @@ lede: Occupational therapy helps children with the everyday skills that let them
 metaTitle: Pediatric Occupational Therapy in Batesville, AR
 metaDescription: Pediatric occupational therapy at STARS Academy in Batesville — sensory processing, self-care, fine-motor and social-emotional skills for children birth to six.
 photo:
+  image: block-stacking
   brief: An occupational therapist spotting a young child on a suspended swing in a sensory gym, child's face calm and focused.
 whatItIs: For young children, "occupation" means the things they do all day — play, eat, get dressed, explore and get along with others. Occupational therapists help children build the skills behind those activities, with special attention to how a child's body and senses respond to the world.
 forWho: Children from birth to age six who have difficulty with sensory processing, self-care, fine-motor or coordination skills, or with managing emotions and transitions.

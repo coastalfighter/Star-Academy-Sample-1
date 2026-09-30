@@ -18,7 +18,8 @@
     "verify": "npm run check && npm run test && npm run build && npm run test:e2e",
     "placeholders": "node scripts/list-placeholders.mjs",
     "images": "node scripts/generate-images.mjs",
-    "vercel:config": "node scripts/generate-vercel-config.ts"
+    "vercel:config": "node scripts/generate-vercel-config.ts",
+    "photos": "node scripts/fetch-photos.mjs"
   },
   "dependencies": {
     "@astrojs/sitemap": "3.7.4",

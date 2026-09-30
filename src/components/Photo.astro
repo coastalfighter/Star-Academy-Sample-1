@@ -2,15 +2,19 @@
 /**
  * Photography slot with built-in art direction.
  *
- * STARS has asked for authentic, documentary photography of real children,
- * staff and families — not stock. Until that shoot happens, each slot renders
- * a clearly labeled placeholder that carries the shot brief for the
- * photographer. Pass `src` + `alt` to swap in the real image.
+ * - `image`: a key from src/lib/photos.json (responsive WebP, srcset/sizes,
+ *   per-photo focal point). Currently temporary stock; the `brief` stays as
+ *   the shot list for STARS' own photography.
+ * - `src` + `alt`: any other image (e.g. uploaded through the CMS).
+ * - Neither: a labeled placeholder showing the shot brief.
  */
 import Icon from './Icon.astro';
+import { PHOTOS, isPhotoKey, photoSrc, photoSrcset } from '@/lib/photos';
 
 interface Props {
   brief: string;
+  image?: string;
+  sizes?: string;
   src?: string;
   alt?: string;
   width?: number;
@@ -24,6 +28,8 @@ interface Props {
 
 const {
   brief,
+  image,
+  sizes = '(min-width: 60em) 50vw, 100vw',
   src,
   alt = '',
   width = 1600,
@@ -34,11 +40,27 @@ const {
   class: className,
   caption,
 } = Astro.props;
+
+if (image && !isPhotoKey(image)) throw new Error(`Unknown photo key "${image}" (see src/lib/photos.json)`);
+const registered = isPhotoKey(image) ? { key: image, ...PHOTOS[image] } : null;
 ---
 
 <figure class:list={['photo', `photo--${tone}`, className]} style={`--ratio: ${ratio}`}>
   {
-    src ? (
+    registered ? (
+      <img
+        src={photoSrc(registered.key)}
+        srcset={photoSrcset(registered.key)}
+        sizes={sizes}
+        alt={registered.alt}
+        width={registered.width}
+        height={registered.height}
+        style={`object-position: ${registered.position}`}
+        loading={priority ? 'eager' : 'lazy'}
+        decoding={priority ? 'sync' : 'async'}
+        fetchpriority={priority ? 'high' : 'auto'}
+      />
+    ) : src ? (
       <img
         src={src}
         alt={alt}
@@ -78,6 +100,9 @@ const {
     aspect-ratio: var(--ratio);
     object-fit: cover;
     border-radius: var(--radius-m);
+  }
+  .photo img {
+    background: var(--sand-200);
   }
   .photo__placeholder {
     position: relative;

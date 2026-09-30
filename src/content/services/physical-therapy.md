@@ -8,6 +8,7 @@ lede: Our physical therapists help children build the strength, balance and coor
 metaTitle: Pediatric Physical Therapy in Batesville, AR
 metaDescription: Pediatric physical therapy at STARS Academy in Batesville — motor development, balance, coordination and adaptive equipment for children from birth to age six.
 photo:
+  image: supported-steps
   brief: A physical therapist kneeling behind a toddler taking supported steps across the therapy gym toward a parent.
 whatItIs: Pediatric physical therapy supports how children move — developmental milestones like sitting, crawling and walking, as well as balance, coordination, strength and motor planning. It also includes helping families find the right adaptive equipment.
 forWho: Children from birth to age six who are behind in motor milestones or have conditions that affect movement, such as cerebral palsy, low muscle tone or prematurity.
