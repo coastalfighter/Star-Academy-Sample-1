@@ -68,6 +68,8 @@ function renderSummary(form: HTMLFormElement, errors: { control: Control; messag
 
 function encode(form: HTMLFormElement): { body: BodyInit; headers?: HeadersInit } {
   const data = new FormData(form);
+  // Third-party endpoints accept multipart and reply with JSON.
+  if (form.dataset.delivery === 'endpoint') return { body: data, headers: { Accept: 'application/json' } };
   if (form.enctype === 'multipart/form-data') return { body: data };
   const params = new URLSearchParams();
   data.forEach((value, key) => params.append(key, typeof value === 'string' ? value : value.name));
@@ -142,8 +144,13 @@ function enhance(form: HTMLFormElement): void {
     if (label) label.textContent = 'Sending…';
 
     try {
+      if (form.dataset.delivery === 'preview') {
+        showSuccess();
+        return;
+      }
       const { body, headers } = encode(form);
-      const response = await fetch('/', { method: 'POST', body, headers });
+      const target = form.dataset.delivery === 'endpoint' && form.dataset.endpoint ? form.dataset.endpoint : '/';
+      const response = await fetch(target, { method: 'POST', body, headers });
       if (!response.ok) throw new Error(`Form endpoint responded ${response.status}`);
       trackConversion(form.name);
       showSuccess();

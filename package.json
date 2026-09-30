@@ -5,7 +5,7 @@
   "description": "STARS Academy website \u2014 pediatric developmental day treatment, Batesville, Arkansas.",
   "type": "module",
   "engines": {
-    "node": ">=20.3.0"
+    "node": "22.x"
   },
   "scripts": {
     "dev": "astro dev",
@@ -17,7 +17,8 @@
     "test:e2e": "playwright test",
     "verify": "npm run check && npm run test && npm run build && npm run test:e2e",
     "placeholders": "node scripts/list-placeholders.mjs",
-    "images": "node scripts/generate-images.mjs"
+    "images": "node scripts/generate-images.mjs",
+    "vercel:config": "node scripts/generate-vercel-config.ts"
   },
   "dependencies": {
     "@astrojs/sitemap": "3.7.4",

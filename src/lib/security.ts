@@ -26,8 +26,9 @@ export const ANALYTICS_ORIGINS = {
   img: ['https://*.google-analytics.com', 'https://www.googletagmanager.com'],
 };
 
-export function buildCsp(scriptHashes: string[], opts: { analytics: boolean }): string {
+export function buildCsp(scriptHashes: string[], opts: { analytics: boolean; formOrigins?: string[] }): string {
   const a = opts.analytics;
+  const forms = opts.formOrigins ?? [];
   const directives: Record<string, string[]> = {
     'default-src': ["'self'"],
     'script-src': ["'self'", ...scriptHashes, ...(a ? ANALYTICS_ORIGINS.script : [])],
@@ -35,14 +36,21 @@ export function buildCsp(scriptHashes: string[], opts: { analytics: boolean }): 
     'style-src': ["'self'", "'unsafe-inline'"],
     'img-src': ["'self'", 'data:', ...(a ? ANALYTICS_ORIGINS.img : [])],
     'font-src': ["'self'"],
-    'connect-src': ["'self'", ...(a ? ANALYTICS_ORIGINS.connect : [])],
-    'form-action': ["'self'"],
+    'connect-src': ["'self'", ...forms, ...(a ? ANALYTICS_ORIGINS.connect : [])],
+    'form-action': ["'self'", ...forms],
     'base-uri': ["'self'"],
     'object-src': ["'none'"],
   };
   return Object.entries(directives)
     .map(([k, v]) => `${k} ${v.join(' ')}`)
     .join('; ');
+}
+
+/** Origins of external form endpoints used on a page (data-endpoint attributes). */
+export function formEndpointOrigins(html: string): string[] {
+  const origins = new Set<string>();
+  for (const m of html.matchAll(/data-endpoint="(https:\/\/[^"]+)"/g)) origins.add(new URL(m[1]!).origin);
+  return [...origins].sort();
 }
 
 /** Inserts a CSP <meta> immediately after <meta charset>, before any script. */

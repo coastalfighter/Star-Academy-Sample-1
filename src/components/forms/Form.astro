@@ -7,10 +7,11 @@
  *   submission and an in-place confirmation that says what happens next.
  * - Spam protection: honeypot field + minimum fill-time check, on top of
  *   the hosting provider's own spam filtering (Netlify Forms / Akismet).
- * - Submissions go to a form inbox owned by STARS — no third-party form
- *   vendor, no lock-in.
+ * - Delivery (Netlify Forms, a custom endpoint, or preview-only) is chosen
+ *   at build time — see src/lib/form-delivery.ts.
  */
 import { SITE } from '@/lib/site';
+import { formDelivery } from '@/lib/form-delivery';
 
 interface Props {
   name: string;
@@ -31,17 +32,20 @@ const {
 } = Astro.props;
 
 const honeypot = 'company_website';
+const delivery = formDelivery();
 ---
 
 <div class="form-shell" data-form-shell>
   <form
     name={name}
     method="POST"
-    action={`/thank-you?form=${name}`}
+    action={delivery.endpoint ?? `/thank-you?form=${name}`}
     data-netlify="true"
     netlify-honeypot={honeypot}
     enctype={multipart ? 'multipart/form-data' : undefined}
     data-stars-form
+    data-delivery={delivery.mode}
+    data-endpoint={delivery.endpoint ?? undefined}
     aria-describedby={`${name}-required-note`}
   >
     <input type="hidden" name="form-name" value={name} />
@@ -64,6 +68,14 @@ const honeypot = 'company_website';
     </div>
 
     <p class="form-privacy small">{privacyNote}</p>
+    {
+      delivery.mode === 'preview' && (
+        <p class="form-preview small" role="note">
+          <strong>Preview site:</strong> this form isn’t connected yet, so nothing you enter will be sent. To reach STARS
+          now, call <a href={SITE.phoneHref}>{SITE.phone}</a>.
+        </p>
+      )
+    }
 
     <div class="form-actions">
       <button type="submit" class="btn" data-submit>
@@ -78,8 +90,21 @@ const honeypot = 'company_website';
       <circle cx="24" cy="24" r="22" fill="var(--teal-100)"></circle>
       <path d="m15 24.5 6 6 12-13" fill="none" stroke="var(--teal-700)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></path>
     </svg>
-    <h3>{successTitle}</h3>
-    <p>{successBody}</p>
+    {
+      delivery.mode === 'preview' ? (
+        <>
+          <h3>Preview only — nothing was sent.</h3>
+          <p>
+            On the live site, this is where the visitor sees: “{successTitle} {successBody}”
+          </p>
+        </>
+      ) : (
+        <>
+          <h3>{successTitle}</h3>
+          <p>{successBody}</p>
+        </>
+      )
+    }
     <p class="small muted">
       Need us sooner? Call <a href={SITE.phoneHref}>{SITE.phone}</a>, {SITE.hours.days}, {SITE.hours.open}–{SITE.hours.close}
     </p>
@@ -123,6 +148,14 @@ const honeypot = 'company_website';
   .form-privacy {
     margin-top: var(--space-s);
     color: var(--ink-600);
+  }
+  .form-preview {
+    margin-top: var(--space-s);
+    padding: var(--space-xs) var(--space-s);
+    border: 1px dashed var(--teal-600);
+    border-radius: var(--radius-s);
+    background: var(--teal-100);
+    color: var(--teal-700);
   }
   .form-actions {
     display: flex;

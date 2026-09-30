@@ -14,6 +14,7 @@ A complete strategic redesign of [mystarsacademy.org](https://www.mystarsacademy
 | [04 — Platform recommendation](docs/04-platform-recommendation.md) | Why Astro + Decap CMS + Netlify, ownership, trade-offs |
 | [05 — Client input needed](docs/05-client-input-needed.md) | Every placeholder, grouped as a checklist |
 | [06 — Launch & operations](docs/06-launch-and-operations.md) | Migration, launch runbook, QA checklist, backups, training |
+| [07 — Vercel preview hosting](docs/07-vercel-preview-hosting.md) | Temporary Vercel deploy: setup, forms, noindex, differences from Netlify |
 
 ## Stack
 
@@ -44,6 +45,7 @@ npm run dev        # http://localhost:4321
 | `npm run verify` | All of the above, in order: what CI runs |
 | `npm run placeholders` | List every remaining "client to confirm" marker |
 | `npm run images` | Regenerate the Open Graph image and touch icon |
+| `npm run vercel:config` | Regenerate `vercel.json` after changing redirects or headers |
 
 ## Project structure
 

@@ -3,7 +3,7 @@ import { readdir, readFile, writeFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import { join } from 'node:path';
 import { toNetlifyRedirects } from '../lib/redirects';
-import { buildCsp, injectCspMeta, inlineScriptHashes, netlifyHeaders } from '../lib/security';
+import { buildCsp, formEndpointOrigins, injectCspMeta, inlineScriptHashes, netlifyHeaders } from '../lib/security';
 
 async function htmlFiles(dir: string): Promise<string[]> {
   const entries = await readdir(dir, { withFileTypes: true });
@@ -32,7 +32,7 @@ export default function siteArtifacts(): AstroIntegration {
           const html = await readFile(file, 'utf8');
           // Allow analytics origins only on pages that actually load analytics.
           const analytics = html.includes('googletagmanager.com/gtag/js');
-          const csp = buildCsp(inlineScriptHashes(html), { analytics });
+          const csp = buildCsp(inlineScriptHashes(html), { analytics, formOrigins: formEndpointOrigins(html) });
           await writeFile(file, injectCspMeta(html, csp));
         }
         await writeFile(join(out, '_redirects'), toNetlifyRedirects());
