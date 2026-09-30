@@ -24,12 +24,16 @@ const { eyebrow, title, lede, crumbs, photo, compact = false, icon } = Astro.pro
 const hasAside = Boolean(photo) || Astro.slots.has('aside');
 ---
 
-<section class:list={['page-hero', { 'page-hero--compact': compact, 'page-hero--split': hasAside }]}>
+<section
+  class:list={['page-hero', 'pattern-care', { 'page-hero--compact': compact, 'page-hero--split': hasAside }]}
+  data-3d="hero"
+  data-3d-track="exit"
+>
   <Sparkles variant="section" />
   <div class="container">
     <Breadcrumbs items={crumbs} />
     <div class="page-hero__grid">
-      <div class="page-hero__text">
+      <div class="page-hero__text depth-text">
         {icon && <DuoIcon name={icon.name} tone={icon.tone ?? 'gold'} size={30} chip class="page-hero__icon anim-lede" />}
         <p class="eyebrow">{eyebrow}</p>
         <AnimatedTitle html={title} />
@@ -38,9 +42,11 @@ const hasAside = Boolean(photo) || Astro.slots.has('aside');
       </div>
       {
         hasAside && (
-          <div class="page-hero__aside">
+          <div class="page-hero__aside depth-stage">
+            <div class="depth-rig">
             {photo && <div class="page-hero__blob" aria-hidden="true" />}
             {photo ? <Photo {...photo} ratio="5 / 4" sizes="(min-width: 56em) 45vw, 100vw" priority /> : <slot name="aside" />}
+            </div>
           </div>
         )
       }
@@ -81,7 +87,10 @@ const hasAside = Boolean(photo) || Astro.slots.has('aside');
   .page-hero__aside {
     position: relative;
   }
-  .page-hero__aside > :global(.photo) {
+  .depth-rig {
+    position: relative;
+  }
+  .depth-rig > :global(.photo) {
     position: relative;
     z-index: 1;
     box-shadow: var(--shadow-m);

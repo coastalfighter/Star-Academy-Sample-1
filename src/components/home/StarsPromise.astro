@@ -1,0 +1,45 @@
+---
+import StarsBlocks from '../graphics/StarsBlocks.astro';
+import Icon from '../Icon.astro';
+---
+
+<section class="section section--navy promise" aria-labelledby="promise-title">
+  <div class="container promise__inner">
+    <div class="promise__head">
+      <p class="eyebrow">Our name is our promise</p>
+      <h2 id="promise-title">Every child, every day: <em>Striving To Achieve Real Success.</em></h2>
+      <p class="lede">
+        Success looks different for every child — a first word, a first step, a calm goodbye at drop-off. We build it one
+        block at a time.
+      </p>
+    </div>
+    <StarsBlocks variant="navy" />
+    <a class="link-arrow promise__link" href="/about-us">Our story and values <Icon name="arrow-right" size={18} /></a>
+  </div>
+</section>
+
+<style>
+  .promise {
+    position: relative;
+    overflow: hidden;
+    background:
+      radial-gradient(50% 60% at 50% 110%, rgb(242 194 48 / 0.16), transparent 70%),
+      radial-gradient(40% 50% at 0% 0%, rgb(46 122 140 / 0.25), transparent 70%),
+      var(--navy-900);
+  }
+  .promise__inner {
+    display: grid;
+    gap: var(--space-xl);
+    justify-items: center;
+    text-align: center;
+  }
+  .promise__head {
+    display: grid;
+    gap: var(--space-s);
+    justify-items: center;
+    max-width: 46rem;
+  }
+  .promise__link {
+    color: #ffffff;
+  }
+</style>

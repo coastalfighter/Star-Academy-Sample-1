@@ -47,7 +47,7 @@ const parts = [
     <ol class="what__parts" role="list">
       {
         parts.map((p, i) => (
-          <li class="what__part" data-reveal style={`--reveal-delay: ${i * 100}ms`}>
+          <li class="what__part" data-3d="flip">
             <span class="what__icon">
               <DuoIcon name={p.icon} tone={p.tone} size={26} chip />
               <span class="what__num" aria-hidden="true">

@@ -1,0 +1,60 @@
+---
+/**
+ * The STARS gold star, extruded into 3D by stacking layers along the Z
+ * axis. It turns slowly as the visitor scrolls through its section and
+ * rests at a gentle angle when motion is off.
+ */
+interface Props {
+  size?: string;
+  class?: string;
+}
+const { size = '14rem', class: className } = Astro.props;
+const layers = 12;
+const star = 'M50 4 61.8 35.3 95 36.9 69 57.7 78.1 90 50 71.6 21.9 90 31 57.7 5 36.9 38.2 35.3Z';
+---
+
+<div class:list={['star3d', className]} style={`--size:${size}`} data-3d aria-hidden="true">
+  <div class="star3d__rig">
+    {
+      Array.from({ length: layers }, (_, i) => (
+        <svg viewBox="0 0 100 100" class="star3d__layer" style={`--z:${i}`}>
+          <path d={star} class={i === layers - 1 ? 'star3d__face' : 'star3d__edge'} />
+        </svg>
+      ))
+    }
+  </div>
+</div>
+
+<style>
+  .star3d {
+    width: var(--size);
+    height: var(--size);
+    perspective: 900px;
+  }
+  .star3d__rig {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transform-style: preserve-3d;
+    transform: rotateX(14deg) rotateY(-24deg);
+  }
+  .star3d__layer {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    transform: translateZ(calc(var(--z) * 1.6px));
+  }
+  .star3d__edge {
+    fill: #b7850c;
+  }
+  .star3d__face {
+    fill: var(--gold-400);
+    stroke: #fff3c4;
+    stroke-width: 0.8;
+    stroke-linejoin: round;
+  }
+  :global(.has-3d) .star3d__rig {
+    transform: rotateX(calc(14deg + var(--p, 0.5) * 10deg)) rotateY(calc(-40deg + var(--p, 0.5) * 220deg));
+  }
+</style>

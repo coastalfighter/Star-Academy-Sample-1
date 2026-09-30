@@ -20,13 +20,15 @@ const moments = [
       <p class="lede">
         Therapy isn’t a separate trip across town that has to fit around everything else. It’s part of how the whole day works.
       </p>
+      <div data-3d="parallax">
       <Photo image="classroom-play" ratio="4 / 3" tone="teal" brief="Wide shot of a STARS classroom mid-morning: children at centers, a therapist and teacher working side by side." />
+      </div>
     </div>
 
     <ol class="day__timeline draw-line" role="list">
       {
         moments.map((m, i) => (
-          <li class="day__moment" data-reveal style={`--reveal-delay: ${i * 70}ms`}>
+          <li class="day__moment" data-3d="swing-right">
             <span class="day__node" aria-hidden="true">
               <DuoIcon name={m.icon} size={20} tone={i % 2 ? 'teal' : 'gold'} />
             </span>

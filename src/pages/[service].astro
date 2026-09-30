@@ -84,7 +84,7 @@ const others = all.filter((x) => x.data.path !== s.path);
       <ul role="list" class="signs__list">
         {
           s.signs.map((sign, i) => (
-            <li data-reveal style={`--reveal-delay: ${i * 60}ms`}>
+            <li data-3d="swing-right">
               <Rich text={sign} />
             </li>
           ))
@@ -102,7 +102,7 @@ const others = all.filter((x) => x.data.path !== s.path);
       <ul role="list" class="provides__list">
         {
           s.provides.map((item) => (
-            <li>
+            <li data-3d="swing-left">
               <span class="provides__icon" aria-hidden="true">
                 <Icon name="check" size={16} />
               </span>

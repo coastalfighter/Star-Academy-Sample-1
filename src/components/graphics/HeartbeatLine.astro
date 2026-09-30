@@ -1,0 +1,49 @@
+---
+/**
+ * Brand motif: a heartbeat trace that turns into a STARS star — clinical
+ * care and childhood in one continuous line. Draws itself on scroll when
+ * 3D motion is enabled; otherwise it is simply drawn.
+ */
+interface Props {
+  tone?: 'light' | 'navy';
+  class?: string;
+}
+const { tone = 'light', class: className } = Astro.props;
+---
+
+<div class:list={['beat', `beat--${tone}`, className]} data-3d="draw" aria-hidden="true">
+  <svg viewBox="0 0 1200 120">
+    <path
+      class="draw-path"
+      pathLength="1"
+      d="M0 70 H330 l18 -34 l20 70 l22 -86 l20 60 l14 -10 H560 c20 0 26 -40 40 -40 s20 40 40 40 H700 M700 70 L722 18 L744 70 L697 37 L747 37 Z M744 70 H1200"
+    />
+  </svg>
+</div>
+
+<style>
+  .beat {
+    width: 100%;
+  }
+  svg {
+    display: block;
+    width: 100%;
+    height: auto;
+    overflow: visible;
+  }
+  .draw-path {
+    fill: none;
+    stroke-width: 2.2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    vector-effect: non-scaling-stroke;
+    stroke-dasharray: 1 1;
+    stroke-dashoffset: 0;
+  }
+  .beat--light .draw-path {
+    stroke: var(--red-600);
+  }
+  .beat--navy .draw-path {
+    stroke: var(--gold-400);
+  }
+</style>

@@ -80,12 +80,41 @@ Subtle, calm and always optional. All motion lives in `src/styles/global.css` (t
 - There's no parallax, bouncing or autoplay.
 - Only `transform`, `opacity`, `clip-path` and `background-size` are animated, which keeps it smooth and avoids layout shift.
 
+## Scroll-driven 3D
+
+`src/scripts/scroll3d.ts` is a ~2 KB engine that writes scroll progress into CSS variables (`--pe` entry, `--p` pass-through, `--px` exit, `--ps` sticky). `src/styles/depth.css` turns those into perspective transforms. There's one passive scroll listener, work is batched to one frame at a time, and only elements near the viewport are measured.
+
+| Effect | Where |
+|---|---|
+| **Care wheel**: the five services on a 3D ring that turns one service per scroll step inside a sticky stage, highlighting the card facing you | Home (`home/CareRing.astro`) |
+| **Hero depth**: the photo stack tilts back and its layers (tinted shape, photo, care card, inset photo) separate along the Z axis as the page scrolls | Home and every inner-page hero |
+| **Flip-up cards**: hinged at the bottom edge | "What STARS is", stats, approach ideas, process steps, values, jobs, eligibility |
+| **Swing-in**: rotates in from the side | Day timeline, pathway steps, service "signs" and "provides" lists, referral/careers pair, next-step links |
+| **S·T·A·R·S blocks**: 3D toy blocks drop in one by one and settle, spelling the acronym | Home "Our name is our promise" band, About |
+| **Extruded 3D star**: the gold star turns as you scroll | Home approach section |
+| **Heartbeat → star line**: draws itself on scroll | Home divider, footer |
+| **Depth parallax** | Day-at-STARS photo, visit photo |
+
+**Guardrails:**
+- Every rule is gated on `.has-3d`, which is added only when JavaScript runs and the visitor hasn't asked for reduced motion.
+- Without it, every element renders in its final static state. The care wheel becomes an ordinary grid of five linked cards.
+- Only `transform` and `opacity` animate (no layout shift).
+- Cards turned away on the wheel stop receiving pointer events.
+- Accessibility audits run against the at-rest state.
+- `tests/e2e/motion3d.spec.ts` covers the wheel, card settling and the reduced-motion fallback.
+
 ## Graphics
 
 - **Duotone icon set** (`graphics/DuoIcon.astro`, 22 icons): a crisp brand-colored line over a soft tinted fill, optionally on an organic "chip". Every service has one consistent icon (`src/lib/service-icons.ts`): blocks for classrooms, speech bubbles for speech, a hand and block for OT, footsteps for PT, and a heart with a cross for nursing. Neurodiversity uses an infinity loop rather than a puzzle piece, which many autistic people find offensive.
 - **Care diagram** (`graphics/CareVenn.astro`): classroom, therapy and nursing overlap around "your child". The circles bloom in and the dashed orbit turns slowly.
 - **Brand stars** (`graphics/Sparkles.astro`) echo the gold star in the STARS logo.
 - The style stays line-based and restrained so it reads as healthcare-credible, not childish.
+
+- **S·T·A·R·S blocks** (`graphics/StarsBlocks.astro`): the brand acronym as CSS-3D toy blocks, since building blocks are how young children grow.
+- **Heartbeat → star** (`graphics/HeartbeatLine.astro`): a pulse trace that becomes a gentle wave and then the STARS star, joining clinical care and childhood in one line.
+- **3D star** (`graphics/Star3D.astro`): the logo star extruded with stacked layers.
+- **Care pattern** (`.pattern-care`): tiny medical crosses alternating with STARS sparkles, masked to fade out, behind heroes and navy sections.
+- **Surfaces**: sand, white and navy sections carry soft teal/gold/red radial tints for depth instead of flat fills.
 
 ## Photography direction
 

@@ -3,6 +3,7 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
 import PageHero from '@/components/PageHero.astro';
 import Photo from '@/components/Photo.astro';
 import Confirm from '@/components/Confirm.astro';
+import StarsBlocks from '@/components/graphics/StarsBlocks.astro';
 import NextSteps from '@/components/NextSteps.astro';
 import { SITE, LOCATIONS, fullAddress } from '@/lib/site';
 import { breadcrumbSchema } from '@/lib/seo';
@@ -73,24 +74,14 @@ const acronym = [
     </div>
   </section>
 
-  <section class="section section--navy" aria-labelledby="name-title">
+  <section class="section section--navy pattern-care" aria-labelledby="name-title">
     <div class="container name">
       <div class="stack">
         <p class="eyebrow">Our name</p>
         <h2 id="name-title">What STARS stands for.</h2>
         <p class="lede">Our name is also our promise to every child and family.</p>
       </div>
-      <p class="name__acronym">
-        <span class="visually-hidden">{SITE.acronym}</span>
-        {
-          acronym.map(([letter, rest]) => (
-            <span class="name__word" aria-hidden="true">
-              <span class="name__letter">{letter}</span>
-              {rest}
-            </span>
-          ))
-        }
-      </p>
+      <StarsBlocks variant="navy" />
     </div>
   </section>
 
@@ -117,7 +108,7 @@ const acronym = [
       <ol role="list" class="values">
         {
           values.map((v, i) => (
-            <li data-reveal style={`--reveal-delay: ${i * 70}ms`}>
+            <li data-3d="flip">
               <span class="values__n" aria-hidden="true">
                 {String(i + 1).padStart(2, '0')}
               </span>
@@ -201,18 +192,6 @@ const acronym = [
     display: grid;
     gap: var(--space-xl);
     align-items: center;
-  }
-  .name__acronym {
-    display: grid;
-    gap: 0.1rem;
-    font-family: var(--font-display);
-    font-size: var(--step-4);
-    line-height: 1.1;
-    color: #ffffff;
-  }
-  .name__letter {
-    color: var(--gold-400);
-    font-weight: 600;
   }
   .vision {
     display: grid;

@@ -7,9 +7,9 @@ import Sparkles from '../graphics/Sparkles.astro';
 import { SITE } from '@/lib/site';
 ---
 
-<section class="hero" aria-labelledby="hero-title">
+<section class="hero pattern-care" aria-labelledby="hero-title" data-3d="hero" data-3d-track="exit">
   <div class="container hero__grid">
-    <div class="hero__text">
+    <div class="hero__text depth-text">
       <p class="eyebrow">Pediatric therapy &amp; developmental preschool · Batesville</p>
       <AnimatedTitle id="hero-title" html="Therapy, learning and care for young children, <em>woven into one full&nbsp;day.</em>" />
       <p class="hero__lede anim-lede">
@@ -29,8 +29,9 @@ import { SITE } from '@/lib/site';
       </p>
     </div>
 
-    <div class="hero__media">
-      <div class="hero__blob" aria-hidden="true"></div>
+    <div class="hero__media depth-stage">
+      <div class="depth-rig">
+      <div class="depth-layer depth-far" aria-hidden="true"><div class="hero__blob"></div></div>
       <Sparkles variant="hero" />
       <Photo
         image="story-time-close"
@@ -41,6 +42,7 @@ import { SITE } from '@/lib/site';
         priority
         brief="A therapist and a preschooler at eye level in a sunlit classroom, mid-laugh — real STARS moment, natural light."
       />
+      <div class="depth-layer depth-near">
       <div class="hero__card" role="group" aria-label="On-site care team">
         <p class="hero__card-title">One team, on site</p>
         <ul role="list">
@@ -52,6 +54,8 @@ import { SITE } from '@/lib/site';
       </div>
       <div class="hero__inset" aria-hidden="true">
         <Photo image="ball-pit-play" sizes="14rem" ratio="1 / 1" tone="gold" brief="Small hands on sensory play — beans, scoops, a teacher's hand nearby." />
+      </div>
+      </div>
       </div>
     </div>
   </div>
@@ -132,7 +136,24 @@ import { SITE } from '@/lib/site';
     max-width: 34rem;
     width: 100%;
     justify-self: center;
+  }
+  .depth-rig {
+    position: relative;
     padding-left: 12%;
+  }
+  .depth-layer {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+  .depth-far {
+    z-index: 0;
+  }
+  .depth-near {
+    z-index: 3;
+  }
+  .depth-near > * {
+    pointer-events: auto;
   }
   .hero__blob {
     position: absolute;
@@ -141,7 +162,7 @@ import { SITE } from '@/lib/site';
     background: linear-gradient(145deg, rgb(242 194 48 / 0.35), rgb(46 122 140 / 0.18));
     border-radius: 58% 42% 52% 48% / 46% 56% 44% 54%;
   }
-  .hero__media > :global(.photo) {
+  .depth-rig > :global(.photo) {
     position: relative;
     z-index: 1;
     box-shadow: var(--shadow-m);

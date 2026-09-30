@@ -47,7 +47,7 @@ const steps = [
       <ol role="list">
         {
           steps.map((s, i) => (
-            <li data-reveal style={`--reveal-delay: ${i * 80}ms`}>
+            <li data-3d="swing-left">
               <span class="pathway__n" aria-hidden="true">
                 <DuoIcon name={s.icon} tone={i % 2 ? 'teal' : 'gold'} size={22} chip />
                 <span class="pathway__badge">{i + 1}</span>

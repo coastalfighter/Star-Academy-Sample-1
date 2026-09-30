@@ -85,7 +85,7 @@ const hiring = [
       <ul role="list" class="why">
         {
           reasons.map((r, i) => (
-            <li data-reveal style={`--reveal-delay: ${i * 80}ms`}>
+            <li data-3d="flip">
               <h3>{r.title}</h3>
               <p>{r.body}</p>
             </li>
@@ -125,7 +125,7 @@ const hiring = [
       <div class="jobs">
         {
           jobs.map((job) => (
-            <article class="job lift" aria-labelledby={`job-${job.id}`}>
+            <article class="job lift" data-3d="flip" aria-labelledby={`job-${job.id}`}>
               <div class="job__head">
                 <p class="job__team">{job.data.team}</p>
                 <h3 id={`job-${job.id}`}>

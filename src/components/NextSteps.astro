@@ -16,7 +16,7 @@ interface Props {
 const { heading, body, primary, secondary, links = [] } = Astro.props;
 ---
 
-<section class="section section--navy next" aria-labelledby="next-heading">
+<section class="section section--navy next pattern-care" aria-labelledby="next-heading">
   <div class="container next__grid">
     <div class="next__lead" data-reveal>
       <p class="eyebrow">Next step</p>
@@ -32,7 +32,7 @@ const { heading, body, primary, secondary, links = [] } = Astro.props;
     </div>
     {
       links.length > 0 && (
-        <ul class="next__links" role="list" data-reveal style="--reveal-delay: 120ms">
+        <ul class="next__links" role="list" data-3d="swing-right">
           {links.map((l) => (
             <li>
               <a href={l.href}>

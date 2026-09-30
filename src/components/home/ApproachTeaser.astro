@@ -2,6 +2,7 @@
 import Icon from '../Icon.astro';
 import DuoIcon from '../graphics/DuoIcon.astro';
 import Sparkles from '../graphics/Sparkles.astro';
+import Star3D from '../graphics/Star3D.astro';
 
 const ideas = [
   { icon: 'team' as const, title: 'Connection comes first', body: 'Children learn from people they trust. Relationships are the foundation for everything else we do.' },
@@ -11,9 +12,10 @@ const ideas = [
 ];
 ---
 
-<section class="section section--navy approach" aria-labelledby="approach-title">
+<section class="section section--navy approach pattern-care" aria-labelledby="approach-title">
   <Sparkles variant="navy" />
-  <div class="container">
+  <div class="container approach__wrap">
+    <Star3D class="approach__star" size="clamp(8rem, 18vw, 15rem)" />
     <div class="approach__head">
       <p class="eyebrow">Our approach</p>
       <h2 id="approach-title">
@@ -28,7 +30,7 @@ const ideas = [
     <ul class="approach__ideas" role="list">
       {
         ideas.map((idea, i) => (
-          <li data-reveal style={`--reveal-delay: ${i * 90}ms`}>
+          <li data-3d="flip">
             <DuoIcon name={idea.icon} tone="inverse" size={26} chip />
             <h3>{idea.title}</h3>
             <p>{idea.body}</p>
@@ -48,17 +50,20 @@ const ideas = [
     position: relative;
     overflow: hidden;
   }
-  .approach::after {
-    /* Oversized outline star — a quiet nod to the STARS mark. */
-    content: '';
+  .approach__wrap {
+    position: relative;
+  }
+  .approach__wrap > :global(.approach__star) {
     position: absolute;
-    right: -8rem;
-    top: -6rem;
-    width: 34rem;
-    height: 34rem;
-    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Cpath d='M24 3.5 29.6 17l14.4 1.2-11 9.5 3.4 14.2L24 34.3l-12.4 7.6L15 27.7 4 18.2 18.4 17Z' fill='none' stroke='%23f2c230' stroke-opacity='.14' stroke-width='.35'/%3E%3C/svg%3E")
-      no-repeat center / contain;
-    pointer-events: none;
+    right: 0;
+    top: -1rem;
+  }
+  @media (max-width: 59.99em) {
+    .approach__wrap > :global(.approach__star) {
+      position: relative;
+      top: 0;
+      margin: 0 0 var(--space-m) auto;
+    }
   }
   .approach__head {
     position: relative;

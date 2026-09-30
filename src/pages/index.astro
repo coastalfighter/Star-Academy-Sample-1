@@ -4,7 +4,9 @@ import Hero from '@/components/home/Hero.astro';
 import AudienceRouter from '@/components/home/AudienceRouter.astro';
 import WhatIsStars from '@/components/home/WhatIsStars.astro';
 import DayAtStars from '@/components/home/DayAtStars.astro';
-import ServicesIndex from '@/components/home/ServicesIndex.astro';
+import CareRing from '@/components/home/CareRing.astro';
+import StarsPromise from '@/components/home/StarsPromise.astro';
+import HeartbeatLine from '@/components/graphics/HeartbeatLine.astro';
 import ApproachTeaser from '@/components/home/ApproachTeaser.astro';
 import FamilyPathway from '@/components/home/FamilyPathway.astro';
 import Credibility from '@/components/home/Credibility.astro';
@@ -16,10 +18,10 @@ import VisitCta from '@/components/home/VisitCta.astro';
  * 1. Hero — what STARS is, who it's for, why it's different, next step
  * 2. Router — every audience finds its door in one glance
  * 3–4. Explain the model, then make it concrete ("a day at STARS")
- * 5. Services — scannable, not a card grid
+ * 5. Services — a 3D care wheel that turns on scroll (grid fallback)
  * 6. Approach — the philosophy, in plain language
  * 7. Family pathway — fit + the four steps to start
- * 8. Credibility — facts, then (real) family voice
+ * 8. Credibility — facts, then (real) family voice; S·T·A·R·S promise band
  * 9. Referral partners + careers
  * 10. Visit — the single most persuasive action
  */
@@ -31,11 +33,13 @@ import VisitCta from '@/components/home/VisitCta.astro';
   <Hero />
   <AudienceRouter />
   <WhatIsStars />
+  <div class="container"><HeartbeatLine /></div>
   <DayAtStars />
-  <ServicesIndex />
+  <CareRing />
   <ApproachTeaser />
   <FamilyPathway />
   <Credibility />
+  <StarsPromise />
   <PartnersCareers />
   <VisitCta />
 </BaseLayout>

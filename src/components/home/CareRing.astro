@@ -1,0 +1,325 @@
+---
+/**
+ * The STARS care wheel: the five services on a 3D ring that turns as the
+ * visitor scrolls. Built as progressive enhancement:
+ *   - default (no JS / reduced motion): a clear grid of linked cards
+ *   - .has-3d: a tall section with a sticky stage; scroll progress turns
+ *     the ring one service at a time and highlights the one facing you.
+ */
+import { getCollection } from 'astro:content';
+import Icon from '../Icon.astro';
+import DuoIcon from '../graphics/DuoIcon.astro';
+import Sparkles from '../graphics/Sparkles.astro';
+import { SERVICE_ICONS } from '@/lib/service-icons';
+
+const services = (await getCollection('services')).sort((a, b) => a.data.order - b.data.order);
+
+const helpsWith: Record<string, string> = {
+  '/classrooms': 'Learning, play, routines, kindergarten readiness',
+  '/speech-therapy': 'Talking, understanding, social connection, eating & swallowing',
+  '/occupational-therapy': 'Sensory needs, big feelings, self-care, using hands',
+  '/physical-therapy': 'Crawling, walking, balance, strength, equipment',
+  '/nursing': 'Medications, feedings, respiratory & complex medical needs',
+};
+const count = services.length;
+---
+
+<section class="ring-section" aria-labelledby="ring-title" data-3d data-3d-track="sticky" data-ring>
+  <div class="ring-sticky">
+    <Sparkles variant="section" />
+    <div class="container ring-layout">
+      <div class="ring-copy">
+        <p class="eyebrow">Services</p>
+        <h2 id="ring-title">Everything your child needs, <em>under one roof.</em></h2>
+        <p class="lede">
+          Five disciplines, one coordinated plan. Each is led by professionals in that field — and they work together every day
+          around the same child.
+        </p>
+        <ol class="ring-dots" role="list" aria-hidden="true">
+          {services.map((s) => <li><span>{s.data.title}</span></li>)}
+        </ol>
+        <a class="link-arrow" href="/services">How our services fit together <Icon name="arrow-right" size={18} /></a>
+      </div>
+
+      <div class="ring-stage">
+        <div class="ring-floor" aria-hidden="true"></div>
+        <ul class="ring" role="list" style={`--n:${count}`}>
+          {
+            services.map((s, i) => {
+              const meta = SERVICE_ICONS[s.data.path]!;
+              return (
+                <li class="ring-card" style={`--i:${i}`} data-ring-card>
+                  <a href={s.data.path} class={`ring-card__inner ring-card__inner--${meta.tone}`}>
+                    <DuoIcon name={meta.icon} tone={meta.tone} size={34} chip />
+                    <span class="ring-card__num" aria-hidden="true">
+                      {String(i + 1).padStart(2, '0')}
+                    </span>
+                    <span class="ring-card__title">{s.data.title}</span>
+                    <span class="ring-card__helps">{helpsWith[s.data.path]}</span>
+                    <span class="ring-card__go">
+                      Learn more <Icon name="arrow-right" size={16} />
+                    </span>
+                  </a>
+                </li>
+              );
+            })
+          }
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  import { onScroll3d } from '@/scripts/scroll3d';
+
+  const section = document.querySelector<HTMLElement>('[data-ring]');
+  if (section) {
+    const cards = Array.from(section.querySelectorAll<HTMLElement>('[data-ring-card]'));
+    const dots = Array.from(section.querySelectorAll<HTMLElement>('.ring-dots li'));
+    const n = cards.length;
+    const step = 360 / n;
+    let current = -1;
+
+    onScroll3d(section, (el) => {
+      const p = Number(el.style.getPropertyValue('--ps')) || 0;
+      // Hold briefly on the first and last card so each gets a moment.
+      const eased = Math.min(1, Math.max(0, (p - 0.06) / 0.88));
+      const turn = eased * (n - 1);
+      el.style.setProperty('--turn', turn.toFixed(4));
+      cards.forEach((card, i) => {
+        const angle = ((i - turn) * step * Math.PI) / 180;
+        const face = Math.cos(angle);
+        card.style.setProperty('--face', face.toFixed(3));
+        // Cards turned away are not clickable or focusable-by-mouse.
+        card.classList.toggle('is-back', face < 0.2);
+      });
+      const idx = Math.round(turn);
+      if (idx !== current) {
+        current = idx;
+        cards.forEach((c, i) => c.classList.toggle('is-front', i === idx));
+        dots.forEach((d, i) => d.classList.toggle('is-on', i === idx));
+      }
+    });
+  }
+</script>
+
+<style>
+  .ring-section {
+    position: relative;
+    padding-block: var(--space-2xl);
+    background:
+      radial-gradient(60% 50% at 85% 30%, rgb(46 122 140 / 0.1), transparent 70%),
+      radial-gradient(50% 45% at 10% 80%, rgb(242 194 48 / 0.12), transparent 70%),
+      var(--paper);
+  }
+  .ring-sticky {
+    position: relative;
+  }
+  .ring-layout {
+    position: relative;
+    display: grid;
+    gap: var(--space-xl);
+  }
+  .ring-copy {
+    display: grid;
+    gap: var(--space-s);
+    align-content: center;
+    max-width: 34rem;
+  }
+  .ring-dots {
+    display: none;
+  }
+
+  /* ---- Default: an accessible grid ---- */
+  .ring {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 13.5rem), 1fr));
+    gap: var(--space-s);
+    padding: 0;
+    list-style: none;
+  }
+  .ring-floor {
+    display: none;
+  }
+  .ring-card__inner {
+    position: relative;
+    display: grid;
+    gap: 0.55rem;
+    align-content: start;
+    height: 100%;
+    padding: var(--space-m);
+    border-radius: var(--radius-l);
+    background: var(--white);
+    border: 1px solid var(--color-line-soft);
+    box-shadow: var(--shadow-s);
+    text-decoration: none;
+    color: var(--ink-900);
+    overflow: hidden;
+    transition:
+      box-shadow var(--duration-m) ease,
+      transform var(--duration-m) var(--ease-out);
+  }
+  .ring-card__inner::after {
+    /* Tinted corner glow that picks up each service's color. */
+    content: '';
+    position: absolute;
+    right: -30%;
+    top: -30%;
+    width: 70%;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: var(--glow);
+    opacity: 0.55;
+    pointer-events: none;
+  }
+  .ring-card__inner--gold {
+    --glow: radial-gradient(closest-side, rgb(242 194 48 / 0.35), transparent);
+  }
+  .ring-card__inner--red {
+    --glow: radial-gradient(closest-side, rgb(196 50 58 / 0.18), transparent);
+  }
+  .ring-card__inner--teal {
+    --glow: radial-gradient(closest-side, rgb(46 122 140 / 0.22), transparent);
+  }
+  .ring-card__inner:hover {
+    box-shadow: var(--shadow-m);
+    transform: translateY(-4px);
+    color: var(--ink-900);
+  }
+  .ring-card__num {
+    font-family: var(--font-display);
+    font-style: italic;
+    color: var(--gold-700);
+  }
+  .ring-card__title {
+    font-family: var(--font-display);
+    font-size: var(--step-2);
+    line-height: 1.15;
+    color: var(--navy-900);
+  }
+  .ring-card__helps {
+    font-size: 0.95rem;
+    color: var(--ink-700);
+  }
+  .ring-card__go {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    margin-top: 0.4rem;
+    font-weight: 650;
+    font-size: 0.925rem;
+    color: var(--navy-700);
+  }
+
+  /* ---- Enhanced: sticky stage with a turning 3D ring ---- */
+  :global(.has-3d) .ring-section {
+    height: 300vh;
+    padding-block: 0;
+  }
+  :global(.has-3d) .ring-sticky {
+    position: sticky;
+    top: var(--header-h);
+    min-height: calc(100vh - var(--header-h));
+    display: grid;
+    align-items: center;
+    padding-block: var(--space-l);
+    overflow: hidden;
+  }
+  :global(.has-3d) .ring-dots {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem 1rem;
+    padding: 0;
+    margin-top: var(--space-2xs);
+    list-style: none;
+    counter-reset: dot;
+  }
+  :global(.has-3d) .ring-dots li {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--ink-600);
+    transition: color var(--duration-m) ease;
+  }
+  :global(.has-3d) .ring-dots li::before {
+    content: '';
+    width: 0.55rem;
+    height: 0.55rem;
+    border-radius: 50%;
+    background: var(--sand-300);
+    transition:
+      background-color var(--duration-m) ease,
+      transform var(--duration-m) var(--ease-out);
+  }
+  :global(.has-3d) .ring-dots li:global(.is-on) {
+    color: var(--navy-900);
+  }
+  :global(.has-3d) .ring-dots li:global(.is-on)::before {
+    background: var(--red-600);
+    transform: scale(1.35);
+  }
+  :global(.has-3d) .ring-stage {
+    --card-w: min(17rem, 62vw);
+    --radius: calc(var(--card-w) * 0.95);
+    position: relative;
+    height: clamp(22rem, 58vh, 30rem);
+    perspective: 1600px;
+    perspective-origin: 50% 40%;
+  }
+  :global(.has-3d) .ring-floor {
+    display: block;
+    position: absolute;
+    left: 50%;
+    bottom: 4%;
+    width: calc(var(--radius) * 2.4);
+    height: calc(var(--radius) * 0.55);
+    transform: translateX(-50%);
+    border-radius: 50%;
+    background: radial-gradient(closest-side, rgb(23 21 58 / 0.14), transparent);
+  }
+  :global(.has-3d) .ring {
+    display: block;
+    position: absolute;
+    inset: 0;
+    transform-style: preserve-3d;
+    transform: translateZ(calc(var(--radius) * -1)) rotateX(-6deg)
+      rotateY(calc(var(--turn, 0) * (-360deg / var(--n))));
+  }
+  :global(.has-3d) .ring-card {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: var(--card-w);
+    margin-left: calc(var(--card-w) / -2);
+    transform: translateY(-50%) rotateY(calc(var(--i) * (360deg / var(--n)))) translateZ(var(--radius));
+    opacity: calc(0.18 + max(0, var(--face, 1)) * 0.82);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    transition: opacity 120ms linear;
+  }
+  :global(.has-3d) .ring-card:global(.is-back) {
+    pointer-events: none;
+  }
+  :global(.has-3d) .ring-card:global(.is-front) .ring-card__inner {
+    box-shadow:
+      0 30px 60px -30px rgb(23 21 58 / 0.45),
+      0 0 0 1.5px var(--gold-400);
+  }
+  :global(.has-3d) .ring-card__inner {
+    backface-visibility: hidden;
+    min-height: 16rem;
+  }
+
+  @media (min-width: 60em) {
+    .ring-layout {
+      grid-template-columns: 0.85fr 1.15fr;
+      align-items: center;
+    }
+    :global(.has-3d) .ring-stage {
+      --card-w: 17.5rem;
+    }
+  }
+</style>

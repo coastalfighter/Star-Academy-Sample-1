@@ -1,0 +1,66 @@
+/* =====================================================================
+   Scroll-driven 3D — see src/scripts/scroll3d.ts.
+   All rules are gated on .has-3d (added only when JS runs and motion is
+   allowed), so the default is always the calm, final, static layout.
+   Only transform/opacity animate: no layout shift, GPU-friendly.
+   ===================================================================== */
+
+/* Cards flip up into place, hinged at the bottom edge. */
+.has-3d [data-3d='flip'] {
+  --t: calc(1 - var(--pe, 1));
+  transform: perspective(1100px) rotateX(calc(var(--t) * 32deg)) translateY(calc(var(--t) * 46px))
+    scale(calc(1 - var(--t) * 0.06));
+  transform-origin: 50% 100%;
+  opacity: calc(0.15 + var(--pe, 1) * 0.85);
+  will-change: transform;
+}
+
+/* Items swing in from either side like pages turning. */
+.has-3d [data-3d='swing-left'],
+.has-3d [data-3d='swing-right'] {
+  --t: calc(1 - var(--pe, 1));
+  transform: perspective(1200px) rotateY(calc(var(--t) * var(--dir) * 28deg))
+    translateX(calc(var(--t) * var(--dir) * -30px));
+  transform-origin: calc(50% - var(--dir) * 50%) 50%;
+  opacity: calc(0.2 + var(--pe, 1) * 0.8);
+}
+.has-3d [data-3d='swing-left'] {
+  --dir: -1;
+}
+.has-3d [data-3d='swing-right'] {
+  --dir: 1;
+}
+
+/* Gentle depth parallax for photos and illustrations. */
+.has-3d [data-3d='parallax'] {
+  transform: translate3d(0, calc((var(--p, 0.5) - 0.5) * -70px), 0);
+}
+
+/* Hero depth: as the page scrolls away, the photo stack tilts back and its
+   layers separate along the Z axis. */
+.has-3d [data-3d='hero'] .depth-stage {
+  perspective: 1400px;
+}
+.has-3d [data-3d='hero'] .depth-rig {
+  transform-style: preserve-3d;
+  transform: rotateX(calc(var(--px, 0) * 16deg)) rotateY(calc(var(--px, 0) * -10deg))
+    translateZ(calc(var(--px, 0) * -80px));
+  transition: transform 80ms linear;
+}
+.has-3d [data-3d='hero'] .depth-near {
+  transform: translateZ(calc(40px + var(--px, 0) * 90px)) translateY(calc(var(--px, 0) * -40px));
+}
+.has-3d [data-3d='hero'] .depth-far {
+  transform: translateZ(calc(var(--px, 0) * -120px));
+}
+
+/* Headline text drifts up and softens as the hero leaves. */
+.has-3d [data-3d='hero'] .depth-text {
+  transform: translateY(calc(var(--px, 0) * -60px));
+  opacity: calc(1 - var(--px, 0) * 0.7);
+}
+
+/* Self-drawing lines (heartbeat → star). */
+.has-3d [data-3d='draw'] .draw-path {
+  stroke-dashoffset: calc(1 - min(1, var(--pe, 1) * 1.15));
+}

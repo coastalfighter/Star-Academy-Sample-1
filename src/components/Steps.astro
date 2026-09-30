@@ -12,7 +12,7 @@ const { steps, layout = 'row' } = Astro.props;
 <ol class:list={['steps', `steps--${layout}`]} role="list">
   {
     steps.map((step, i) => (
-      <li class="step" data-reveal style={`--reveal-delay: ${i * 80}ms`}>
+      <li class="step" data-3d="flip">
         <span class="step__num" aria-hidden="true">
           {String(i + 1).padStart(2, '0')}
         </span>

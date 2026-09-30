@@ -23,7 +23,7 @@ const stats = [
     <dl class="cred__stats">
       {
         stats.map((s, i) => (
-          <div class="lift" data-reveal style={`--reveal-delay: ${i * 80}ms`}>
+          <div class="lift" data-3d="flip" style={`--reveal-delay: ${i * 80}ms`}>
             <dt>{s.label}</dt>
             <dd>
               <DuoIcon name={s.icon} tone={i % 2 ? 'teal' : 'gold'} size={22} chip class="cred__icon" />

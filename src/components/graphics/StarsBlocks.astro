@@ -1,0 +1,145 @@
+---
+/**
+ * S·T·A·R·S building blocks — the brand acronym as stacking toy blocks,
+ * because building blocks are how young children (and development) grow.
+ * With 3D enabled the blocks drop in and settle one after another as the
+ * section scrolls into view; otherwise they simply sit in place.
+ */
+interface Props {
+  variant?: 'light' | 'navy';
+}
+const { variant = 'light' } = Astro.props;
+
+const blocks = [
+  { letter: 'S', word: 'Striving', tone: 'navy' },
+  { letter: 'T', word: 'To', tone: 'red' },
+  { letter: 'A', word: 'Achieve', tone: 'gold' },
+  { letter: 'R', word: 'Real', tone: 'teal' },
+  { letter: 'S', word: 'Success', tone: 'navy' },
+];
+---
+
+<div class:list={['blocks', `blocks--${variant}`]} data-3d>
+  <p class="visually-hidden">STARS stands for Striving To Achieve Real Success.</p>
+  <ol class="blocks__row" role="list" aria-hidden="true">
+    {
+      blocks.map((b, i) => (
+        <li class={`block block--${b.tone}`} style={`--i:${i}`}>
+          <span class="cube">
+            <span class="face face--front">{b.letter}</span>
+            <span class="face face--top" />
+            <span class="face face--side" />
+          </span>
+          <span class="block__word">
+            <strong>{b.word[0]}</strong>
+            {b.word.slice(1)}
+          </span>
+        </li>
+      ))
+    }
+  </ol>
+</div>
+
+<style>
+  .blocks {
+    --s: clamp(2.7rem, 1.8rem + 4.4vw, 6rem);
+    max-width: 100%;
+  }
+  .blocks__row {
+    display: flex;
+    justify-content: center;
+    gap: clamp(0.4rem, 2vw, 1.6rem);
+    padding: 0;
+    list-style: none;
+    perspective: 900px;
+  }
+  .block {
+    display: grid;
+    justify-items: center;
+    gap: 0.9rem;
+  }
+  .cube {
+    position: relative;
+    width: var(--s);
+    height: var(--s);
+    transform-style: preserve-3d;
+    transform: rotateX(-18deg) rotateY(-28deg);
+  }
+  .face {
+    position: absolute;
+    inset: 0;
+    border-radius: 10%;
+    backface-visibility: hidden;
+  }
+  .face--front {
+    display: grid;
+    place-items: center;
+    background: var(--c1);
+    color: var(--ink);
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: calc(var(--s) * 0.6);
+    line-height: 1;
+    transform: translateZ(calc(var(--s) / 2));
+    box-shadow: inset 0 0 0 2px rgb(255 255 255 / 0.18);
+  }
+  .face--top {
+    background: var(--c2);
+    transform: rotateX(90deg) translateZ(calc(var(--s) / 2));
+  }
+  .face--side {
+    background: var(--c3);
+    transform: rotateY(90deg) translateZ(calc(var(--s) / 2));
+  }
+  .block--navy {
+    --c1: var(--navy-800);
+    --c2: #3b3884;
+    --c3: #15133a;
+    --ink: #ffffff;
+  }
+  .block--red {
+    --c1: var(--red-600);
+    --c2: #dc5a60;
+    --c3: #8e1f26;
+    --ink: #ffffff;
+  }
+  .block--gold {
+    --c1: var(--gold-400);
+    --c2: #f8d875;
+    --c3: #c9950f;
+    --ink: var(--navy-900);
+  }
+  .block--teal {
+    --c1: var(--teal-600);
+    --c2: #4f99aa;
+    --c3: #1d5563;
+    --ink: #ffffff;
+  }
+  .block__word {
+    font-size: clamp(0.62rem, 0.55rem + 0.35vw, 0.9rem);
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-700);
+  }
+  .block__word strong {
+    color: var(--red-700);
+  }
+  .blocks--navy .block__word {
+    color: #c7c5dc;
+  }
+  .blocks--navy .block__word strong {
+    color: var(--gold-400);
+  }
+
+  /* Scroll-driven drop: each block lands a little after the one before. */
+  :global(.has-3d) .blocks .cube {
+    --land: clamp(0, calc(var(--pe, 1) * 2.2 - var(--i) * 0.28), 1);
+    transform: translateY(calc((1 - var(--land)) * -160px)) rotateX(calc(-18deg - (1 - var(--land)) * 70deg))
+      rotateY(calc(-28deg + (1 - var(--land)) * 120deg));
+    opacity: calc(var(--land) * 1.4);
+  }
+  :global(.has-3d) .blocks .block__word {
+    opacity: clamp(0, calc(var(--pe, 1) * 2.2 - var(--i) * 0.28 - 0.3), 1);
+  }
+</style>

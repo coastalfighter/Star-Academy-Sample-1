@@ -11,6 +11,8 @@ test.describe('accessibility & page quality', () => {
       });
       page.on('pageerror', (err) => errors.push(err.message));
 
+      // Audit the page at rest: transient mid-animation opacity is not a contrast failure.
+      await page.emulateMedia({ reducedMotion: 'reduce' });
       const response = await page.goto(path);
       expect(response?.status()).toBe(200);
 

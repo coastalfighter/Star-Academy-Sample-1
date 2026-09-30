@@ -2,6 +2,7 @@
 import Logo from './Logo.astro';
 import Icon from './Icon.astro';
 import Confirm from './Confirm.astro';
+import HeartbeatLine from './graphics/HeartbeatLine.astro';
 import { FOOTER_NAV, LEGAL_NAV } from '@/lib/navigation';
 import { SITE, LOCATIONS, fullAddress, mapsUrl } from '@/lib/site';
 
@@ -9,6 +10,7 @@ const year = new Date().getFullYear();
 ---
 
 <footer class="site-footer">
+  <div class="container footer__beat"><HeartbeatLine tone="navy" /></div>
   <div class="container">
     <div class="footer__top">
       <div class="footer__brand">
@@ -125,6 +127,11 @@ const year = new Date().getFullYear();
   .site-footer a:hover {
     color: var(--gold-400);
     text-decoration: underline;
+  }
+  .footer__beat {
+    margin-top: calc(var(--space-xl) * -1);
+    margin-bottom: var(--space-l);
+    opacity: 0.9;
   }
   .footer__top {
     display: grid;
